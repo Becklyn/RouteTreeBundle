@@ -108,3 +108,8 @@ This is a pretty simple implementation, which is intended:
 * No existing site should break by just activating the bundle.
 * The declaration effort should be low but avoid clashes.
 * The title can currently not be changed dynamically, it needs to be "hardcoded" in your route definition.
+* Fake parameters, only generation with `1` as parameters
+
+#### Fake parameters
+To build a complete page tree, the bundle needs to build URLs for every route inside the page tree.
+This bundle's main use case is to build a "hidden" menu, which only marks the top level main menu elements as active. Therefore it is valid to just use "fake" route parameters and fill everything with 1 (the voter needs to only compare the routes and not the route parameters).
