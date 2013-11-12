@@ -1,0 +1,28 @@
+{
+    "name":         "becklyn/page-tree-bundle",
+    "description":  "This bundle provides a simple implementation of a pagetree",
+    "keywords":     ["bootstrap"],
+    "type":         "symfony-bundle",
+    "homepage":     "https://github.com/Becklyn/BecklynPageTreeBundle",
+    "authors":      [
+        {
+            "name":     "Becklyn GmbH",
+            "homepage": "http://becklyn.com/"
+        }
+    ],
+    "require":      {
+        "symfony/framework-bundle": "~2.0",
+        "knplabs/knp-menu": "2.0.0-alpha1",
+        "knplabs/knp-menu-bundle": "2.0.0-alpha1"
+    },
+    "autoload":     {
+        "psr-0": { "Becklyn\\PageTreeBundle": "" }
+    },
+    "target-dir": "Becklyn/PageTreeBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

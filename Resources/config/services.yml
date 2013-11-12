@@ -1,0 +1,9 @@
+services:
+    becklyn.page_tree:
+        class: Becklyn\PageTreeBundle\Model\PageTreeModel
+        arguments: [@router]
+
+
+    becklyn.page_tree.menu_builder:
+        class: Becklyn\PageTreeBundle\Menu\PageTreeMenuBuilder
+        arguments: [@knp_menu.factory, @becklyn.page_tree]
