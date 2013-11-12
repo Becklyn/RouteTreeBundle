@@ -7,7 +7,7 @@ namespace Becklyn\PageTreeBundle\Model\PageTree;
  *
  * @package Becklyn\PageTreeBundle\Model\PageTree
  */
-class Node
+class PageTreeNode
 {
     /**
      * @var string
@@ -32,7 +32,7 @@ class Node
 
 
     /**
-     * @var Node[]
+     * @var PageTreeNode[]
      */
     private $children = [];
 
@@ -62,7 +62,7 @@ class Node
 
 
 
-    public function addChild (Node $node)
+    public function addChild (PageTreeNode $node)
     {
         $this->children[] = $node;
     }
@@ -70,7 +70,7 @@ class Node
 
 
     /**
-     * @return Node[]
+     * @return PageTreeNode[]
      */
     public function getChildren ()
     {

@@ -4,7 +4,7 @@ namespace Becklyn\PageTreeBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
-use Becklyn\PageTreeBundle\Model\PageTree\Node;
+use Becklyn\PageTreeBundle\Model\PageTree\PageTreeNode;
 use Becklyn\PageTreeBundle\Model\PageTreeModel;
 
 class PageTreeMenuBuilder
@@ -58,7 +58,7 @@ class PageTreeMenuBuilder
      * Appends the node tree to the given parent
      *
      * @param ItemInterface $parent
-     * @param Node[] $nodes
+     * @param PageTreeNode[] $nodes
      */
     private function appendNodes (ItemInterface $parent, array $nodes)
     {

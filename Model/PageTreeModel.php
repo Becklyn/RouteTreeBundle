@@ -4,7 +4,7 @@ namespace Becklyn\PageTreeBundle\Model;
 
 use Becklyn\PageTreeBundle\Model\PageTree\InvalidNodeException;
 use Becklyn\PageTreeBundle\Model\PageTree\InvalidPageTreeException;
-use Becklyn\PageTreeBundle\Model\PageTree\Node;
+use Becklyn\PageTreeBundle\Model\PageTree\PageTreeNode;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -13,7 +13,7 @@ class PageTreeModel
     /**
      * The page tree elements
      *
-     * @var Node[]
+     * @var PageTreeNode[]
      */
     private $pageTree;
 
@@ -21,7 +21,7 @@ class PageTreeModel
     /**
      * The direct access to the nodes in the page tree
      *
-     * @var Node[]
+     * @var PageTreeNode[]
      */
     private $directAccess;
 
@@ -88,7 +88,7 @@ class PageTreeModel
      * @param string $routeName
      * @param Route $route
      *
-     * @return null|Node
+     * @return null|PageTreeNode
      * @throws PageTree\InvalidNodeException
      */
     private function transformRouteToNode ($routeName, Route $route)
@@ -118,7 +118,7 @@ class PageTreeModel
 
         $routeRequirements = array_keys($route->getRequirements());
         $fakeParameters    = array_fill_keys($routeRequirements, 1);
-        return new Node($routeName, $fakeParameters, $parent, $title);
+        return new PageTreeNode($routeName, $fakeParameters, $parent, $title);
     }
 
 
@@ -127,7 +127,7 @@ class PageTreeModel
      *
      * @param null|string $fromRoute
      *
-     * @return Pagetree\Node[]
+     * @return Pagetree\PageTreeNode[]
      */
     public function getPageTree ($fromRoute = null)
     {
