@@ -4,19 +4,19 @@
     "keywords":     ["bootstrap"],
     "type":         "symfony-bundle",
     "homepage":     "https://github.com/Becklyn/BecklynPageTreeBundle",
-    "license": "MIT",
-    "authors":      [
+    "license":      "MIT",
+    "authors": [
         {
             "name":     "Becklyn GmbH",
             "homepage": "http://becklyn.com/"
         }
     ],
-    "require":      {
+    "require": {
         "symfony/framework-bundle": "~2.0",
         "knplabs/knp-menu": "2.0.0-alpha1",
         "knplabs/knp-menu-bundle": "2.0.0-alpha1"
     },
-    "autoload":     {
+    "autoload": {
         "psr-0": { "Becklyn\\PageTreeBundle": "" }
     },
     "target-dir": "Becklyn/PageTreeBundle",
