@@ -4,6 +4,7 @@
     "keywords":     ["bootstrap"],
     "type":         "symfony-bundle",
     "homepage":     "https://github.com/Becklyn/BecklynPageTreeBundle",
+    "license": "MIT",
     "authors":      [
         {
             "name":     "Becklyn GmbH",
