@@ -1,7 +1,7 @@
 {
     "name":         "becklyn/page-tree-bundle",
     "description":  "This bundle provides a simple implementation of a pagetree",
-    "keywords":     ["bootstrap"],
+    "keywords":     ["symfony"],
     "type":         "symfony-bundle",
     "homepage":     "https://github.com/Becklyn/BecklynPageTreeBundle",
     "license":      "MIT",
