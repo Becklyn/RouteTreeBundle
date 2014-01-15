@@ -43,7 +43,7 @@ my_route:
     options:
         page_tree:
             parent: homepage
-            title: "My Route"
+            title:  "My Route"
 ```
 
 All routes without the `page_tree` option are not included in the page tree.
@@ -73,13 +73,30 @@ route:
         page_tree:
             parent:  homepage       # the name of the parent node
             is_root: true           # whether this is a root node
-            title:   "abc"          # optional title of the node
+            title:   "abc"          # (optional) title of the node
+            hidden:  true           # (optional) whether the node should be hidden when rendering
 ```
 
 Either `parent` or `is_root` (must be `true`) must be set.
 Also all referenced `parent`-routes need to exist.
 
 *Notice:* if you pass _both_ `parent` and `is_root` the parent will be discarded and it will be a root page.
+
+The `hidden` flag hides the menu item (including all children) when rendering:
+
+```html
+<ul>
+    <!-- ... -->
+    <li style="display:none">
+        <a href="#">This is hidden</a>
+    </li>
+    <!-- ... -->
+</ul>
+```
+
+This is necessary, because currently (v2.0.0@alpha) there is only one pagetree in the KnpMenuBundle, which is used for both rendering and voting on the active element.
+So if you want to display active parents without including the actual element in the menu, it needs to be in the tree, but hidden in the generated HTML.
+
 
 If the page tree is invalid a `InvalidPageTreeException` is thrown, on the first construction of the page tree.
 

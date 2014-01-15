@@ -93,32 +93,13 @@ class PageTreeModel
      */
     private function transformRouteToNode ($routeName, Route $route)
     {
-        $routePageTreeData = $route->getOption("page_tree");
-
-        // if there is no pagetree
-        if (!is_array($routePageTreeData))
-        {
-            return null;
+        try {
+            return PageTreeNode::createFromRoute($routeName, $route);
         }
-
-        if (isset($routePageTreeData["is_root"]) && $routePageTreeData["is_root"])
+        catch (\InvalidArgumentException $e)
         {
-            $parent = null;
+            throw new InvalidNodeException($e->getMessage(), 0, $e);
         }
-        else if (isset($routePageTreeData["parent"]))
-        {
-            $parent = $routePageTreeData["parent"];
-        }
-        else
-        {
-            throw new InvalidNodeException("Node {$routeName} needs to either have a parent or be a root node.");
-        }
-
-        $title = isset($routePageTreeData["title"]) ? (string) $routePageTreeData["title"] : null;
-
-        $routeRequirements = array_keys($route->getRequirements());
-        $fakeParameters    = array_fill_keys($routeRequirements, 1);
-        return new PageTreeNode($routeName, $fakeParameters, $parent, $title);
     }
 
 

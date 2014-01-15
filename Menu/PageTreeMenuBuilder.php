@@ -69,6 +69,11 @@ class PageTreeMenuBuilder
                 "routeParameters" => $node->getFakeParameters()
             ]);
 
+            if ($node->isHidden())
+            {
+                $child->setAttribute("style", "display:none");
+            }
+
             $this->appendNodes($child, $node->getChildren());
         }
     }
