@@ -97,6 +97,8 @@ The `hidden` flag hides the menu item (including all children) when rendering:
 This is necessary, because currently (v2.0.0@alpha) there is only one pagetree in the KnpMenuBundle, which is used for both rendering and voting on the active element.
 So if you want to display active parents without including the actual element in the menu, it needs to be in the tree, but hidden in the generated HTML.
 
+Please note: if you use the bootstrap menu renderer, the hidden items are correctly stripped from the HTML, instead of hiding the via CSS.
+
 
 If the page tree is invalid a `InvalidPageTreeException` is thrown, on the first construction of the page tree.
 
@@ -116,6 +118,17 @@ my_app.menu:
 ```
 
 The menu builder will use your `title` as link text. If no `title` is set, the route name is used.
+
+
+### Bootstrap compatible menu renderer
+A Bootstrap 3 compatible menu renderer is included in the bundle.
+It will render the inner `<ul class="nav navbar-nav">` of the navbar for you.
+
+```jinja
+{{ renderPageTreeBootstrapMenu("menu_name") }}
+```
+
+It will automatically strip all hidden menu items from the HTML - therefore the known `li.first` and `li.last` from the default KnpMenu theme will not be included.
 
 
 ## Known limitations

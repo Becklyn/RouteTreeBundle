@@ -74,6 +74,8 @@ class PageTreeMenuBuilder
                 $child->setAttribute("style", "display:none");
             }
 
+            $child->setExtra("pageTree:hidden", $node->isHidden());
+
             $this->appendNodes($child, $node->getChildren());
         }
     }

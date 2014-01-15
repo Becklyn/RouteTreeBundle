@@ -7,3 +7,10 @@ services:
     becklyn.page_tree.menu_builder:
         class: Becklyn\PageTreeBundle\Menu\PageTreeMenuBuilder
         arguments: [@knp_menu.factory, @becklyn.page_tree]
+
+
+    twig.extension.becklyn.page_tree:
+            class: Becklyn\PageTreeBundle\Service\PageTreeTwigExtension
+            arguments: [@knp_menu.menu_provider, @knp_menu.renderer_provider]
+            tags:
+                - { name: twig.extension }
