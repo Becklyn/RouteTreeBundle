@@ -15,13 +15,13 @@ use Knp\Menu\Twig\Helper;
 class PageTreeTwigExtension extends \Twig_Extension
 {
     /**
-     * @var \Knp\Menu\Renderer\RendererProviderInterface
+     * @var RendererProviderInterface
      */
     private $rendererProvider;
 
 
     /**
-     * @var \Knp\Menu\Provider\MenuProviderInterface
+     * @var MenuProviderInterface
      */
     private $menuProvider;
 
@@ -44,10 +44,17 @@ class PageTreeTwigExtension extends \Twig_Extension
      *
      * @param ItemInterface $menu
      * @param array $options
+     *
+     * @return string
      */
     public function renderBootstrap ($menu, array $options = [])
     {
-        $options["template"] = "@BecklynPageTree/Menu/bootstrap.html.twig";
+        // Set default values
+        $options = array_merge([
+            "template"      => "@BecklynPageTree/Menu/bootstrap.html.twig",
+            "currentClass"  => "active",
+            "ancestorClass" => "active"
+        ], $options);
 
         // force twig renderer, because we only provide a twig template
         $helper = new Helper($this->rendererProvider, $this->menuProvider);
@@ -82,8 +89,6 @@ class PageTreeTwigExtension extends \Twig_Extension
 
         return false;
     }
-
-
 
 
 
