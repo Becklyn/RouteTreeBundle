@@ -28,7 +28,11 @@
             {% if hasChildren %}
                 {%- set linkClasses    = linkAttributes.class is defined ? linkAttributes.class : "" %}
                 {%- set linkClasses    = "#{linkClasses} dropdown-toggle"|trim %}
-                {%- set linkAttributes = linkAttributes|merge({"data-toggle": "dropdown", class: linkClasses}) %}
+                {%- set linkAttributes = linkAttributes|merge({class: linkClasses}) %}
+
+                {% if not options.hoverDropdown %}
+                    {%- set linkAttributes = linkAttributes|merge({"data-toggle": "dropdown"}) %}
+                {% endif %}
             {% endif %}
 
             {%- if item.uri is not empty and (not matcher.isCurrent(item) or options.currentAsLink) %}

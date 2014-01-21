@@ -130,6 +130,15 @@ It will render the inner `<ul class="nav navbar-nav">` of the navbar for you.
 
 It will automatically strip all hidden menu items from the HTML - therefore the known `li.first` and `li.last` from the default KnpMenu theme will not be included.
 
+It also has new options, in addition to the existing KnpMenu options:
+
+```yaml
+hoverDropdown: true
+```
+
+If you set `hoverDropdown` to true, the `data-toggle="dropdown"` from the items with dropdown is removed - you could add a hover
+functionality via CSS then ([as shown here](https://gist.github.com/apfelbox/8541060#file-hover-navbar-css)).
+
 
 ## Known limitations
 This is a pretty simple implementation, which is intended:

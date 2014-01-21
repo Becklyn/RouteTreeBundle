@@ -53,7 +53,8 @@ class PageTreeTwigExtension extends \Twig_Extension
         $options = array_merge([
             "template"      => "@BecklynPageTree/Menu/bootstrap.html.twig",
             "currentClass"  => "active",
-            "ancestorClass" => "active"
+            "ancestorClass" => "active",
+            "hoverDropdown" => true
         ], $options);
 
         // force twig renderer, because we only provide a twig template
