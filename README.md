@@ -71,10 +71,11 @@ The return value is a list of nodes.
 route:
     options:
         page_tree:
-            parent:  homepage       # the name of the parent node
-            is_root: true           # whether this is a root node
-            title:   "abc"          # (optional) title of the node
-            hidden:  true           # (optional) whether the node should be hidden when rendering
+            parent:     homepage       # the name of the parent node
+            is_root:    false          # whether this is a root node
+            title:      "abc"          # (optional) title of the node
+            hidden:     false          # (optional) whether the node should be hidden when rendering
+            parameters: {}             # the default values for the parameters
 ```
 
 Either `parent` or `is_root` (must be `true`) must be set.
@@ -82,6 +83,8 @@ Also all referenced `parent`-routes need to exist.
 
 *Notice:* if you pass _both_ `parent` and `is_root` the parent will be discarded and it will be a root page.
 
+
+### Hidden
 The `hidden` flag hides the menu item (including all children) when rendering:
 
 ```html
@@ -100,6 +103,35 @@ So if you want to display active parents without including the actual element in
 Please note: if you use the bootstrap menu renderer, the hidden items are correctly stripped from the HTML, instead of hiding the via CSS.
 
 
+### Parameters
+The parameters can define default values for parameters:
+
+```yml
+page_listing:
+    path: /listing/{page}
+    options:
+        page_tree:
+            parameters:
+                page: 1
+```
+
+**If you do not define a default value, `1` is used**
+
+You can use the expression language for the default values.
+Currently supported functions:
+* `date()` (wraps the [PHP date](php.net/manual/en/function.date.php) function, for the current timestamp)
+
+```yml
+calendar:
+    path: /calendar/{year}
+    options:
+        page_tree:
+            parameters:
+                year: "date('Y')"
+```
+
+
+### Error Cases
 If the page tree is invalid a `InvalidPageTreeException` is thrown, on the first construction of the page tree.
 
 

@@ -1,8 +1,7 @@
 <?php
 
-namespace Becklyn\PageTreeBundle\Model\PageTree;
+namespace Becklyn\PageTreeBundle\Entity;
 
-use Symfony\Component\Routing\Route;
 
 /**
  * Represents a node in the page tree
@@ -65,11 +64,11 @@ class PageTreeNode
      */
     public function __construct ($route, array $fakeParameters = array(), $parent, $title, $hidden = false)
     {
-        $this->route          = $route;
-        $this->fakeParameters = $fakeParameters;
-        $this->parent         = $parent;
-        $this->title          = $title;
-        $this->hidden         = $hidden;
+        $this->route               = $route;
+        $this->fakeParameters      = $fakeParameters;
+        $this->parent              = $parent;
+        $this->title               = $title;
+        $this->hidden              = $hidden;
     }
 
 
@@ -163,45 +162,5 @@ class PageTreeNode
     public function isHidden ()
     {
         return $this->hidden;
-    }
-
-
-
-    /**
-     * Creates a pagetree node from a given route
-     *
-     * @param string $routeName
-     * @param Route $route
-     */
-    public static function createFromRoute ($routeName, Route $route)
-    {
-        $routePageTreeData = $route->getOption("page_tree");
-
-        // if there is no pagetree data
-        if (!is_array($routePageTreeData))
-        {
-            return null;
-        }
-
-        if (isset($routePageTreeData["is_root"]) && $routePageTreeData["is_root"])
-        {
-            $parent = null;
-        }
-        else if (isset($routePageTreeData["parent"]))
-        {
-            $parent = $routePageTreeData["parent"];
-        }
-        else
-        {
-            throw new InvalidNodeException("Node {$routeName} needs to either have a parent or be a root node.");
-        }
-
-        $title    = isset($routePageTreeData["title"])  ? (string) $routePageTreeData["title"] : null;
-        $isHidden = isset($routePageTreeData["hidden"]) ? (bool) $routePageTreeData["hidden"]  : false;
-
-        $routeRequirements = array_keys($route->getRequirements());
-        $fakeParameters    = array_fill_keys($routeRequirements, 1);
-
-        return new self($routeName, $fakeParameters, $parent, $title, $isHidden);
     }
 }

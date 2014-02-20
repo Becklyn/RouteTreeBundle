@@ -2,9 +2,10 @@
 
 namespace Becklyn\PageTreeBundle\Model;
 
+use Becklyn\PageTreeBundle\Entity\PageTreeNode;
 use Becklyn\PageTreeBundle\Model\PageTree\InvalidNodeException;
 use Becklyn\PageTreeBundle\Model\PageTree\InvalidPageTreeException;
-use Becklyn\PageTreeBundle\Model\PageTree\PageTreeNode;
+use Becklyn\PageTreeBundle\Service\PlaceholderParameterGenerator;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -26,12 +27,21 @@ class PageTreeModel
     private $directAccess;
 
 
+    /**
+     * @var PlaceholderParameterGenerator
+     */
+    private $placeholderParameterGenerator;
+
+
 
     /**
      * @param RouterInterface $router
+     * @param \Becklyn\PageTreeBundle\Service\PlaceholderParameterGenerator $placeholderParameterGenerator
      */
-    public function __construct (RouterInterface $router)
+    public function __construct (RouterInterface $router, PlaceholderParameterGenerator $placeholderParameterGenerator)
     {
+        $this->placeholderParameterGenerator = $placeholderParameterGenerator;
+
         $this->buildPageTree($router);
     }
 
@@ -94,13 +104,57 @@ class PageTreeModel
     private function transformRouteToNode ($routeName, Route $route)
     {
         try {
-            return PageTreeNode::createFromRoute($routeName, $route);
+            return $this->createNodeFromRoute($routeName, $route);
         }
         catch (\InvalidArgumentException $e)
         {
             throw new InvalidNodeException($e->getMessage(), 0, $e);
         }
     }
+
+
+
+    /**
+     * Creates a pagetree node from a given route
+     *
+     * @param string $routeName
+     * @param Route $route
+     *
+     * @throws InvalidNodeException
+     * @return PageTreeNode|null
+     */
+    private function createNodeFromRoute ($routeName, Route $route)
+    {
+        $routePageTreeData = $route->getOption("page_tree");
+
+        // if there is no pagetree data
+        if (!is_array($routePageTreeData))
+        {
+            return null;
+        }
+
+        if (isset($routePageTreeData["is_root"]) && $routePageTreeData["is_root"])
+        {
+            $parent = null;
+        }
+        else if (isset($routePageTreeData["parent"]))
+        {
+            $parent = $routePageTreeData["parent"];
+        }
+        else
+        {
+            throw new InvalidNodeException("Node {$routeName} needs to either have a parent or be a root node.");
+        }
+
+        $title               = isset($routePageTreeData["title"])      ? (string) $routePageTreeData["title"]     : null;
+        $isHidden            = isset($routePageTreeData["hidden"])     ? (bool) $routePageTreeData["hidden"]      : false;
+        $fakeParameterValues = isset($routePageTreeData["parameters"]) ? (array) $routePageTreeData["parameters"] : array();
+        $fakeParameters      = $this->placeholderParameterGenerator->prepareFakeParameters($route->getRequirements(), $fakeParameterValues);
+
+        return new PageTreeNode($routeName, $fakeParameters, $parent, $title, $isHidden);
+    }
+
+
 
 
     /**
