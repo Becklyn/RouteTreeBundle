@@ -3,6 +3,7 @@
 namespace Becklyn\PageTreeBundle\Service;
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\ExpressionLanguage\SyntaxError;
 
 class PlaceholderParameterGenerator
 {
@@ -68,7 +69,16 @@ class PlaceholderParameterGenerator
         {
             if (isset($fakeParameters[$parameter]))
             {
-                $placeholders[$parameter] = $this->language->evaluate($fakeParameters[$parameter], $this->expressionContext);
+                try
+                {
+                    $placeholders[$parameter] = $this->language->evaluate($fakeParameters[$parameter], $this->expressionContext);
+                }
+                catch (SyntaxError $e)
+                {
+                    // if the compilation fails, we just use the text as string
+                    // this allows arbitrary strings, which weren't meant as expression
+                    $placeholders[$parameter] = $fakeParameters[$parameter];
+                }
             }
             else
             {
