@@ -56,33 +56,33 @@ class PlaceholderParameterGenerator
     /**
      * Prepares the fake parameters
      *
-     * @param array $requirements
+     * @param array $pathVariables
      * @param array $fakeParameters
      *
      * @return array
      */
-    public function prepareFakeParameters (array $requirements, array $fakeParameters = [])
+    public function prepareFakeParameters (array $pathVariables, array $fakeParameters = [])
     {
         $placeholders = [];
 
-        foreach ($requirements as $parameter => $requirement)
+        foreach ($pathVariables as $pathVariable)
         {
-            if (isset($fakeParameters[$parameter]))
+            if (isset($fakeParameters[$pathVariable]))
             {
                 try
                 {
-                    $placeholders[$parameter] = $this->language->evaluate($fakeParameters[$parameter], $this->expressionContext);
+                    $placeholders[$pathVariable] = $this->language->evaluate($fakeParameters[$pathVariable], $this->expressionContext);
                 }
                 catch (SyntaxError $e)
                 {
                     // if the compilation fails, we just use the text as string
                     // this allows arbitrary strings, which weren't meant as expression
-                    $placeholders[$parameter] = $fakeParameters[$parameter];
+                    $placeholders[$pathVariable] = $fakeParameters[$pathVariable];
                 }
             }
             else
             {
-                $placeholders[$parameter] = 1;
+                $placeholders[$pathVariable] = 1;
             }
         }
 
