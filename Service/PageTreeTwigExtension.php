@@ -54,7 +54,8 @@ class PageTreeTwigExtension extends \Twig_Extension
             "template"      => "@BecklynPageTree/Menu/bootstrap.html.twig",
             "currentClass"  => "active",
             "ancestorClass" => "active",
-            "hoverDropdown" => true
+            "hoverDropdown" => true,
+            "listClass"     => "navbar-nav"
         ], $options);
 
         // force twig renderer, because we only provide a twig template
@@ -73,7 +74,7 @@ class PageTreeTwigExtension extends \Twig_Extension
      */
     public function hasChildrenHelper (ItemInterface $item)
     {
-        if ($item->getLevel() >= 2 || !$item->isDisplayed())
+        if (!$item->isDisplayed())
         {
             return false;
         }
@@ -99,7 +100,7 @@ class PageTreeTwigExtension extends \Twig_Extension
     public function getFunctions ()
     {
         return array(
-            new \Twig_SimpleFunction("renderPageTreeBootstrapMenu", [$this, "renderBootstrap"], ["is_safe" => ["html"]]),
+            new \Twig_SimpleFunction("renderPageTreeBootstrapMenu",       [$this, "renderBootstrap"], ["is_safe" => ["html"]]),
             new \Twig_SimpleFunction("pageTreeBootstrapMenu_hasChildren", [$this, "hasChildrenHelper"]),
         );
     }

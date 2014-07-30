@@ -4,7 +4,7 @@ namespace Becklyn\PageTreeBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
-use Becklyn\PageTreeBundle\Model\PageTree\PageTreeNode;
+use Becklyn\PageTreeBundle\Entity\PageTreeNode;
 use Becklyn\PageTreeBundle\Model\PageTreeModel;
 
 class PageTreeMenuBuilder
@@ -46,7 +46,6 @@ class PageTreeMenuBuilder
         $root = $this->factory->createItem("root");
 
         // prepare menu for bootstrap
-        $root->setChildrenAttribute("class", "nav navbar-nav");
         $this->appendNodes($root, $this->pageTreeModel->getPageTree($fromRoute));
 
         return $root;
