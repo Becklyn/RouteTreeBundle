@@ -2,7 +2,10 @@
 
 {% block list %}
     {% if item.hasChildren and options.depth is not sameas(0) and item.displayChildren %}
-        {%- set listAttributes = listAttributes|merge({class: "nav #{options.listClass} " ~ listAttributes.class|default("")}) %}
+        {% if listAttributes.class is not defined or not "dropdown-menu" in listAttributes.class %}
+            {%- set listAttributes = listAttributes|merge({class: "nav #{options.listClass} " ~ listAttributes.class|default("")}) %}
+        {% endif %}
+
         {% import "knp_menu.html.twig" as knp_menu %}
         <ul{{ knp_menu.attributes(listAttributes) }}>
             {{ block('children') }}
@@ -38,6 +41,11 @@
             {%- set classes = classes|merge(["dropdown"]) %}
         {% endif %}
 
+        {%- set attributes = item.attributes %}
+        {%- if classes is not empty %}
+            {%- set attributes = attributes|merge({'class': classes|join(' ')}) %}
+        {%- endif %}
+
         {# displaying the item #}
         {% import "knp_menu.html.twig" as knp_menu %}
         <li{{ knp_menu.attributes(attributes) }}>
@@ -58,3 +66,5 @@
         </li>
     {% endif %}
 {% endblock %}
+
+{% block linkElement %}{% import "knp_menu.html.twig" as knp_menu %}<a href="{{ item.uri }}"{{ knp_menu.attributes(item.linkAttributes) }}>{{ block('label') }}{% if hasChildren %} <b class="caret"></b>{% endif %}</a>{% endblock %}
