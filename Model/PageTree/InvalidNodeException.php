@@ -2,7 +2,4 @@
 
 namespace Becklyn\PageTreeBundle\Model\PageTree;
 
-class InvalidNodeException extends \Exception
-{
-
-}
+class InvalidNodeException extends \Exception {}

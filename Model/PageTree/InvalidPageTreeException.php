@@ -4,6 +4,4 @@ namespace Becklyn\PageTreeBundle\Model\PageTree;
 
 use Exception;
 
-class InvalidPageTreeException extends \Exception
-{
-}
+class InvalidPageTreeException extends \Exception {}
