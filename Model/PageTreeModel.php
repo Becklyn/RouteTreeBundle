@@ -84,7 +84,6 @@ class PageTreeModel
             }
             else
             {
-                // @todo root-detection could be automatic.
                 throw new InvalidPageTreeException("Invalid pagetree at route „{$node->getRoute()}“: parent '{$node->getParent()}' requested, but route was not found. Did you forget to define the route „{$node->getRoute()}“ as root?");
             }
         }
