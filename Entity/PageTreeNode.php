@@ -47,6 +47,15 @@ class PageTreeNode
 
 
     /**
+     * Identifier where to put a separator.
+     * Possible values: "before", "after", null (= no separator)
+     *
+     * @var string|null
+     */
+    private $separator = null;
+
+
+    /**
      * Flag, whether the element should be rendered
      *
      * @var bool
@@ -56,19 +65,21 @@ class PageTreeNode
 
 
     /**
-     * @param $route
-     * @param string[] $fakeParameters
+     * @param string      $route
+     * @param string[]    $fakeParameters
      * @param string|null $parent
      * @param string|null $title
-     * @param bool $hidden
+     * @param bool        $hidden
+     * @param string|null $separator
      */
-    public function __construct ($route, array $fakeParameters = array(), $parent, $title, $hidden = false)
+    public function __construct ($route, array $fakeParameters = array(), $parent, $title, $hidden, $separator)
     {
-        $this->route               = $route;
-        $this->fakeParameters      = $fakeParameters;
-        $this->parent              = $parent;
-        $this->title               = $title;
-        $this->hidden              = $hidden;
+        $this->route          = $route;
+        $this->fakeParameters = $fakeParameters;
+        $this->parent         = $parent;
+        $this->title          = $title;
+        $this->hidden         = $hidden;
+        $this->separator      = $separator;
     }
 
 
@@ -162,5 +173,15 @@ class PageTreeNode
     public function isHidden ()
     {
         return $this->hidden;
+    }
+
+
+
+    /**
+     * @return null|string
+     */
+    public function getSeparator ()
+    {
+        return $this->separator;
     }
 }

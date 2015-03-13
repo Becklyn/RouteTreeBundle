@@ -74,6 +74,7 @@ class PageTreeMenuBuilder
             }
 
             $child->setExtra("pageTree:hidden", $node->isHidden());
+            $child->setExtra("pageTree:separator", $node->getSeparator());
 
             $this->appendNodes($child, $node->getChildren());
         }

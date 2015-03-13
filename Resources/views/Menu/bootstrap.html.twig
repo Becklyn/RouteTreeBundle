@@ -48,6 +48,9 @@
 
         {# displaying the item #}
         {% import "knp_menu.html.twig" as knp_menu %}
+        {% if item.extra("pageTree:separator") is sameas("before") %}
+            <li role="presentation" class="divider"></li>
+        {% endif %}
         <li{{ knp_menu.attributes(attributes) }}>
             {%- if item.uri is not empty and (not matcher.isCurrent(item) or options.currentAsLink) %}
                 {{ block('linkElement') }}
@@ -64,6 +67,9 @@
                 {{ block('list') }}
             {% endif %}
         </li>
+        {% if item.extra("pageTree:separator") is sameas("after") %}
+            <li role="presentation" class="divider"></li>
+        {% endif %}
     {% endif %}
 {% endblock %}
 

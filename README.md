@@ -75,7 +75,8 @@ route:
             is_root:    false          # whether this is a root node
             title:      "abc"          # (optional) title of the node
             hidden:     false          # (optional) whether the node should be hidden when rendering
-            parameters: {}             # the default values for the parameters
+            parameters: {}             # (optional) the default values for the parameters
+            separator:  null           # (optional) where to place a separator
 ```
 
 Either `parent` or `is_root` (must be `true`) must be set.
@@ -129,6 +130,16 @@ calendar:
             parameters:
                 year: "date('Y')"
 ```
+
+### Separator
+You can place a separator before or after any menu item. The used template must support properly it.
+
+In the bootstrap theme this is only properly supported for dropdown menus. Please note, that adjacent separators are not merged.
+
+Possible values:
+*   `null`: no separator (default)
+*   `before`: place separator right before this item
+*   `after`: place separator right after this item
 
 
 ### Error Cases
