@@ -151,7 +151,7 @@ class PageTreeModel
         $separator           = isset($routePageTreeData["separator"])  ? (string) $routePageTreeData["separator"] : null;
         $fakeParameterValues = isset($routePageTreeData["parameters"]) ? (array) $routePageTreeData["parameters"] : array();
         $fakeParameters      = $this->placeholderParameterGenerator->prepareFakeParameters($route->compile()->getPathVariables(), $fakeParameterValues);
-        $sortOrder           = isset($routePageTreeData["sortOrder"])  ? (string) $routePageTreeData["sortOrder"] : null;
+        $sortOrder           = isset($routePageTreeData["sortOrder"])  ? (integer) $routePageTreeData["sortOrder"] : null;
 
         return new PageTreeNode($routeName, $fakeParameters, $parent, $title, $isHidden, $separator, $sortOrder);
     }

@@ -73,13 +73,13 @@ class PageTreeNode
 
 
     /**
-     * @param string      $route
-     * @param string[]    $fakeParameters
-     * @param string|null $parent
-     * @param string|null $title
-     * @param bool        $hidden
-     * @param string|null $separator
-     * @param integer|null    $sortOrder
+     * @param string       $route
+     * @param string[]     $fakeParameters
+     * @param string|null  $parent
+     * @param string|null  $title
+     * @param bool         $hidden
+     * @param string|null  $separator
+     * @param integer|null $sortOrder
      */
     public function __construct ($route, array $fakeParameters = array(), $parent, $title, $hidden, $separator, $sortOrder)
     {
