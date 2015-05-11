@@ -63,16 +63,25 @@ class PageTreeNode
     private $hidden;
 
 
+    /**
+     * sortorder of element
+     *
+     * @var integer
+     */
+    private $sortOrder;
+
+
 
     /**
-     * @param string      $route
-     * @param string[]    $fakeParameters
-     * @param string|null $parent
-     * @param string|null $title
-     * @param bool        $hidden
-     * @param string|null $separator
+     * @param string       $route
+     * @param string[]     $fakeParameters
+     * @param string|null  $parent
+     * @param string|null  $title
+     * @param bool         $hidden
+     * @param string|null  $separator
+     * @param integer|null $sortOrder
      */
-    public function __construct ($route, array $fakeParameters = array(), $parent, $title, $hidden, $separator)
+    public function __construct ($route, array $fakeParameters = array(), $parent, $title, $hidden, $separator, $sortOrder)
     {
         $this->route          = $route;
         $this->fakeParameters = $fakeParameters;
@@ -80,6 +89,7 @@ class PageTreeNode
         $this->title          = $title;
         $this->hidden         = $hidden;
         $this->separator      = $separator;
+        $this->sortOrder      = $sortOrder;
     }
 
 
@@ -183,5 +193,36 @@ class PageTreeNode
     public function getSeparator ()
     {
         return $this->separator;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getSortOrder ()
+    {
+        return $this->sortOrder;
+    }
+
+
+
+    /**
+     * sorts the PageTreeNode objects by the sortOrder
+     *
+     * @param $nodeA
+     * @param $nodeB
+     *
+     * @return integer
+     */
+    static function sortNodes($nodeA, $nodeB)
+    {
+        $sortOrderA = strtolower($nodeA->sortOrder);
+        $sortOrderB = strtolower($nodeB->sortOrder);
+
+        if ($sortOrderA == $sortOrderB) {
+            return 0;
+        }
+        return ($sortOrderA > $sortOrderB) ? +1 : -1;
     }
 }

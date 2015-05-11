@@ -61,6 +61,8 @@ class PageTreeMenuBuilder
      */
     private function appendNodes (ItemInterface $parent, array $nodes)
     {
+        usort($nodes, array("Becklyn\\PageTreeBundle\\Entity\\PageTreeNode", "sortNodes"));
+
         foreach ($nodes as $node)
         {
             $child = $parent->addChild($node->getDisplayTitle(), [
