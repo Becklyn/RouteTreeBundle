@@ -38,15 +38,16 @@ class PageTreeMenuBuilder
      * Builds the menu from a given route
      *
      * @param null|string $fromRoute
+     * @param array $options
      *
      * @return ItemInterface
      */
-    public function buildMenu ($fromRoute = null)
+    public function buildMenu ($fromRoute = null, array $options = [])
     {
         $root = $this->factory->createItem("root");
 
         // prepare menu for bootstrap
-        $this->appendNodes($root, $this->pageTreeModel->getPageTree($fromRoute));
+        $this->appendNodes($root, $this->pageTreeModel->getPageTree($fromRoute), $options);
 
         return $root;
     }
@@ -58,14 +59,29 @@ class PageTreeMenuBuilder
      *
      * @param ItemInterface $parent
      * @param PageTreeNode[] $nodes
+     * @param array $options
      */
-    private function appendNodes (ItemInterface $parent, array $nodes)
+    private function appendNodes (ItemInterface $parent, array $nodes, array $options = [])
     {
         foreach ($nodes as $node)
         {
+            $routeParameters = [];
+
+            foreach ($node->getFakeParameters() as $parameter => $value)
+            {
+                if (isset($options["routeParameters"][$parameter]))
+                {
+                    $routeParameters[$parameter] = $options["routeParameters"][$parameter];
+                }
+                else
+                {
+                    $routeParameters[$parameter] = $value;
+                }
+            }
+
             $child = $parent->addChild($node->getDisplayTitle(), [
                 "route" => $node->getRoute(),
-                "routeParameters" => $node->getFakeParameters()
+                "routeParameters" => $routeParameters,
             ]);
 
             if ($node->isHidden())
@@ -76,7 +92,7 @@ class PageTreeMenuBuilder
             $child->setExtra("pageTree:hidden", $node->isHidden());
             $child->setExtra("pageTree:separator", $node->getSeparator());
 
-            $this->appendNodes($child, $node->getChildren());
+            $this->appendNodes($child, $node->getChildren(), $options);
         }
     }
 }

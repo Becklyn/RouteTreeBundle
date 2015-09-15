@@ -14,6 +14,9 @@ services:
 
     twig.extension.becklyn.page_tree:
             class: Becklyn\PageTreeBundle\Service\PageTreeTwigExtension
-            arguments: [@knp_menu.menu_provider, @knp_menu.renderer_provider]
+            arguments:
+                - @knp_menu.menu_provider
+                - @knp_menu.renderer_provider
+                - @becklyn.page_tree.menu_builder
             tags:
                 - { name: twig.extension }

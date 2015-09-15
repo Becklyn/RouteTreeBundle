@@ -2,6 +2,7 @@
 
 namespace Becklyn\PageTreeBundle\Service;
 
+use Becklyn\PageTreeBundle\Menu\PageTreeMenuBuilder;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Knp\Menu\Renderer\RendererProviderInterface;
@@ -26,15 +27,22 @@ class PageTreeTwigExtension extends \Twig_Extension
     private $menuProvider;
 
 
+    /**
+     * @var PageTreeMenuBuilder
+     */
+    private $menuBuilder;
+
+
 
     /**
      * @param MenuProviderInterface $menuProvider
      * @param RendererProviderInterface $rendererProvider
      */
-    public function __construct (MenuProviderInterface $menuProvider, RendererProviderInterface $rendererProvider)
+    public function __construct (MenuProviderInterface $menuProvider, RendererProviderInterface $rendererProvider, PageTreeMenuBuilder $menuBuilder)
     {
         $this->menuProvider     = $menuProvider;
         $this->rendererProvider = $rendererProvider;
+        $this->menuBuilder      = $menuBuilder;
     }
 
 
@@ -94,6 +102,12 @@ class PageTreeTwigExtension extends \Twig_Extension
 
 
 
+    public function getPageTreeMenu ($root, $options = array())
+    {
+        return $this->menuBuilder->buildMenu($root, $options);
+    }
+
+
     /**
      * {@inheritdoc}
      */
@@ -102,6 +116,7 @@ class PageTreeTwigExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction("renderPageTreeBootstrapMenu",       [$this, "renderBootstrap"], ["is_safe" => ["html"]]),
             new \Twig_SimpleFunction("pageTreeBootstrapMenu_hasChildren", [$this, "hasChildrenHelper"]),
+            new \Twig_SimpleFunction("getPageTreeMenu",                   [$this, "getPageTreeMenu"]),
         );
     }
 
