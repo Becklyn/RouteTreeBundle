@@ -62,6 +62,13 @@ class PageTreeNode
      */
     private $hidden;
 
+    /**
+     * Array of roles
+     *
+     * @var array
+     */
+    private $roles;
+
 
 
     /**
@@ -72,7 +79,7 @@ class PageTreeNode
      * @param bool        $hidden
      * @param string|null $separator
      */
-    public function __construct ($route, array $fakeParameters = array(), $parent, $title, $hidden, $separator)
+    public function __construct ($route, array $fakeParameters = array(), $parent, $title, $hidden, $separator, $roles = array())
     {
         $this->route          = $route;
         $this->fakeParameters = $fakeParameters;
@@ -80,6 +87,7 @@ class PageTreeNode
         $this->title          = $title;
         $this->hidden         = $hidden;
         $this->separator      = $separator;
+        $this->roles          = $roles;
     }
 
 
@@ -183,5 +191,13 @@ class PageTreeNode
     public function getSeparator ()
     {
         return $this->separator;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getRoles ()
+    {
+        return $this->roles;
     }
 }

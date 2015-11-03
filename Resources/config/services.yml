@@ -6,7 +6,7 @@ services:
 
     becklyn.page_tree.menu_builder:
         class: Becklyn\PageTreeBundle\Menu\PageTreeMenuBuilder
-        arguments: [@knp_menu.factory, @becklyn.page_tree]
+        arguments: [@knp_menu.factory, @becklyn.page_tree, @security.authorization_checker]
 
 
     becklyn.page_tree.placeholder_parameter_generator:

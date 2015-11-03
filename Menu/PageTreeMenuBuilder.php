@@ -6,6 +6,7 @@ use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Becklyn\PageTreeBundle\Entity\PageTreeNode;
 use Becklyn\PageTreeBundle\Model\PageTreeModel;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class PageTreeMenuBuilder
 {
@@ -20,16 +21,22 @@ class PageTreeMenuBuilder
      */
     private $pageTreeModel;
 
+    /**
+     * @var AuthorizationCheckerInterface
+     */
+    private $authorizationChecker;
+
 
 
     /**
      * @param FactoryInterface $factory
      * @param PageTreeModel $pageTreeModel
      */
-    public function __construct(FactoryInterface $factory, PageTreeModel $pageTreeModel)
+    public function __construct(FactoryInterface $factory, PageTreeModel $pageTreeModel,  AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->factory       = $factory;
         $this->pageTreeModel = $pageTreeModel;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
 
@@ -84,15 +91,39 @@ class PageTreeMenuBuilder
                 "routeParameters" => $routeParameters,
             ]);
 
-            if ($node->isHidden())
+            $nodeHidden = $node->isHidden() || !$this->isAuthorized($node);
+
+            if ($nodeHidden)
             {
                 $child->setAttribute("style", "display:none");
             }
 
-            $child->setExtra("pageTree:hidden", $node->isHidden());
+            $child->setExtra("pageTree:hidden", $nodeHidden);
             $child->setExtra("pageTree:separator", $node->getSeparator());
 
             $this->appendNodes($child, $node->getChildren(), $options);
         }
+    }
+
+    /**
+     * Checks wheter the logged in User is authorized to see the PageTreeNode
+     *
+     * @param PageTreeNode $node
+     * @return bool
+     */
+    private function isAuthorized(PageTreeNode $node)
+    {
+        if (empty($node->getRoles()))
+        {
+            return true;
+        }
+
+        foreach ($node->getRoles() as $role) {
+            if ($this->authorizationChecker->isGranted($role)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
