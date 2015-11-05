@@ -32,7 +32,7 @@ class PageTreeMenuBuilder
      * @param FactoryInterface $factory
      * @param PageTreeModel $pageTreeModel
      */
-    public function __construct(FactoryInterface $factory, PageTreeModel $pageTreeModel,  AuthorizationCheckerInterface $authorizationChecker)
+    public function __construct(FactoryInterface $factory, PageTreeModel $pageTreeModel, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->factory       = $factory;
         $this->pageTreeModel = $pageTreeModel;

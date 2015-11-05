@@ -65,10 +65,9 @@ class PageTreeNode
     /**
      * Array of roles
      *
-     * @var array
+     * @var string[]
      */
     private $roles;
-
 
 
     /**
@@ -78,6 +77,7 @@ class PageTreeNode
      * @param string|null $title
      * @param bool        $hidden
      * @param string|null $separator
+     * @param string[]    $roles
      */
     public function __construct ($route, array $fakeParameters = array(), $parent, $title, $hidden, $separator, $roles = array())
     {
@@ -194,7 +194,7 @@ class PageTreeNode
     }
 
     /**
-     * @return null|string
+     * @return string[]
      */
     public function getRoles ()
     {
