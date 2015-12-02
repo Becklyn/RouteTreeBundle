@@ -150,9 +150,10 @@ class PageTreeModel
         $isHidden            = isset($routePageTreeData["hidden"])     ? (bool) $routePageTreeData["hidden"]      : false;
         $separator           = isset($routePageTreeData["separator"])  ? (string) $routePageTreeData["separator"] : null;
         $fakeParameterValues = isset($routePageTreeData["parameters"]) ? (array) $routePageTreeData["parameters"] : array();
+        $roles               = isset($routePageTreeData["roles"])      ? (array) $routePageTreeData["roles"]      : array();
         $fakeParameters      = $this->placeholderParameterGenerator->prepareFakeParameters($route->compile()->getPathVariables(), $fakeParameterValues);
 
-        return new PageTreeNode($routeName, $fakeParameters, $parent, $title, $isHidden, $separator);
+        return new PageTreeNode($routeName, $fakeParameters, $parent, $title, $isHidden, $separator, $roles);
     }
 
 
