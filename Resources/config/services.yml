@@ -1,12 +1,16 @@
 services:
     becklyn.page_tree:
         class: Becklyn\PageTreeBundle\Model\PageTreeModel
-        arguments: [@router, @becklyn.page_tree.placeholder_parameter_generator]
+        arguments:
+            - "@router"
+            - "@becklyn.page_tree.placeholder_parameter_generator"
 
 
     becklyn.page_tree.menu_builder:
         class: Becklyn\PageTreeBundle\Menu\PageTreeMenuBuilder
-        arguments: [@knp_menu.factory, @becklyn.page_tree]
+        arguments:
+            - "@knp_menu.factory"
+            - "@becklyn.page_tree"
 
 
     becklyn.page_tree.placeholder_parameter_generator:
@@ -15,8 +19,8 @@ services:
     twig.extension.becklyn.page_tree:
             class: Becklyn\PageTreeBundle\Service\PageTreeTwigExtension
             arguments:
-                - @knp_menu.menu_provider
-                - @knp_menu.renderer_provider
-                - @becklyn.page_tree.menu_builder
+                - "@knp_menu.menu_provider"
+                - "@knp_menu.renderer_provider"
+                - "@becklyn.page_tree.menu_builder"
             tags:
                 - { name: twig.extension }
