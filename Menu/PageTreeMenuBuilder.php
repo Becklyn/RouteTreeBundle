@@ -72,6 +72,12 @@ class PageTreeMenuBuilder
     {
         foreach ($nodes as $node)
         {
+            // Don't render nodes that the User is not supposed/eligible to see
+            if ($node->isHidden() || !$this->isAuthorized($node))
+            {
+                continue;
+            }
+
             $routeParameters = [];
 
             foreach ($node->getFakeParameters() as $parameter => $value)
@@ -90,13 +96,6 @@ class PageTreeMenuBuilder
                 "route" => $node->getRoute(),
                 "routeParameters" => $routeParameters,
             ]);
-
-            $nodeHidden = $node->isHidden() || !$this->isAuthorized($node);
-
-            if ($nodeHidden)
-            {
-                $child->setAttribute("style", "display:none");
-            }
 
             $child->setExtra("pageTree:hidden", $nodeHidden);
             $child->setExtra("pageTree:separator", $node->getSeparator());
