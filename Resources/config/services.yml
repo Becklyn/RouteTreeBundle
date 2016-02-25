@@ -4,6 +4,7 @@ services:
         arguments:
             - "@router"
             - "@becklyn.page_tree.placeholder_parameter_generator"
+            - "@service_container"
 
 
     becklyn.page_tree.menu_builder:
