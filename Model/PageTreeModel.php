@@ -6,6 +6,8 @@ use Becklyn\PageTreeBundle\Entity\PageTreeNode;
 use Becklyn\PageTreeBundle\Model\PageTree\InvalidNodeException;
 use Becklyn\PageTreeBundle\Model\PageTree\InvalidPageTreeException;
 use Becklyn\PageTreeBundle\Service\PlaceholderParameterGenerator;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -33,13 +35,21 @@ class PageTreeModel
     private $placeholderParameterGenerator;
 
 
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+
 
     /**
      * @param RouterInterface $router
      * @param \Becklyn\PageTreeBundle\Service\PlaceholderParameterGenerator $placeholderParameterGenerator
      */
-    public function __construct (RouterInterface $router, PlaceholderParameterGenerator $placeholderParameterGenerator)
+    public function __construct (RouterInterface $router, PlaceholderParameterGenerator $placeholderParameterGenerator, ContainerInterface $container)
     {
+
+        $this->container = $container;
         $this->placeholderParameterGenerator = $placeholderParameterGenerator;
 
         $this->buildPageTree($router);
@@ -146,7 +156,7 @@ class PageTreeModel
             throw new InvalidNodeException("Node {$routeName} needs to either have a parent or be a root node.");
         }
 
-        $title               = isset($routePageTreeData["title"])      ? (string) $routePageTreeData["title"]     : null;
+        $title               = $this->prepareTitle($routePageTreeData);
         $isHidden            = isset($routePageTreeData["hidden"])     ? (bool) $routePageTreeData["hidden"]      : false;
         $separator           = isset($routePageTreeData["separator"])  ? (string) $routePageTreeData["separator"] : null;
         $fakeParameterValues = isset($routePageTreeData["parameters"]) ? (array) $routePageTreeData["parameters"] : array();
@@ -158,6 +168,39 @@ class PageTreeModel
 
 
 
+    /**
+     * Prepares the title by fetching it from the given config array and replacing all contained parameters
+     *
+     * @param array $routePageTreeData
+     *
+     * @return null|string
+     */
+    public function prepareTitle (array $routePageTreeData)
+    {
+        if (!isset($routePageTreeData["title"]))
+        {
+            return null;
+        }
+
+        $title = (string) $routePageTreeData["title"];
+
+        $title = preg_replace_callback(
+            '~%(?P<parameter_name>.+?)%~',
+            function (array $matches) {
+                try
+                {
+                    return $this->container->getParameter($matches["parameter_name"]);
+                }
+                catch (InvalidArgumentException $e)
+                {
+                    return $matches[0];
+                }
+            },
+            $title
+        );
+
+        return $title;
+    }
 
     /**
      * Returns the page tree
