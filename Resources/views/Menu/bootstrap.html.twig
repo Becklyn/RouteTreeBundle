@@ -14,9 +14,9 @@
 {% endblock %}
 
 {% block item %}
-    {% if item.displayed and not item.extra("pageTree:hidden", false) %}
+    {% if item.displayed %}
         {# Extension OAGM Bootstrap: only show items up to level 2 (bootstrap doesn't support sub-dropdowns) and when there are children #}
-        {%- set hasChildren = pageTreeBootstrapMenu_hasChildren(item) %}
+        {%- set hasChildren = hasRouteTreeChildren(item) %}
 
         {# building the class of the item #}
         {%- set classes = item.attribute('class') is not empty ? [item.attribute('class')] : [] %}
@@ -48,7 +48,7 @@
 
         {# displaying the item #}
         {% import "knp_menu.html.twig" as knp_menu %}
-        {% if item.extra("pageTree:separator") is sameas("before") %}
+        {% if item.extra("routeTree:separator") is sameas("before") %}
             <li role="presentation" class="divider"></li>
         {% endif %}
         <li{{ knp_menu.attributes(attributes) }}>
@@ -67,7 +67,7 @@
                 {{ block('list') }}
             {% endif %}
         </li>
-        {% if item.extra("pageTree:separator") is sameas("after") %}
+        {% if item.extra("routeTree:separator") is sameas("after") %}
             <li role="presentation" class="divider"></li>
         {% endif %}
     {% endif %}

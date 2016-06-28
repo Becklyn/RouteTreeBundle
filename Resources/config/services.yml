@@ -1,28 +1,81 @@
 services:
-    becklyn.page_tree:
-        class: Becklyn\PageTreeBundle\Model\PageTreeModel
+
+    becklyn.route_tree:
+        class: Becklyn\RouteTreeBundle\Tree\RouteTree
         arguments:
+            - "@becklyn.route_tree.builder"
+            - "@becklyn.route_tree.cache"
+            - "@becklyn.route_tree.post_processing"
             - "@router"
-            - "@becklyn.page_tree.placeholder_parameter_generator"
-            - "@service_container"
+
+    becklyn.route_tree.builder.parameters_generator:
+        class: Becklyn\RouteTreeBundle\Builder\ParametersGenerator
 
 
-    becklyn.page_tree.menu_builder:
-        class: Becklyn\PageTreeBundle\Menu\PageTreeMenuBuilder
+
+    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Post Processing
+    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    becklyn.route_tree.post_processing:
+        class: Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing
         arguments:
-            - "@knp_menu.factory"
-            - "@becklyn.page_tree"
+            - "@becklyn.route_tree.post_processing.translations"
+            - "@becklyn.route_tree.post_processing.security"
+            - "@becklyn.route_tree.post_processing.missing_parameters"
+            - "@request_stack"
+
+    becklyn.route_tree.post_processing.translations:
+        class: Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\TranslationsProcessor
+        arguments:
+            - "@translator"
+
+    becklyn.route_tree.post_processing.security:
+        class: Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\SecurityProcessor
+        arguments:
+            - "@security.token_storage"
             - "@security.authorization_checker"
+            - "@sensio_framework_extra.security.expression_language"
+            - "@security.authentication.trust_resolver"
+            - "@security.role_hierarchy"
+            - "@request_stack"
+
+    becklyn.route_tree.post_processing.missing_parameters:
+        class: Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\MissingParametersProcessor
 
 
-    becklyn.page_tree.placeholder_parameter_generator:
-        class: Becklyn\PageTreeBundle\Service\PlaceholderParameterGenerator
-
-    twig.extension.becklyn.page_tree:
-            class: Becklyn\PageTreeBundle\Service\PageTreeTwigExtension
+    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Twig
+    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    becklyn.route_tree.twig.extension:
+            class: Becklyn\RouteTreeBundle\Twig\RouteTreeTwigExtension
             arguments:
                 - "@knp_menu.menu_provider"
                 - "@knp_menu.renderer_provider"
-                - "@becklyn.page_tree.menu_builder"
+                - "@becklyn.route_tree.knp_menu.menu_builder"
             tags:
                 - { name: twig.extension }
+
+
+    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # KnpMenu Integration
+    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    becklyn.route_tree.knp_menu.menu_builder:
+        class: Becklyn\RouteTreeBundle\KnpMenu\MenuBuilder
+        arguments:
+            - "@knp_menu.factory"
+            - "@becklyn.route_tree"
+
+
+    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Nodes Provider
+    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    becklyn.route_tree.cache:
+        class: Becklyn\RouteTreeBundle\Cache\TreeCache
+        arguments:
+            - "%kernel.cache_dir%"
+            - "%kernel.debug%"
+
+    becklyn.route_tree.builder:
+        class: Becklyn\RouteTreeBundle\Builder\TreeBuilder
+        arguments:
+            - "@becklyn.route_tree.builder.parameters_generator"
