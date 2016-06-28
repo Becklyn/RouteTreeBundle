@@ -6,6 +6,7 @@ services:
             - "@becklyn.route_tree.builder"
             - "@becklyn.route_tree.cache"
             - "@becklyn.route_tree.post_processing"
+            - "@router"
 
     becklyn.route_tree.post_processing:
         class: Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing
@@ -61,5 +62,4 @@ services:
     becklyn.route_tree.builder:
         class: Becklyn\RouteTreeBundle\Builder\TreeBuilder
         arguments:
-            - "@router"
             - "@becklyn.route_tree.builder.parameters_generator"

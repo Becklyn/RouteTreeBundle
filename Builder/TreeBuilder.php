@@ -2,14 +2,12 @@
 
 namespace Becklyn\RouteTreeBundle\Builder;
 
-use Becklyn\RouteTreeBundle\Exception\InvalidNodeDataException;
 use Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException;
 use Becklyn\RouteTreeBundle\Tree\Node;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Router;
 
 
 /**
@@ -44,12 +42,6 @@ class TreeBuilder
 
 
     /**
-     * @var Router
-     */
-    private $router;
-
-
-    /**
      * @var ParametersGenerator
      */
     private $parametersGenerator;
@@ -57,13 +49,11 @@ class TreeBuilder
 
 
     /**
-     * @param Router              $router
      * @param ParametersGenerator $parametersGenerator
      */
-    public function __construct (Router $router, ParametersGenerator $parametersGenerator)
+    public function __construct (ParametersGenerator $parametersGenerator)
     {
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-        $this->router = $router;
         $this->parametersGenerator = $parametersGenerator;
     }
 
@@ -72,12 +62,12 @@ class TreeBuilder
     /**
      * Builds the route tree
      *
+     * @param Route[]|RouteCollection $routeCollection
+     *
      * @return Node[] the array is indexed by route name
      */
-    public function buildTree ()
+    public function buildTree ($routeCollection)
     {
-        $routeCollection = $this->router->getRouteCollection();
-
         $relevantRoutes = $this->calculateRelevantRoutes($routeCollection);
         $nodes = $this->generateNodesFromRoutes($routeCollection, $relevantRoutes);
         $nodes = $this->linkNodeHierarchy($nodes);
@@ -91,12 +81,12 @@ class TreeBuilder
     /**
      * Calculates a list of which routes should be included in the tree
      *
-     * @param RouteCollection $routeCollection
+     * @param Route[]|RouteCollection $routeCollection
      *
      * @return array of format ["route" => (bool) $includeInTree]
      * @throws InvalidRouteTreeException
      */
-    private function calculateRelevantRoutes (RouteCollection $routeCollection)
+    private function calculateRelevantRoutes ($routeCollection)
     {
         $routeIndex = [];
 
@@ -144,12 +134,12 @@ class TreeBuilder
     /**
      * Generates the nodes for the given routes
      *
-     * @param RouteCollection $routeCollection
-     * @param array           $relevantRoutes
+     * @param Route[]|RouteCollection $routeCollection
+     * @param array                   $relevantRoutes
      *
      * @return Node[]
      */
-    private function generateNodesFromRoutes (RouteCollection $routeCollection, array $relevantRoutes)
+    private function generateNodesFromRoutes ($routeCollection, array $relevantRoutes)
     {
         $nodes = [];
 

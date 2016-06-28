@@ -5,6 +5,7 @@ namespace Becklyn\RouteTreeBundle\Tree;
 use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
 use Becklyn\RouteTreeBundle\Cache\TreeCache;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing;
+use Symfony\Component\Routing\RouterInterface;
 
 
 /**
@@ -22,17 +23,18 @@ class RouteTree
 
 
     /**
-     * @param TreeBuilder    $builder
-     * @param TreeCache      $cache
-     * @param PostProcessing $postProcessing
+     * @param TreeBuilder     $builder
+     * @param TreeCache       $cache
+     * @param PostProcessing  $postProcessing
+     * @param RouterInterface $router
      */
-    public function __construct (TreeBuilder $builder, TreeCache $cache, PostProcessing $postProcessing)
+    public function __construct (TreeBuilder $builder, TreeCache $cache, PostProcessing $postProcessing, RouterInterface $router)
     {
         $tree = $cache->getTree();
 
         if (null === $tree)
         {
-            $tree = $builder->buildTree();
+            $tree = $builder->buildTree($router->getRouteCollection());
             $cache->setTree($tree);
         }
 
