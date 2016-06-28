@@ -15,6 +15,7 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class TreeBuilder
 {
+    const PARENT_CONFIGURATION_OPTION = "parent";
     const ROUTE_OPTIONS_KEY = "page_tree";
 
     /**
@@ -31,7 +32,7 @@ class TreeBuilder
         "separator" => "separator",
         "parameters" => "parameters",
         "security" => "security",
-        "parent" => "parentRoute",
+        self::PARENT_CONFIGURATION_OPTION => "parentRoute",
     ];
 
 
@@ -109,9 +110,9 @@ class TreeBuilder
             $routeIndex[$routeName] = true;
 
             // mark parent route as relevant
-            if (isset($routeData["parent"]) && !empty($routeData["parent"]))
+            if (isset($routeData[self::PARENT_CONFIGURATION_OPTION]) && !empty($routeData[self::PARENT_CONFIGURATION_OPTION]))
             {
-                $parentRoute = $routeData["parent"];
+                $parentRoute = $routeData[self::PARENT_CONFIGURATION_OPTION];
 
                 if (!isset($routeIndex[$parentRoute]))
                 {
