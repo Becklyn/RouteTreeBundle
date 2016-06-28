@@ -14,7 +14,7 @@ use Knp\Menu\ItemInterface;
 class MenuBuilder
 {
     /**
-     * @var \Knp\Menu\FactoryInterface
+     * @var FactoryInterface
      */
     private $factory;
 
@@ -71,7 +71,7 @@ class MenuBuilder
         {
             if ($node->isHidden())
             {
-                return;
+                continue;
             }
 
             $routeParameters = $node->getParameters();
