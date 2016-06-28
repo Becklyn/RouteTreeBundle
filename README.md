@@ -1,18 +1,18 @@
-BecklynPageTreeBundle
-=====================
+BecklynRouteTreeBundle
+======================
 
-Adds a simple implementation for an automatic generation of a page tree to build a menu.
+Adds a simple implementation for an automatic generation of a route tree to build a menu.
 
 
 ## Installation
 
-Install the bundle via [packagist](https://packagist.org/packages/becklyn/page-tree-bundle):
+Install the bundle via [packagist](https://packagist.org/packages/becklyn/route-tree-bundle):
 
 ```javascript
     // ...
     require: {
         // ...
-        "becklyn/page-tree-bundle": "~1.0"
+        "becklyn/route-tree-bundle": "^2.0"
     },
     // ...
 ```
@@ -24,15 +24,15 @@ Load the bundle in your `app/AppKernel.php`:
     {
         $bundles = array(
             // ...
-            new \Becklyn\PageTreeBundle\BecklynPageTreeBundle(),
+            new \Becklyn\RouteTreeBundle\BecklynRouteTreeBundle(),
         );
         // ...
     }
 ```
 
 
-## Defining the page tree nodes
-You add elements to the page tree by setting the options of the routes:
+## Defining the route tree nodes
+You add elements to the tree by setting the options of the routes:
 
 ```yml
 homepage:
@@ -41,28 +41,22 @@ homepage:
 my_route:
     path: /my_route
     options:
-        page_tree:
+        tree:
             parent: homepage
             title:  "My Route"
 ```
 
-All routes without the `page_tree` option are not included in the page tree.
-
-
-## Getting the page tree
-You can directly get the service `becklyn.page_tree` and load the page tree from there.
+## Getting the route tree
+You can directly get the service `becklyn.route_tree` and load the tree from there.
 
 ```php
-    $pageTreeModel = $container->get("becklyn.page_tree");
+    $routeTreeModel = $container->get("becklyn.route_tree");
 
-    // the complete page tree
-    $tree1 = $pageTreeModel->getPageTree();
-
-    // the tree under my_route, including all child nodes, excluding my_route
-    $tree2 = $pageTreeModel->getPageTree("my_route");
+    // get a node with a specific route. With this node you can traverse the route tree.
+    $tree1 = $routeTreeModel->getNode("my_route");
 ```
 
-The return value is a list of nodes.
+The return value is a `Becklyn\RouteTreeBundle\Tree\Node`.
 
 
 ## All path options
@@ -70,38 +64,19 @@ The return value is a list of nodes.
 ```yml
 route:
     options:
-        page_tree:
+        tree:
             parent:     homepage       # the name of the parent node
-            is_root:    false          # whether this is a root node
             title:      "abc"          # (optional) title of the node
             hidden:     false          # (optional) whether the node should be hidden when rendering
             parameters: {}             # (optional) the default values for the parameters
             separator:  null           # (optional) where to place a separator
 ```
 
-Either `parent` or `is_root` (must be `true`) must be set.
-Also all referenced `parent`-routes need to exist.
-
-*Notice:* if you pass _both_ `parent` and `is_root` the parent will be discarded and it will be a root page.
+`parent` must be set. Also all referenced `parent`-routes need to exist.
 
 
 ### Hidden
 The `hidden` flag hides the menu item (including all children) when rendering:
-
-```html
-<ul>
-    <!-- ... -->
-    <li style="display:none">
-        <a href="#">This is hidden</a>
-    </li>
-    <!-- ... -->
-</ul>
-```
-
-This is necessary, because currently (v2.0.0@alpha) there is only one pagetree in the KnpMenuBundle, which is used for both rendering and voting on the active element.
-So if you want to display active parents without including the actual element in the menu, it needs to be in the tree, but hidden in the generated HTML.
-
-Please note: if you use the bootstrap menu renderer, the hidden items are correctly stripped from the HTML, instead of hiding the via CSS.
 
 
 ### Parameters
@@ -111,28 +86,16 @@ The parameters can define default values for parameters:
 page_listing:
     path: /listing/{page}
     options:
-        page_tree:
+        tree:
             parameters:
                 page: 1
 ```
 
-**If you do not define a default value, `1` is used**
+**If you do not define a value, the parameter is looked up in the request attributes of the current request. If it doesn't find anything there, `null` is used.**
 
-You can use the expression language for the default values.
-Currently supported functions:
-* `date()` (wraps the [PHP date](php.net/manual/en/function.date.php) function, for the current timestamp)
-
-```yml
-calendar:
-    path: /calendar/{year}
-    options:
-        page_tree:
-            parameters:
-                year: "date('Y')"
-```
 
 ### Separator
-You can place a separator before or after any menu item. The used template must support properly it.
+You can place a separator before or after any menu item. The used template must properly support it.
 
 In the bootstrap theme this is only properly supported for dropdown menus. Please note, that adjacent separators are not merged.
 
@@ -143,19 +106,19 @@ Possible values:
 
 
 ### Error Cases
-If the page tree is invalid a `InvalidPageTreeException` is thrown, on the first construction of the page tree.
+If the page tree is invalid a `InvalidRouteTreeException` is thrown, on the first construction of the page tree.
+If the configuration of a node is not correct, a `InvalidNodeDataException` is thrown.
 
 
 ## KnpMenuBundle MenuBuilder
-There is an automatic menu builder, based on the page tree. You need to define your menus as service, the menu builder service is named `becklyn.page_tree.menu_builder`.
+There is an automatic menu builder, based on the route tree. You need to define your menus as service, the menu builder service is named `becklyn.route_tree.knp_menu.menu_builder`.
 
 Just add the definition to your `services.yml` this is pretty much based on [the official KnpMenuBundle documentation](https://github.com/KnpLabs/KnpMenuBundle/blob/master/Resources/doc/menu_service.md).
 ```yml
 my_app.menu:
     class: Knp\Menu\MenuItem
-    factory_service: becklyn.page_tree.menu_builder
-    factory_method: buildMenu
-    arguments: ["my_route"]    # <- the starting route. Can be left empty (or pass null explicitly), to include the complete page tree
+    factory: ["@becklyn.route_tree.knp_menu.menu_builder", buildMenu]
+    arguments: ["my_route"]         # <- the starting route
     tags:
         - { name: knp_menu.menu, alias: menu_name }
 ```
@@ -168,7 +131,7 @@ A Bootstrap 3 compatible menu renderer is included in the bundle.
 It will render the inner `<ul class="nav navbar-nav">` of the navbar for you.
 
 ```jinja
-{{ renderPageTreeBootstrapMenu("menu_name") }}
+{{ routeTreeBootstrapMenu("menu_name") }}
 ```
 
 It will automatically strip all hidden menu items from the HTML - therefore the known `li.first` and `li.last` from the default KnpMenu theme will not be included.
@@ -186,12 +149,7 @@ functionality via CSS then ([as shown here](https://gist.github.com/apfelbox/854
 ## Known limitations
 This is a pretty simple implementation, which is intended:
 
-* It should be fast. The page tree is not (yet?) cached, so the generation should be fast.
+* It should be fast. The tree is not (yet?) cached, so the generation should be fast.
 * No existing site should break by just activating the bundle.
 * The declaration effort should be low but avoid clashes.
-* The title can currently not be changed dynamically, it needs to be "hardcoded" in your route definition.
-* Fake parameters, only generation with `1` as parameters
-
-#### Fake parameters
-To build a complete page tree, the bundle needs to build URLs for every route inside the page tree.
-This bundle's main use case is to build a "hidden" menu, which only marks the top level main menu elements as active. Therefore it is valid to just use "fake" route parameters and fill everything with 1 (the voter needs to only compare the routes and not the route parameters).
+* "Fake" parameters, only generation with `null` as default parameters

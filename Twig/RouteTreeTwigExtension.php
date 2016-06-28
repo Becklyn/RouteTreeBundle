@@ -1,26 +1,21 @@
 <?php
 
-namespace Becklyn\PageTreeBundle\Service;
+namespace Becklyn\RouteTreeBundle\Twig;
 
-use Becklyn\PageTreeBundle\Menu\PageTreeMenuBuilder;
+use Becklyn\RouteTreeBundle\KnpMenu\MenuBuilder;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Knp\Menu\Renderer\RendererProviderInterface;
 use Knp\Menu\Twig\Helper;
 
+
 /**
  * Defines all twig extensions, used in this bundle
  *
- * @package Becklyn\PageTreeBundle\Service
+ * @package Becklyn\RouteTreeBundle\Service
  */
-class PageTreeTwigExtension extends \Twig_Extension
+class RouteTreeTwigExtension extends \Twig_Extension
 {
-    /**
-     * @var RendererProviderInterface
-     */
-    private $rendererProvider;
-
-
     /**
      * @var MenuProviderInterface
      */
@@ -28,38 +23,45 @@ class PageTreeTwigExtension extends \Twig_Extension
 
 
     /**
-     * @var PageTreeMenuBuilder
+     * @var RendererProviderInterface
+     */
+    private $rendererProvider;
+
+
+    /**
+     * @var MenuBuilder
      */
     private $menuBuilder;
 
 
 
     /**
-     * @param MenuProviderInterface $menuProvider
+     * @param MenuProviderInterface     $menuProvider
      * @param RendererProviderInterface $rendererProvider
+     * @param MenuBuilder               $menuBuilder
      */
-    public function __construct (MenuProviderInterface $menuProvider, RendererProviderInterface $rendererProvider, PageTreeMenuBuilder $menuBuilder)
+    public function __construct (MenuProviderInterface $menuProvider, RendererProviderInterface $rendererProvider, MenuBuilder $menuBuilder)
     {
-        $this->menuProvider     = $menuProvider;
+        $this->menuProvider = $menuProvider;
         $this->rendererProvider = $rendererProvider;
-        $this->menuBuilder      = $menuBuilder;
+        $this->menuBuilder = $menuBuilder;
     }
 
 
 
     /**
-     * Renders a bootstrap conform page tree menu
+     * Renders a bootstrap conform tree menu
      *
      * @param ItemInterface $menu
      * @param array $options
      *
      * @return string
      */
-    public function renderBootstrap ($menu, array $options = [])
+    public function routeTreeBootstrapMenu ($menu, array $options = [])
     {
         // Set default values
         $options = array_merge([
-            "template"      => "@BecklynPageTree/Menu/bootstrap.html.twig",
+            "template"      => "@BecklynRouteTree/Menu/bootstrap.html.twig",
             "currentClass"  => "active",
             "ancestorClass" => "active",
             "hoverDropdown" => true,
@@ -80,7 +82,7 @@ class PageTreeTwigExtension extends \Twig_Extension
      *
      * @return bool
      */
-    public function hasChildrenHelper (ItemInterface $item)
+    public function hasRouteTreeChildren (ItemInterface $item)
     {
         if (!$item->isDisplayed())
         {
@@ -89,10 +91,8 @@ class PageTreeTwigExtension extends \Twig_Extension
 
         foreach ($item->getChildren() as $child)
         {
-            /** @var ItemInterface $child */
-            if (!$child->getExtra("pageTree:hidden", false))
+            if ($child->isDisplayed())
             {
-                // if we find a child which is not hidden, we need to render the menu
                 return true;
             }
         }
@@ -102,9 +102,14 @@ class PageTreeTwigExtension extends \Twig_Extension
 
 
 
-    public function getPageTreeMenu ($root, $options = array())
+    /**
+     * @param string $root
+     *
+     * @return ItemInterface
+     */
+    public function getRouteTreeMenu ($root)
     {
-        return $this->menuBuilder->buildMenu($root, $options);
+        return $this->menuBuilder->buildMenu($root);
     }
 
 
@@ -114,9 +119,9 @@ class PageTreeTwigExtension extends \Twig_Extension
     public function getFunctions ()
     {
         return array(
-            new \Twig_SimpleFunction("renderPageTreeBootstrapMenu",       [$this, "renderBootstrap"], ["is_safe" => ["html"]]),
-            new \Twig_SimpleFunction("pageTreeBootstrapMenu_hasChildren", [$this, "hasChildrenHelper"]),
-            new \Twig_SimpleFunction("getPageTreeMenu",                   [$this, "getPageTreeMenu"]),
+            new \Twig_SimpleFunction("routeTreeBootstrapMenu", [$this, "routeTreeBootstrapMenu"], ["is_safe" => ["html"]]),
+            new \Twig_SimpleFunction("hasRouteTreeChildren",  [$this, "hasRouteTreeChildren"]),
+            new \Twig_SimpleFunction("getRouteTreeMenu", [$this, "getRouteTreeMenu"]),
         );
     }
 
