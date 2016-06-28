@@ -18,7 +18,31 @@ class RouteTree
     /**
      * @var Node[]
      */
-    private $tree = [];
+    private $tree = null;
+
+
+    /**
+     * @var TreeBuilder
+     */
+    private $builder;
+
+
+    /**
+     * @var TreeCache
+     */
+    private $cache;
+
+
+    /**
+     * @var PostProcessing
+     */
+    private $postProcessing;
+
+
+    /**
+     * @var RouterInterface
+     */
+    private $router;
 
 
 
@@ -30,15 +54,30 @@ class RouteTree
      */
     public function __construct (TreeBuilder $builder, TreeCache $cache, PostProcessing $postProcessing, RouterInterface $router)
     {
-        $tree = $cache->getTree();
+        $this->builder = $builder;
+        $this->cache = $cache;
+        $this->postProcessing = $postProcessing;
+        $this->router = $router;
+    }
+
+
+
+    /**
+     * Builds the tree
+     *
+     * @return Node[]
+     */
+    private function buildTree ()
+    {
+        $tree = $this->cache->getTree();
 
         if (null === $tree)
         {
-            $tree = $builder->buildTree($router->getRouteCollection());
-            $cache->setTree($tree);
+            $tree = $this->builder->buildTree($this->router->getRouteCollection());
+            $this->cache->setTree($tree);
         }
 
-        $this->tree = $postProcessing->postProcessTree($tree);
+        return $this->postProcessing->postProcessTree($tree);
     }
 
 
@@ -52,6 +91,11 @@ class RouteTree
      */
     public function getNode ($route)
     {
+        if (null === $this->tree)
+        {
+            $this->tree = $this->buildTree();
+        }
+
         return isset($this->tree[$route])
             ? $this->tree[$route]
             : null;
