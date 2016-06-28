@@ -5,13 +5,15 @@ namespace Becklyn\RouteTreeBundle\Tree;
 use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
 use Becklyn\RouteTreeBundle\Cache\TreeCache;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing;
+use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
+use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 
 /**
  *
  */
-class RouteTree
+class RouteTree implements CacheClearerInterface, CacheWarmerInterface
 {
     const TREE_TRANSLATION_DOMAIN = "route_tree";
 
@@ -100,4 +102,39 @@ class RouteTree
             ? $this->tree[$route]
             : null;
     }
+
+
+
+    //region Cache clearer implementation
+    /**
+     * @inheritDoc
+     */
+    public function clear ($cacheDir)
+    {
+        $this->cache->clear();
+    }
+    //endregion
+
+
+
+    //region Cache warmer implementation
+    /**
+     * @inheritDoc
+     */
+    public function isOptional ()
+    {
+        return true;
+    }
+
+
+
+    /**
+     * @inheritDoc
+     */
+    public function warmUp ($cacheDir)
+    {
+        $this->cache->clear();
+        $this->buildTree();
+    }
+    //endregion
 }

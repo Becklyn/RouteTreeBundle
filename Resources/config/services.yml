@@ -7,6 +7,9 @@ services:
             - "@becklyn.route_tree.cache"
             - "@becklyn.route_tree.post_processing"
             - "@router"
+        tags:
+            - { name: kernel.cache_clearer }
+            - { name: kernel.cache_warmer }
 
     becklyn.route_tree.builder.parameters_generator:
         class: Becklyn\RouteTreeBundle\Builder\ParametersGenerator

@@ -58,4 +58,17 @@ class TreeCache
         @mkdir(dirname($this->filePath), 0755, true);
         file_put_contents($this->filePath, serialize($nodes));
     }
+
+
+
+    /**
+     * Clears the cache
+     */
+    public function clear ()
+    {
+        if (is_file($this->filePath))
+        {
+            @unlink($this->filePath);
+        }
+    }
 }
