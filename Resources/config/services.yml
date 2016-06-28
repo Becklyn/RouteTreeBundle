@@ -71,6 +71,8 @@ services:
     # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     becklyn.route_tree.cache:
         class: Becklyn\RouteTreeBundle\Cache\TreeCache
+        arguments:
+            - "@kernel"
 
     becklyn.route_tree.builder:
         class: Becklyn\RouteTreeBundle\Builder\TreeBuilder
