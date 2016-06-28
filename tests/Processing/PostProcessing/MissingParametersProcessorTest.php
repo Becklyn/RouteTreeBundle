@@ -4,7 +4,6 @@ namespace Becklyn\RouteTreeBundle\tests\Processing\PostProcessing;
 
 use Becklyn\RouteTreeBundle\Tree\Node;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\MissingParametersProcessor;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 
 /**
@@ -26,10 +25,9 @@ class MissingParametersProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testMissingParameter ()
     {
-        $attributes = new ParameterBag();
         $node = new Node("test");
         $node->setParameters(["shouldBeMissing" => null]);
-        $this->missingParametersProcessor->process($attributes, $node);
+        $this->missingParametersProcessor->process([], $node);
 
         // sets the default value
         $this->assertSame(1, $node->getParameters()["shouldBeMissing"]);
@@ -38,9 +36,9 @@ class MissingParametersProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testExistingParameter ()
     {
-        $attributes = new ParameterBag([
+        $attributes = [
             "shouldNotBeMissing" => "exists",
-        ]);
+        ];
         $node = new Node("test");
         $node->setParameters(["shouldNotBeMissing" => null]);
         $this->missingParametersProcessor->process($attributes, $node);

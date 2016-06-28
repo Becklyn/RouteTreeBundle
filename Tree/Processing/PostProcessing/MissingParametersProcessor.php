@@ -16,10 +16,10 @@ class MissingParametersProcessor
     /**
      * Processes the given node
      *
-     * @param ParameterBag $requestAttributes
-     * @param Node         $node
+     * @param array $requestAttributes
+     * @param Node  $node
      */
-    public function process (ParameterBag $requestAttributes, Node $node)
+    public function process (array $requestAttributes, Node $node)
     {
         $parameters = $node->getParameters();
         $mergedParameters = $node->getMergedParameters();
@@ -28,9 +28,9 @@ class MissingParametersProcessor
         {
             if ($value === null)
             {
-                if ($requestAttributes->has($key))
+                if (isset($requestAttributes[$key]))
                 {
-                    $parameters[$key] = $requestAttributes->get($key);
+                    $parameters[$key] = $requestAttributes[$key];
                 }
                 else if (isset($mergedParameters[$key]))
                 {

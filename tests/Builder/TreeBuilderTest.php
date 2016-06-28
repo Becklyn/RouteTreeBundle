@@ -184,9 +184,9 @@ class TreeBuilderTest extends \PHPUnit_Framework_TestCase
             ]),
         ]);
 
-        $attributes = new ParameterBag([
+        $attributes = [
             "from_attributes" => "yes",
-        ]);
+        ];
 
         foreach ($tree as $node)
         {

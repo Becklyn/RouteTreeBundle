@@ -76,7 +76,7 @@ class PostProcessing
 
             foreach ($nodes as $node)
             {
-                $this->missingParametersProcessor->process($requestAttributes, $node);
+                $this->missingParametersProcessor->process($requestAttributes->get("_route_params", []), $node);
             }
         }
 
