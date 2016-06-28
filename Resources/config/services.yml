@@ -8,15 +8,29 @@ services:
             - "@becklyn.route_tree.post_processing"
             - "@router"
 
+    becklyn.route_tree.builder.parameters_generator:
+        class: Becklyn\RouteTreeBundle\Builder\ParametersGenerator
+
+
+
+    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Post Processing
+    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     becklyn.route_tree.post_processing:
         class: Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing
         arguments:
-            - "@translator"
+            - "@becklyn.route_tree.post_processing.translations"
             - "@becklyn.route_tree.post_processing.security"
+            - "@becklyn.route_tree.post_processing.missing_parameters"
             - "@request_stack"
 
+    becklyn.route_tree.post_processing.translations:
+        class: Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\TranslationsProcessor
+        arguments:
+            - "@translator"
+
     becklyn.route_tree.post_processing.security:
-        class: Becklyn\RouteTreeBundle\Tree\Processing\SecurityProcessor
+        class: Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\SecurityProcessor
         arguments:
             - "@security.token_storage"
             - "@security.authorization_checker"
@@ -25,9 +39,8 @@ services:
             - "@security.role_hierarchy"
             - "@request_stack"
 
-    becklyn.route_tree.builder.parameters_generator:
-        class: Becklyn\RouteTreeBundle\Builder\ParametersGenerator
-
+    becklyn.route_tree.post_processing.missing_parameters:
+        class: Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\MissingParametersProcessor
 
 
     # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

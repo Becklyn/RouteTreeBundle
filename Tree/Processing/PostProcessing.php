@@ -3,10 +3,11 @@
 namespace Becklyn\RouteTreeBundle\Tree\Processing;
 
 use Becklyn\RouteTreeBundle\Tree\Node;
-use Becklyn\RouteTreeBundle\Tree\RouteTree;
+use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\MissingParametersProcessor;
+use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\SecurityProcessor;
+use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\TranslationsProcessor;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Translation\TranslatorInterface;
 
 
 /**
@@ -15,9 +16,9 @@ use Symfony\Component\Translation\TranslatorInterface;
 class PostProcessing
 {
     /**
-     * @var TranslatorInterface
+     * @var TranslationsProcessor
      */
-    private $translator;
+    private $translationsProcessor;
 
 
     /**
@@ -32,17 +33,25 @@ class PostProcessing
     private $requestStack;
 
 
+    /**
+     * @var MissingParametersProcessor
+     */
+    private $missingParametersProcessor;
+
+
 
     /**
-     * @param TranslatorInterface $translator
-     * @param SecurityProcessor   $securityProcessor
-     * @param RequestStack        $requestStack
+     * @param TranslationsProcessor      $translationsProcessor
+     * @param SecurityProcessor          $securityProcessor
+     * @param MissingParametersProcessor $missingParametersProcessor
+     * @param RequestStack               $requestStack
      */
-    public function __construct (TranslatorInterface $translator, SecurityProcessor $securityProcessor, RequestStack $requestStack)
+    public function __construct (TranslationsProcessor $translationsProcessor, SecurityProcessor $securityProcessor, MissingParametersProcessor $missingParametersProcessor, RequestStack $requestStack)
     {
-        $this->translator = $translator;
+        $this->translationsProcessor = $translationsProcessor;
         $this->securityProcessor = $securityProcessor;
         $this->requestStack = $requestStack;
+        $this->missingParametersProcessor = $missingParametersProcessor;
     }
 
 
@@ -57,8 +66,8 @@ class PostProcessing
     {
         foreach ($nodes as $node)
         {
-            $this->translateTitle($node);
-            $this->applySecurity($node);
+            $this->translationsProcessor->process($node);
+            $this->securityProcessor->process($node);
         }
 
         if (null !== $this->requestStack->getCurrentRequest())
@@ -67,67 +76,10 @@ class PostProcessing
 
             foreach ($nodes as $node)
             {
-                $this->generateMissingParameters($requestAttributes, $node);
+                $this->missingParametersProcessor->process($requestAttributes, $node);
             }
         }
 
         return $nodes;
-    }
-
-
-
-    /**
-     * Translates the title of the given node
-     *
-     * @param Node $node
-     */
-    private function translateTitle (Node $node)
-    {
-        if (null === $node->getTitle())
-        {
-            return;
-        }
-
-        $node->setTitle(
-            $this->translator->trans($node->getTitle(), [], RouteTree::TREE_TRANSLATION_DOMAIN)
-        );
-    }
-
-
-
-    /**
-     * Applies the security check for the given node
-     *
-     * @param Node $node
-     */
-    private function applySecurity (Node $node)
-    {
-        if (!$this->securityProcessor->isAllowedToAccessNode($node))
-        {
-            $node->setHidden(true);
-        }
-    }
-
-
-
-    /**
-     * @param ParameterBag $requestAttributes
-     * @param Node         $node
-     *
-     * @return string[]
-     */
-    private function generateMissingParameters (ParameterBag $requestAttributes, Node $node)
-    {
-        $parameters = $node->getParameters();
-
-        foreach ($parameters as $key => $value)
-        {
-            if ($value === null)
-            {
-                $parameters[$key] = $requestAttributes->get($key, 1);
-            }
-        }
-
-        $node->setParameters($parameters);
     }
 }

@@ -310,4 +310,15 @@ class Node
     {
         return $this->getTitle() ?: $this->getRoute();
     }
+
+
+
+    /**
+     * @expectedException \Becklyn\RouteTreeBundle\Exception\InvalidNodeDataException
+     */
+    public function testInvalidSeparator ()
+    {
+        $node = new Node("route");
+        $node->setSeparator("idontexist");
+    }
 }

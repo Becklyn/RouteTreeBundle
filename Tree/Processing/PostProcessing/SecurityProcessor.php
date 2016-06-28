@@ -1,6 +1,6 @@
 <?php
 
-namespace Becklyn\RouteTreeBundle\Tree\Processing;
+namespace Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing;
 
 use Becklyn\RouteTreeBundle\Tree\Node;
 use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;
@@ -84,7 +84,7 @@ class SecurityProcessor
      *
      * @return bool
      */
-    public function isAllowedToAccessNode (Node $node)
+    private function isAllowedToAccessNode (Node $node)
     {
         if (empty($node->getSecurity()))
         {
@@ -141,5 +141,20 @@ class SecurityProcessor
 
         // controller variables should also be accessible
         return array_merge($requestVariables, $variables);
+    }
+
+
+
+    /**
+     * Processes the given node
+     *
+     * @param Node $node
+     */
+    public function process (Node $node)
+    {
+        if (!$this->isAllowedToAccessNode($node))
+        {
+            $node->setHidden(true);
+        }
     }
 }
