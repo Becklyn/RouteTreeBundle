@@ -12,12 +12,29 @@ use Symfony\Component\Routing\Route;
 class ParametersGenerator
 {
     /**
-     * @param Route $route
-     * @param Node  $node
+     * Automatically sets the parameters for all descendant nodes
+     *
+     * @param Node $node
+     */
+    public function generateParametersForNode (Node $node)
+    {
+        $node->setParameters($this->calculateParametersForNode($node));
+
+        foreach ($node->getChildren() as $child)
+        {
+            $this->generateParametersForNode($child);
+        }
+    }
+
+
+    /**
+     * Calculates the parameters for a single node
+     *
+     * @param Node $node
      *
      * @return string[]
      */
-    public function calculateParametersForNode (Node $node)
+    private function calculateParametersForNode (Node $node)
     {
         $parameters = $node->getParameters();
 

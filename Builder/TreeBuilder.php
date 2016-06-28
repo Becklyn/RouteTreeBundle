@@ -244,9 +244,11 @@ class TreeBuilder
     {
         foreach ($nodes as $node)
         {
-            $node->setParameters(
-                $this->parametersGenerator->calculateParametersForNode($node)
-            );
+            // only loop through the top level nodes as the parameters generator itself traverses the tree
+            if (null === $node->getParent())
+            {
+                $this->parametersGenerator->generateParametersForNode($node);
+            }
         }
 
         return $nodes;
