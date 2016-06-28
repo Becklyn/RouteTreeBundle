@@ -143,7 +143,6 @@ class TreeBuilder
     {
         $nodes = [];
 
-        // generate nodes fro
         foreach ($routeCollection as $routeName => $route)
         {
             // skip not relevant routes
