@@ -112,7 +112,7 @@ class SecurityProcessor
      */
     private function getVariables ()
     {
-        $request = $this->requestStack->getCurrentRequest();
+        $request = $this->requestStack->getMasterRequest();
         $requestVariables = null !== $request
             ? $request->attributes->all()
             : [];
