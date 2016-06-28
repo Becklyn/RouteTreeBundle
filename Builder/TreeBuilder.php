@@ -116,7 +116,7 @@ class TreeBuilder
                 if (!isset($routeIndex[$parentRoute]))
                 {
                     throw new InvalidRouteTreeException(sprintf(
-                        "Route '%s' references a parent '%s', but the parent route does not exist.",
+                        "Route '%s' references a parent '%s', but the parent route could not be found.",
                         $routeName,
                         $parentRoute
                     ));
