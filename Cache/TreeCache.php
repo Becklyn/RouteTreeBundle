@@ -3,8 +3,6 @@
 namespace Becklyn\RouteTreeBundle\Cache;
 
 use Becklyn\RouteTreeBundle\Tree\Node;
-use Symfony\Component\HttpKernel\HttpKernel;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 
 /**
@@ -23,13 +21,15 @@ class TreeCache
     private $filePath;
 
 
+
     /**
-     * @param KernelInterface $kernel
+     * @param string $cacheDir
+     * @param bool   $debug
      */
-    public function __construct (KernelInterface $kernel)
+    public function __construct ($cacheDir, $debug)
     {
-        $this->isDebug = $kernel->isDebug();
-        $this->filePath = $kernel->getCacheDir() . "/becklyn/route-tree/tree.cache";
+        $this->filePath = "{$cacheDir}/becklyn/route-tree/tree.cache";
+        $this->isDebug = $debug;
     }
 
 

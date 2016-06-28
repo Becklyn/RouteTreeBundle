@@ -72,7 +72,8 @@ services:
     becklyn.route_tree.cache:
         class: Becklyn\RouteTreeBundle\Cache\TreeCache
         arguments:
-            - "@kernel"
+            - "%kernel.cache_dir%"
+            - "%kernel.debug%"
 
     becklyn.route_tree.builder:
         class: Becklyn\RouteTreeBundle\Builder\TreeBuilder
