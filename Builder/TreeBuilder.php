@@ -166,7 +166,7 @@ class TreeBuilder
      *
      * @return Node[]
      */
-    private function linkNodeHierarchy ($nodes)
+    private function linkNodeHierarchy (array $nodes)
     {
         foreach ($nodes as $node)
         {
