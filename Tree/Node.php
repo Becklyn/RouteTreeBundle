@@ -49,7 +49,9 @@ class Node
 
 
     /**
-     * The parameter names with values
+     * The parameters which were set directly on the node itself.
+     * Array with names as key and parameter values as values
+     *
      * $parameters = [
      *     "name" => "value",
      * ]
@@ -57,6 +59,20 @@ class Node
      * @var string[]
      */
     private $parameters = [];
+
+
+    /**
+     * The parameters with the inherited parameters.
+     * Array with names as key and parameter values as values
+     *
+     * $parameters = [
+     *     "name" => "value",
+     * ]
+     *
+     * @var string[]
+     */
+    private $mergedParameters = [];
+
 
     /**
      * Security restrictions.
@@ -203,6 +219,9 @@ class Node
     public function setParameters (array $parameters)
     {
         $this->parameters = $parameters;
+
+        // refresh merged parameters
+        $this->setMergedParameters($parameters);
     }
 
 
@@ -284,8 +303,27 @@ class Node
             ? (string) $parentRoute
             : null;
     }
-    //endregion
 
+
+
+    /**
+     * @return string[]
+     */
+    public function getMergedParameters ()
+    {
+        return $this->mergedParameters;
+    }
+
+
+
+    /**
+     * @param string[] $mergedParameters
+     */
+    public function setMergedParameters ($mergedParameters)
+    {
+        $this->mergedParameters = $mergedParameters;
+    }
+    //endregion
 
 
     /**

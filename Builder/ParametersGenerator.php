@@ -17,7 +17,7 @@ class ParametersGenerator
      */
     public function generateParametersForNode (Node $node)
     {
-        $node->setParameters($this->calculateParametersForNode($node));
+        $node->setMergedParameters($this->calculateParametersForNode($node));
 
         foreach ($node->getChildren() as $child)
         {
@@ -35,7 +35,7 @@ class ParametersGenerator
      */
     private function calculateParametersForNode (Node $node)
     {
-        $parameters = $node->getParameters();
+        $parameters = $node->getMergedParameters();
 
         foreach ($parameters as $name => $value)
         {
@@ -60,7 +60,7 @@ class ParametersGenerator
      */
     private function findParameterInTree ($name, Node $node)
     {
-        $nodeParameters = $node->getParameters();
+        $nodeParameters = $node->getMergedParameters();
 
         if (isset($nodeParameters[$name]) && null !== $nodeParameters[$name])
         {

@@ -22,12 +22,24 @@ class MissingParametersProcessor
     public function process (ParameterBag $requestAttributes, Node $node)
     {
         $parameters = $node->getParameters();
+        $mergedParameters = $node->getMergedParameters();
 
         foreach ($parameters as $key => $value)
         {
             if ($value === null)
             {
-                $parameters[$key] = $requestAttributes->get($key, self::DEFAULT_PARAMETER_VALUE);
+                if ($requestAttributes->has($key))
+                {
+                    $parameters[$key] = $requestAttributes->get($key);
+                }
+                else if (isset($mergedParameters[$key]))
+                {
+                    $parameters[$key] = $mergedParameters[$key];
+                }
+                else
+                {
+                    $parameters[$key] = self::DEFAULT_PARAMETER_VALUE;
+                }
             }
         }
 
