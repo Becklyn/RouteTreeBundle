@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\ParameterBag;
  */
 class MissingParametersProcessor
 {
+    const DEFAULT_PARAMETER_VALUE = 1;
+
     /**
      * Processes the given node
      *
@@ -25,7 +27,7 @@ class MissingParametersProcessor
         {
             if ($value === null)
             {
-                $parameters[$key] = $requestAttributes->get($key, 1);
+                $parameters[$key] = $requestAttributes->get($key, self::DEFAULT_PARAMETER_VALUE);
             }
         }
 

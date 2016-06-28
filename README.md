@@ -91,7 +91,7 @@ page_listing:
                 page: 1
 ```
 
-**If you do not define a value, the parameter is looked up in the request attributes of the current request. If it doesn't find anything there, `null` is used.**
+**If you do not define a value, the parameter is looked up in the request attributes of the current request. If it doesn't find anything there, `1` is used.**
 
 
 ### Separator
@@ -152,4 +152,4 @@ This is a pretty simple implementation, which is intended:
 * It should be fast. The tree is not (yet?) cached, so the generation should be fast.
 * No existing site should break by just activating the bundle.
 * The declaration effort should be low but avoid clashes.
-* "Fake" parameters, only generation with `null` as default parameters
+* "Fake" parameters, only generation with `1` as default parameters
