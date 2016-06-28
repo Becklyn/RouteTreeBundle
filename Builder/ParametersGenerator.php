@@ -3,7 +3,6 @@
 namespace Becklyn\RouteTreeBundle\Builder;
 
 use Becklyn\RouteTreeBundle\Tree\Node;
-use Symfony\Component\Routing\Route;
 
 
 /**
