@@ -16,7 +16,7 @@ use Symfony\Component\Routing\RouteCollection;
 class TreeBuilder
 {
     const PARENT_CONFIGURATION_OPTION = "parent";
-    const ROUTE_OPTIONS_KEY = "page_tree";
+    const ROUTE_OPTIONS_KEY = "tree";
 
     /**
      * All configuration options.
