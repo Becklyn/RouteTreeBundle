@@ -21,7 +21,7 @@ trait RouteTestTrait
     protected function generateRoute ($path, array $treeData = [])
     {
         $options = !empty($treeData)
-            ? ["page_tree" => $treeData]
+            ? ["tree" => $treeData]
             : [];
 
         return new Route(
