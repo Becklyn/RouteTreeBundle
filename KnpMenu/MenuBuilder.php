@@ -69,17 +69,17 @@ class MenuBuilder
     {
         foreach ($nodes as $node)
         {
-            if ($node->isHidden())
-            {
-                continue;
-            }
-
             $routeParameters = $node->getParameters();
 
             $child = $parent->addChild($node->getDisplayTitle(), [
                 "route" => $node->getRoute(),
                 "routeParameters" => $routeParameters,
             ]);
+            
+            if ($node->isHidden())
+            {
+                $child->setDisplay(false);
+            }
 
             $child->setExtra("routeTree:separator", $node->getSeparator());
 
