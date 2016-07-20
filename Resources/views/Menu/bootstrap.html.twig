@@ -1,7 +1,7 @@
 {% extends "knp_menu.html.twig" %}
 
 {% block list %}
-    {% if item.hasChildren and options.depth is not sameas(0) and item.displayChildren %}
+    {% if item.hasChildren and options.depth is not same as(0) and item.displayChildren %}
         {% if listAttributes.class is not defined or not "dropdown-menu" in listAttributes.class %}
             {%- set listAttributes = listAttributes|merge({class: "nav #{options.listClass} " ~ listAttributes.class|default("")}) %}
         {% endif %}
@@ -48,7 +48,7 @@
 
         {# displaying the item #}
         {% import "knp_menu.html.twig" as knp_menu %}
-        {% if item.extra("routeTree:separator") is sameas("before") %}
+        {% if item.extra("routeTree:separator") is same as("before") %}
             <li role="presentation" class="divider"></li>
         {% endif %}
         <li{{ knp_menu.attributes(attributes) }}>
@@ -67,7 +67,7 @@
                 {{ block('list') }}
             {% endif %}
         </li>
-        {% if item.extra("routeTree:separator") is sameas("after") %}
+        {% if item.extra("routeTree:separator") is same as("after") %}
             <li role="presentation" class="divider"></li>
         {% endif %}
     {% endif %}
