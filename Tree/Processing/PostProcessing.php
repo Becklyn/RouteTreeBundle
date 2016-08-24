@@ -6,7 +6,6 @@ use Becklyn\RouteTreeBundle\Tree\Node;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\MissingParametersProcessor;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\SecurityProcessor;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\TranslationsProcessor;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 

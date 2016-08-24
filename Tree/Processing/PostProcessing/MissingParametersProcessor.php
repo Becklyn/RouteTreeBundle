@@ -3,7 +3,6 @@
 namespace Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing;
 
 use Becklyn\RouteTreeBundle\Tree\Node;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 
 /**
