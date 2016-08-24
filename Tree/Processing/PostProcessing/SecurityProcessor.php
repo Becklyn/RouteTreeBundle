@@ -127,7 +127,7 @@ class SecurityProcessor
             'token' => $token,
             'user' => $token->getUser(),
             'request' => $request,
-            'roles' => array_map(function ($role) { return $role->getRole(); }, $roles),
+            'roles' => array_map(function (Role $role) { return $role->getRole(); }, $roles),
             'trust_resolver' => $this->trustResolver,
             // needed for the is_granted expression function
             'auth_checker' => $this->authorizationChecker,
