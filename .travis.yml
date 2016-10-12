@@ -11,7 +11,7 @@ before_install:
     - composer self-update --stable
 
 install:
-    - composer update
+    - composer install
 
 script:
     - ./vendor/bin/phpunit -c phpunit.xml --coverage-text
