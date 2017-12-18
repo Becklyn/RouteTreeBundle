@@ -39,7 +39,7 @@ class SecurityProcessor
     /**
      * @var ExpressionLanguage
      */
-    private $language;
+    private $expressionLanguage;
 
 
     /**
@@ -64,16 +64,23 @@ class SecurityProcessor
     /**
      * @param TokenStorageInterface                $tokenStorage
      * @param AuthorizationCheckerInterface        $authorizationChecker
-     * @param ExpressionLanguage                   $language
+     * @param ExpressionLanguage                   $expressionLanguage
      * @param AuthenticationTrustResolverInterface $trustResolver
      * @param RoleHierarchyInterface               $roleHierarchy
      * @param RequestStack                         $requestStack
      */
-    public function __construct (TokenStorageInterface $tokenStorage, AuthorizationCheckerInterface $authorizationChecker, ExpressionLanguage $language, AuthenticationTrustResolverInterface $trustResolver, RoleHierarchyInterface $roleHierarchy, RequestStack $requestStack)
+    public function __construct (
+        TokenStorageInterface $tokenStorage,
+        AuthorizationCheckerInterface $authorizationChecker,
+        ExpressionLanguage $expressionLanguage,
+        AuthenticationTrustResolverInterface $trustResolver,
+        RoleHierarchyInterface $roleHierarchy,
+        RequestStack $requestStack
+    )
     {
         $this->tokenStorage = $tokenStorage;
         $this->authorizationChecker = $authorizationChecker;
-        $this->language = $language;
+        $this->expressionLanguage = $expressionLanguage;
         $this->trustResolver = $trustResolver;
         $this->roleHierarchy = $roleHierarchy;
         $this->requestStack = $requestStack;
@@ -100,7 +107,7 @@ class SecurityProcessor
             return false;
         }
 
-        return $this->language->evaluate($node->getSecurity(), $this->getVariables());
+        return $this->expressionLanguage->evaluate($node->getSecurity(), $this->getVariables());
     }
 
 
