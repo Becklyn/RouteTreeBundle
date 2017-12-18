@@ -4,17 +4,18 @@ services:
         autoconfigure: true
 
 
-    Becklyn\RouteTreeBundle\Tree\RouteTree: ~
     Becklyn\RouteTreeBundle\Builder\ParametersGenerator: ~
+    Becklyn\RouteTreeBundle\Tree\RouteTree: ~
 
 
     # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Post Processing
     # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing: ~
-    Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\TranslationsProcessor: ~
-    Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\SecurityProcessor: ~
     Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\MissingParametersProcessor: ~
+
+    Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\SecurityProcessor:
+    Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\TranslationsProcessor: ~
 
 
     # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -37,7 +38,7 @@ services:
     # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Nodes Provider
     # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    Becklyn\RouteTreeBundle\Builder\TreeBuilder: ~
+
     Becklyn\RouteTreeBundle\Cache\TreeCache:
         $debug: '%kernel.debug%'
-
-    Becklyn\RouteTreeBundle\Builder\TreeBuilder: ~
