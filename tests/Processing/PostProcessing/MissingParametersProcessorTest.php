@@ -1,15 +1,16 @@
 <?php
 
-namespace Becklyn\RouteTreeBundle\tests\Processing\PostProcessing;
+namespace Tests\Becklyn\RouteTreeBundle\Processing\PostProcessing;
 
 use Becklyn\RouteTreeBundle\Tree\Node;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\MissingParametersProcessor;
+use PHPUnit\Framework\TestCase;
 
 
 /**
  *
  */
-class MissingParametersProcessorTest extends \PHPUnit_Framework_TestCase
+class MissingParametersProcessorTest extends TestCase
 {
     /**
      * @var MissingParametersProcessor

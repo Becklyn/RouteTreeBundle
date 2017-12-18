@@ -1,14 +1,15 @@
 <?php
 
-namespace Becklyn\RouteTreeBundle\tests\Tree;
+namespace Tests\Becklyn\RouteTreeBundle\Tree;
 
 use Becklyn\RouteTreeBundle\Tree\Node;
+use PHPUnit\Framework\TestCase;
 
 
 /**
  *
  */
-class NodeTest extends \PHPUnit_Framework_TestCase
+class NodeTest extends TestCase
 {
     public function testWithTitle ()
     {

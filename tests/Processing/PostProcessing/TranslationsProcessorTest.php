@@ -1,6 +1,6 @@
 <?php
 
-namespace Becklyn\RouteTreeBundle\tests\Processing\PostProcessing;
+namespace Tests\Becklyn\RouteTreeBundle\Processing\PostProcessing;
 
 use Becklyn\RouteTreeBundle\Builder\ParametersGenerator;
 use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
@@ -8,6 +8,7 @@ use Becklyn\RouteTreeBundle\tests\RouteTestTrait;
 use Becklyn\RouteTreeBundle\Tree\Node;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\TranslationsProcessor;
 use Becklyn\RouteTreeBundle\Tree\RouteTree;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\MessageSelector;
 use Symfony\Component\Translation\Translator;
@@ -16,7 +17,7 @@ use Symfony\Component\Translation\Translator;
 /**
  *
  */
-class TranslationsProcessorTest extends \PHPUnit_Framework_TestCase
+class TranslationsProcessorTest extends TestCase
 {
     use RouteTestTrait;
 
