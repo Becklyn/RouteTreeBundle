@@ -368,6 +368,15 @@ class Node
 
 
     /**
+     * @return array
+     */
+    public function getExtras () : array
+    {
+        return $this->extra;
+    }
+
+
+    /**
      * @param array $extra
      */
     public function setExtra (array $extra) : void

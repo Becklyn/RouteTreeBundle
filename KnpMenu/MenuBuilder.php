@@ -75,13 +75,14 @@ class MenuBuilder
                 "route" => $node->getRoute(),
                 "routeParameters" => $routeParameters,
             ]);
-            
+
             if ($node->isHidden())
             {
                 $child->setDisplay(false);
             }
 
             $child->setExtra("routeTree:separator", $node->getSeparator());
+            $child->setExtra("routeTree:extras", $node->getExtras());
 
             $this->appendNodes($child, $node->getChildren());
         }
