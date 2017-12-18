@@ -93,6 +93,12 @@ class Node
      * @var array
      */
     private $extra = [];
+
+
+    /**
+     * @var int
+     */
+    private $priority = 0;
     //endregion
 
 
@@ -131,7 +137,7 @@ class Node
     /**
      * @param null|string $title
      */
-    public function setTitle (?string $title)
+    public function setTitle (?string $title) : void
     {
         $this->title = $title;
     }
@@ -151,7 +157,7 @@ class Node
     /**
      * @param boolean $hidden
      */
-    public function setHidden (bool $hidden)
+    public function setHidden (bool $hidden) : void
     {
         $this->hidden = $hidden;
     }
@@ -170,7 +176,7 @@ class Node
     /**
      * @param string[] $parameters
      */
-    public function setParameters (array $parameters)
+    public function setParameters (array $parameters) : void
     {
         $this->parameters = $parameters;
 
@@ -193,7 +199,7 @@ class Node
     /**
      * @param null|string $security
      */
-    public function setSecurity (?string $security)
+    public function setSecurity (?string $security) : void
     {
         $this->security = $security;
     }
@@ -213,7 +219,7 @@ class Node
     /**
      * @param Node|null $parent
      */
-    public function setParent (?Node $parent)
+    public function setParent (?Node $parent) : void
     {
         $this->parent = $parent;
     }
@@ -243,34 +249,9 @@ class Node
     /**
      * @param string[] $mergedParameters
      */
-    public function setMergedParameters (array $mergedParameters)
+    public function setMergedParameters (array $mergedParameters) : void
     {
         $this->mergedParameters = $mergedParameters;
-    }
-    //endregion
-
-
-    /**
-     * Adds a node as child node
-     *
-     * @param Node $node
-     */
-    public function addChild (Node $node)
-    {
-        $node->setParent($this);
-        $this->children[] = $node;
-    }
-
-
-
-    /**
-     * Returns the display title
-     *
-     * @return string
-     */
-    public function getDisplayTitle () : string
-    {
-        return $this->getTitle() ?: $this->getRoute();
     }
 
 
@@ -289,5 +270,48 @@ class Node
     public function setExtra (array $extra) : void
     {
         $this->extra = $extra;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getPriority () : int
+    {
+        return $this->priority;
+    }
+
+
+    /**
+     * @param int $priority
+     */
+    public function setPriority (int $priority) : void
+    {
+        $this->priority = $priority;
+    }
+    // endregion
+
+
+    /**
+     * Adds a node as child node
+     *
+     * @param Node $node
+     */
+    public function addChild (Node $node) : void
+    {
+        $node->setParent($this);
+        $this->children[] = $node;
+    }
+
+
+
+    /**
+     * Returns the display title
+     *
+     * @return string
+     */
+    public function getDisplayTitle () : string
+    {
+        return $this->getTitle() ?: $this->getRoute();
     }
 }
