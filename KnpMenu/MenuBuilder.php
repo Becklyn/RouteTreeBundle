@@ -20,11 +20,11 @@ class MenuBuilder
      */
     private $factory;
 
+
     /**
      * @var RouteTree
      */
     private $routeTree;
-
 
 
     /**
@@ -38,7 +38,6 @@ class MenuBuilder
     }
 
 
-
     /**
      * Builds the menu from a given route
      *
@@ -46,12 +45,12 @@ class MenuBuilder
      *
      * @return ItemInterface
      */
-    public function buildMenu ($fromRoute)
+    public function buildMenu (string $fromRoute) : ItemInterface
     {
         $menuRoot = $this->factory->createItem("root");
         $rootNode = $this->routeTree->getNode($fromRoute);
 
-        if (null !== $rootNode && !$rootNode->isHidden())
+        if (null !== $rootNode)
         {
             $this->appendNodes($menuRoot, $rootNode->getChildren());
         }
@@ -60,22 +59,19 @@ class MenuBuilder
     }
 
 
-
     /**
      * Appends the node tree to the given parent
      *
      * @param ItemInterface $parent
-     * @param Node[] $nodes
+     * @param Node[]        $nodes
      */
-    private function appendNodes (ItemInterface $parent, array $nodes)
+    private function appendNodes (ItemInterface $parent, array $nodes) : void
     {
         foreach ($nodes as $node)
         {
-            $routeParameters = $node->getParameters();
-
             $child = $parent->addChild($node->getDisplayTitle(), [
                 "route" => $node->getRoute(),
-                "routeParameters" => $routeParameters,
+                "routeParameters" => $node->getParameters(),
             ]);
 
             if ($node->isHidden())
@@ -83,9 +79,7 @@ class MenuBuilder
                 $child->setDisplay(false);
             }
 
-            $child->setExtra("routeTree:separator", $node->getSeparator());
-            $child->setExtra("routeTree:extras", $node->getExtras());
-
+            $child->setExtras($node->getExtra());
             $this->appendNodes($child, $node->getChildren());
         }
     }
