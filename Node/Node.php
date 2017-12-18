@@ -299,7 +299,6 @@ class Node
      */
     public function addChild (Node $node) : void
     {
-        $node->setParent($this);
         $this->children[] = $node;
     }
 
