@@ -2,7 +2,7 @@
 
 namespace Tests\Becklyn\RouteTreeBundle\Tree;
 
-use Becklyn\RouteTreeBundle\Tree\Node;
+use Becklyn\RouteTreeBundle\Node\Node;
 use PHPUnit\Framework\TestCase;
 
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing;
 
-use Becklyn\RouteTreeBundle\Tree\Node;
+use Becklyn\RouteTreeBundle\Node\Node;
 use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;

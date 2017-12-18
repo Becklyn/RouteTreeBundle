@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Becklyn\RouteTreeBundle\Builder;
 
 use Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException;
-use Becklyn\RouteTreeBundle\Tree\Node;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Becklyn\RouteTreeBundle\Node\Node;
+use Becklyn\RouteTreeBundle\Node\NodeFactory;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -17,32 +16,10 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class TreeBuilder
 {
-    const PARENT_CONFIGURATION_OPTION = "parent";
-    const ROUTE_OPTIONS_KEY = "tree";
-
     /**
-     * All configuration options.
-     *
-     * Mapping of routing configuration to the properties of the Node
-     * ["config-option" => "propertyPath"]
-     *
-     * @var string[]
+     * @var NodeFactory
      */
-    private static $configurationOptions = [
-        "title" => "title",
-        "hidden" => "hidden",
-        "separator" => "separator",
-        "parameters" => "parameters",
-        "security" => "security",
-        "extra" => "extra",
-        self::PARENT_CONFIGURATION_OPTION => "parentRoute",
-    ];
-
-
-    /**
-     * @var PropertyAccessor
-     */
-    private $propertyAccessor;
+    private $nodeFactory;
 
 
     /**
@@ -51,16 +28,15 @@ class TreeBuilder
     private $parametersGenerator;
 
 
-
     /**
+     * @param NodeFactory         $nodeFactory
      * @param ParametersGenerator $parametersGenerator
      */
-    public function __construct (ParametersGenerator $parametersGenerator)
+    public function __construct (NodeFactory $nodeFactory, ParametersGenerator $parametersGenerator)
     {
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $this->nodeFactory = $nodeFactory;
         $this->parametersGenerator = $parametersGenerator;
     }
-
 
 
     /**
@@ -69,8 +45,9 @@ class TreeBuilder
      * @param Route[]|RouteCollection $routeCollection
      *
      * @return Node[] the array is indexed by route name
+     * @throws InvalidRouteTreeException
      */
-    public function buildTree ($routeCollection)
+    public function buildTree (iterable $routeCollection)
     {
         $relevantRoutes = $this->calculateRelevantRoutes($routeCollection);
         $nodes = $this->generateNodesFromRoutes($routeCollection, $relevantRoutes);
@@ -90,7 +67,7 @@ class TreeBuilder
      * @return array of format ["route" => (bool) $includeInTree]
      * @throws InvalidRouteTreeException
      */
-    private function calculateRelevantRoutes ($routeCollection)
+    private function calculateRelevantRoutes (iterable $routeCollection) : array
     {
         $routeIndex = [];
 
@@ -101,7 +78,7 @@ class TreeBuilder
 
         foreach ($routeCollection as $routeName => $route)
         {
-            $routeData = $route->getOption(self::ROUTE_OPTIONS_KEY);
+            $routeData = $route->getOption(NodeFactory::CONFIG_OPTIONS_KEY);
 
             // no route data found -> skip
             if (null === $routeData)
@@ -113,10 +90,10 @@ class TreeBuilder
             $routeIndex[$routeName] = true;
 
             // mark parent route as relevant
-            if (isset($routeData[self::PARENT_CONFIGURATION_OPTION]) && !empty($routeData[self::PARENT_CONFIGURATION_OPTION]))
-            {
-                $parentRoute = $routeData[self::PARENT_CONFIGURATION_OPTION];
+            $parentRoute = $routeData[NodeFactory::CONFIG_OPTIONS_KEY] ?? null;
 
+            if (null !== $parentRoute)
+            {
                 if (!isset($routeIndex[$parentRoute]))
                 {
                     throw new InvalidRouteTreeException(sprintf(
@@ -143,19 +120,19 @@ class TreeBuilder
      *
      * @return Node[]
      */
-    private function generateNodesFromRoutes ($routeCollection, array $relevantRoutes)
+    private function generateNodesFromRoutes (iterable $routeCollection, array $relevantRoutes) : array
     {
         $nodes = [];
 
         foreach ($routeCollection as $routeName => $route)
         {
             // skip not relevant routes
-            if (!isset($relevantRoutes[$routeName]) || !$relevantRoutes[$routeName])
+            if ($relevantRoutes[$routeName] ?? false)
             {
                 continue;
             }
 
-            $nodes[$routeName] = $this->createNodeFromRoute($routeName, $route);
+            $nodes[$routeName] = $this->nodeFactory->createNode($routeName, $route);
         }
 
         return $nodes;
@@ -170,7 +147,7 @@ class TreeBuilder
      *
      * @return Node[]
      */
-    private function linkNodeHierarchy (array $nodes)
+    private function linkNodeHierarchy (array $nodes) : array
     {
         foreach ($nodes as $node)
         {
@@ -188,52 +165,13 @@ class TreeBuilder
 
 
     /**
-     * Creates a node from a route
-     *
-     * @param string $routeName
-     * @param Route  $route
-     *
-     * @return Node
-     */
-    private function createNodeFromRoute ($routeName, Route $route)
-    {
-        $routeData = $route->getOption(self::ROUTE_OPTIONS_KEY);
-        $node = new Node($routeName);
-
-        // if there is no tree data
-        if (is_array($routeData))
-        {
-            // set basic data automatically
-            foreach (self::$configurationOptions as $configOption => $propertyPath)
-            {
-                if (isset($routeData[$configOption]))
-                {
-                    $this->propertyAccessor->setValue($node, $propertyPath, $routeData[$configOption]);
-                }
-            }
-
-            // set all required parameters at least as "null"
-            $node->setParameters(
-                array_replace(
-                    array_fill_keys($route->compile()->getVariables(), null),
-                    $node->getParameters()
-                )
-            );
-        }
-
-        return $node;
-    }
-
-
-
-    /**
      * Calculates all parameters
      *
      * @param Node[] $nodes
      *
      * @return Node[]
      */
-    private function calculateAllParameters (array $nodes)
+    private function calculateAllParameters (array $nodes) : array
     {
         foreach ($nodes as $node)
         {

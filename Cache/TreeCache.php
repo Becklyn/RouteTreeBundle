@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Cache;
 
-use Becklyn\RouteTreeBundle\Tree\Node;
+use Becklyn\RouteTreeBundle\Node\Node;
 use Psr\Cache\CacheItemPoolInterface;
 
 

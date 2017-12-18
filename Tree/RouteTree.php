@@ -6,6 +6,7 @@ namespace Becklyn\RouteTreeBundle\Tree;
 
 use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
 use Becklyn\RouteTreeBundle\Cache\TreeCache;
+use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;

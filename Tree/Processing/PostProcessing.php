@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Tree\Processing;
 
-use Becklyn\RouteTreeBundle\Tree\Node;
+use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\MissingParametersProcessor;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\SecurityProcessor;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\TranslationsProcessor;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing;
 
-use Becklyn\RouteTreeBundle\Tree\Node;
+use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Tree\RouteTree;
 use Symfony\Component\Translation\TranslatorInterface;
 

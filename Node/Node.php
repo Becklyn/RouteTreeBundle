@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Becklyn\RouteTreeBundle\Tree;
+namespace Becklyn\RouteTreeBundle\Node;
 
 use Becklyn\RouteTreeBundle\Exception\InvalidNodeDataException;
 
