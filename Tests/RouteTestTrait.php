@@ -1,6 +1,6 @@
 <?php
 
-namespace Becklyn\RouteTreeBundle\tests;
+namespace Tests\Becklyn\RouteTreeBundle;
 
 use Symfony\Component\Routing\Route;
 
