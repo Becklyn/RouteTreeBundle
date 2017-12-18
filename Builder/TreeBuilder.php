@@ -32,6 +32,7 @@ class TreeBuilder
         "separator" => "separator",
         "parameters" => "parameters",
         "security" => "security",
+        "extra" => "extra",
         self::PARENT_CONFIGURATION_OPTION => "parentRoute",
     ];
 

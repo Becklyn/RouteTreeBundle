@@ -106,6 +106,14 @@ class Node
      * @var Node[]
      */
     private $children = [];
+
+
+    /**
+     * The extra data
+     *
+     * @var array
+     */
+    private $extra = [];
     //endregion
 
 
@@ -347,5 +355,23 @@ class Node
     public function getDisplayTitle ()
     {
         return $this->getTitle() ?: $this->getRoute();
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getExtra ($key, $defaultValue = null) : array
+    {
+        return $this->extra[$key] ?? $defaultValue;
+    }
+
+
+    /**
+     * @param array $extra
+     */
+    public function setExtra (array $extra) : void
+    {
+        $this->extra = $extra;
     }
 }
