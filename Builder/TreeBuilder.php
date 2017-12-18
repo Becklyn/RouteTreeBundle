@@ -55,7 +55,7 @@ class TreeBuilder
     {
         $relevantRoutes = $this->calculateRelevantRoutes($routeCollection);
         $nodes = $this->generateNodesFromRoutes($routeCollection, $relevantRoutes);
-        $nodes = $this->linkNodeHierarchy($nodes);
+        $nodes = $this->linkNodeHierarchy($routeCollection, $nodes);
 
         // needs to be after the hierarchy has been set up
         return $this->calculateAllParameters($nodes);
@@ -154,7 +154,7 @@ class TreeBuilder
         foreach ($routeCollection as $routeName => $route)
         {
             $routeData = $route->getOption(self::CONFIG_OPTIONS_KEY);
-            $parentRoute = $routeData[self::CONFIG_OPTIONS_KEY][self::CONFIG_PARENT_KEY];
+            $parentRoute = $routeData[self::CONFIG_OPTIONS_KEY][self::CONFIG_PARENT_KEY] ?? null;
 
             if (null !== $parentRoute && isset($nodes[$routeName], $nodes[$parentRoute]))
             {
