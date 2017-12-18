@@ -5,11 +5,25 @@ declare(strict_types=1);
 namespace Becklyn\RouteTreeBundle\Node;
 
 use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
+use Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper;
 use Symfony\Component\Routing\Route;
 
 
 class NodeFactory
 {
+    /**
+     * @var SecurityInferHelper
+     */
+    private $securityInferHelper;
+
+
+    /**
+     * @param SecurityInferHelper $securityInferHelper
+     */
+    public function __construct (SecurityInferHelper $securityInferHelper)
+    {
+        $this->securityInferHelper = $securityInferHelper;
+    }
 
 
     /**
@@ -50,7 +64,12 @@ class NodeFactory
 
             if (isset($routeData["security"]))
             {
+                // prefer explicitly set security settings
                 $node->setSecurity($routeData["security"]);
+            }
+            else
+            {
+                $this->inferSecurity($node, $route);
             }
 
             if (isset($routeData["extra"]))
@@ -68,5 +87,30 @@ class NodeFactory
         }
 
         return $node;
+    }
+
+
+    /**
+     * Infers the security from the linked controller
+     *
+     * @param Node  $node
+     * @param Route $route
+     */
+    private function inferSecurity (Node $node, Route $route) : void
+    {
+        $controller = $route->getDefault("_controller");
+
+        if (null === $controller)
+        {
+            return;
+        }
+
+        $security = $this->securityInferHelper->inferSecurity($controller);
+        dump($security);
+
+        if (null !== $security)
+        {
+            $node->setSecurity($security);
+        }
     }
 }
