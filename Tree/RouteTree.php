@@ -6,6 +6,7 @@ namespace Becklyn\RouteTreeBundle\Tree;
 
 use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
 use Becklyn\RouteTreeBundle\Cache\TreeCache;
+use Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException;
 use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
@@ -66,11 +67,11 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
     }
 
 
-
     /**
      * Builds the tree
      *
      * @return Node[]
+     * @throws InvalidRouteTreeException
      */
     private function buildTree ()
     {
@@ -86,13 +87,13 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
     }
 
 
-
     /**
      * Fetches a node from the tree
      *
      * @param string $route
      *
      * @return Node|null
+     * @throws InvalidRouteTreeException
      */
     public function getNode ($route)
     {
