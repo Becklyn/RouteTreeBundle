@@ -8,7 +8,7 @@ use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
 use Becklyn\RouteTreeBundle\Cache\TreeCache;
 use Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException;
 use Becklyn\RouteTreeBundle\Node\Node;
-use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing;
+use Becklyn\RouteTreeBundle\PostProcessing\PostProcessor;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -40,7 +40,7 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
 
 
     /**
-     * @var PostProcessing
+     * @var PostProcessor
      */
     private $postProcessing;
 
@@ -55,10 +55,10 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
     /**
      * @param TreeBuilder     $builder
      * @param TreeCache       $cache
-     * @param PostProcessing  $postProcessing
+     * @param PostProcessor   $postProcessing
      * @param RouterInterface $router
      */
-    public function __construct (TreeBuilder $builder, TreeCache $cache, PostProcessing $postProcessing, RouterInterface $router)
+    public function __construct (TreeBuilder $builder, TreeCache $cache, PostProcessor $postProcessing, RouterInterface $router)
     {
         $this->builder = $builder;
         $this->cache = $cache;
