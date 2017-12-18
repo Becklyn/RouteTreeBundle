@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing;
+namespace Becklyn\RouteTreeBundle\PostProcessing\Processor;
 
 use Becklyn\RouteTreeBundle\Node\Node;
 use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;

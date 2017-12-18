@@ -5,7 +5,7 @@ namespace Tests\Becklyn\RouteTreeBundle\Processing\PostProcessing;
 use Becklyn\RouteTreeBundle\Builder\ParametersGenerator;
 use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
 use Becklyn\RouteTreeBundle\Node\Node;
-use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\TranslationsProcessor;
+use Becklyn\RouteTreeBundle\PostProcessing\Processor\TranslationsProcessor;
 use Becklyn\RouteTreeBundle\Tree\RouteTree;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Loader\ArrayLoader;

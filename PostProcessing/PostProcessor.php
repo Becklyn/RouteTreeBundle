@@ -2,19 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Becklyn\RouteTreeBundle\Tree\Processing;
+namespace Becklyn\RouteTreeBundle\PostProcessing;
 
 use Becklyn\RouteTreeBundle\Node\Node;
-use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\MissingParametersProcessor;
-use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\SecurityProcessor;
-use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\TranslationsProcessor;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Becklyn\RouteTreeBundle\PostProcessing\Processor\MissingParametersProcessor;
+use Becklyn\RouteTreeBundle\PostProcessing\Processor\SecurityProcessor;
+use Becklyn\RouteTreeBundle\PostProcessing\Processor\TranslationsProcessor;
 
 
 /**
  *
  */
-class PostProcessing
+class PostProcessor
 {
     /**
      * @var TranslationsProcessor
@@ -29,29 +28,24 @@ class PostProcessing
 
 
     /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-
-    /**
      * @var MissingParametersProcessor
      */
     private $missingParametersProcessor;
-
 
 
     /**
      * @param TranslationsProcessor      $translationsProcessor
      * @param SecurityProcessor          $securityProcessor
      * @param MissingParametersProcessor $missingParametersProcessor
-     * @param RequestStack               $requestStack
      */
-    public function __construct (TranslationsProcessor $translationsProcessor, SecurityProcessor $securityProcessor, MissingParametersProcessor $missingParametersProcessor, RequestStack $requestStack)
+    public function __construct (
+        TranslationsProcessor $translationsProcessor,
+        SecurityProcessor $securityProcessor,
+        MissingParametersProcessor $missingParametersProcessor
+    )
     {
         $this->translationsProcessor = $translationsProcessor;
         $this->securityProcessor = $securityProcessor;
-        $this->requestStack = $requestStack;
         $this->missingParametersProcessor = $missingParametersProcessor;
     }
 
@@ -69,16 +63,7 @@ class PostProcessing
         {
             $this->translationsProcessor->process($node);
             $this->securityProcessor->process($node);
-        }
-
-        if (null !== $this->requestStack->getCurrentRequest())
-        {
-            $requestAttributes = $this->requestStack->getCurrentRequest()->attributes;
-
-            foreach ($nodes as $node)
-            {
-                $this->missingParametersProcessor->process($requestAttributes->get("_route_params", []), $node);
-            }
+            $this->missingParametersProcessor->process($node);
         }
 
         return $nodes;

@@ -11,16 +11,16 @@ services:
     # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Post Processing
     # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing: ~
-    Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\MissingParametersProcessor: ~
+    Becklyn\RouteTreeBundle\PostProcessing\PostProcessor: ~
+    Becklyn\RouteTreeBundle\PostProcessing\Processor\MissingParametersProcessor: ~
 
-    Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\SecurityProcessor:
+    Becklyn\RouteTreeBundle\PostProcessing\Processor\SecurityProcessor:
         arguments:
             $expressionLanguage: '@sensio_framework_extra.security.expression_language'
             $trustResolver: '@security.authentication.trust_resolver'
             $roleHierarchy: '@security.role_hierarchy'
 
-    Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\TranslationsProcessor: ~
+    Becklyn\RouteTreeBundle\PostProcessing\Processor\TranslationsProcessor: ~
 
 
     # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

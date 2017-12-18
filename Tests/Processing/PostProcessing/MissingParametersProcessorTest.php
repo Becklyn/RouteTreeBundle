@@ -3,7 +3,7 @@
 namespace Tests\Becklyn\RouteTreeBundle\Processing\PostProcessing;
 
 use Becklyn\RouteTreeBundle\Node\Node;
-use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\MissingParametersProcessor;
+use Becklyn\RouteTreeBundle\PostProcessing\Processor\MissingParametersProcessor;
 use PHPUnit\Framework\TestCase;
 
 

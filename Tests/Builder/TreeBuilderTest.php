@@ -5,7 +5,7 @@ namespace Tests\Becklyn\RouteTreeBundle\Builder;
 use Becklyn\RouteTreeBundle\Builder\ParametersGenerator;
 use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
 use Becklyn\RouteTreeBundle\Node\Node;
-use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\MissingParametersProcessor;
+use Becklyn\RouteTreeBundle\PostProcessing\Processor\MissingParametersProcessor;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouteCollection;
 use Tests\Becklyn\RouteTreeBundle\RouteTestTrait;
