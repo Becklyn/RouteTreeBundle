@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Becklyn\RouteTreeBundle\Builder;
+namespace Becklyn\RouteTreeBundle\Builder\BuildProcessor\Parameter;
 
 use Becklyn\RouteTreeBundle\Node\Node;
 

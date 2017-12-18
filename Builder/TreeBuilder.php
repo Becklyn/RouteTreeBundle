@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Builder;
 
+use Becklyn\RouteTreeBundle\Builder\BuildProcessor\ParameterProcessor;
+use Becklyn\RouteTreeBundle\Builder\BuildProcessor\PriorityProcessor;
 use Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException;
 use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Node\NodeFactory;
@@ -27,19 +29,27 @@ class TreeBuilder
 
 
     /**
-     * @var ParametersGenerator
+     * @var PriorityProcessor
      */
-    private $parametersGenerator;
+    private $priorityProcessor;
 
 
     /**
-     * @param NodeFactory         $nodeFactory
-     * @param ParametersGenerator $parametersGenerator
+     * @var ParameterProcessor
      */
-    public function __construct (NodeFactory $nodeFactory, ParametersGenerator $parametersGenerator)
+    private $parameterProcessor;
+
+
+    /**
+     * @param NodeFactory        $nodeFactory
+     * @param PriorityProcessor  $priorityProcessor
+     * @param ParameterProcessor $parameterProcessor
+     */
+    public function __construct (NodeFactory $nodeFactory, PriorityProcessor $priorityProcessor, ParameterProcessor $parameterProcessor)
     {
         $this->nodeFactory = $nodeFactory;
-        $this->parametersGenerator = $parametersGenerator;
+        $this->priorityProcessor = $priorityProcessor;
+        $this->parameterProcessor = $parameterProcessor;
     }
 
 
@@ -58,7 +68,8 @@ class TreeBuilder
         $nodes = $this->linkNodeHierarchy($routeCollection, $nodes);
 
         // needs to be after the hierarchy has been set up
-        return $this->calculateAllParameters($nodes);
+        $nodes = $this->priorityProcessor->sortNodes($nodes);
+        return $this->parameterProcessor->calculateAllParameters($nodes);
     }
 
 
@@ -164,28 +175,6 @@ class TreeBuilder
             {
                 $node->setParent($parent);
                 $parent->addChild($node);
-            }
-        }
-
-        return $nodes;
-    }
-
-
-    /**
-     * Calculates all parameters
-     *
-     * @param Node[] $nodes
-     *
-     * @return Node[]
-     */
-    private function calculateAllParameters (array $nodes) : array
-    {
-        foreach ($nodes as $node)
-        {
-            // only loop through the top level nodes as the parameters generator itself traverses the tree
-            if (null === $node->getParent())
-            {
-                $this->parametersGenerator->generateParametersForNode($node);
             }
         }
 
