@@ -129,7 +129,7 @@ class TreeBuilder
         foreach ($routeCollection as $routeName => $route)
         {
             // skip not relevant routes
-            if ($relevantRoutes[$routeName] ?? false)
+            if (!$relevantRoutes[$routeName] ?? false)
             {
                 continue;
             }
@@ -154,7 +154,7 @@ class TreeBuilder
         foreach ($routeCollection as $routeName => $route)
         {
             $routeData = $route->getOption(self::CONFIG_OPTIONS_KEY);
-            $parentRoute = $routeData[self::CONFIG_OPTIONS_KEY][self::CONFIG_PARENT_KEY] ?? null;
+            $parentRoute = $routeData[self::CONFIG_PARENT_KEY] ?? null;
 
             if (null !== $parentRoute && isset($nodes[$routeName], $nodes[$parentRoute]))
             {
