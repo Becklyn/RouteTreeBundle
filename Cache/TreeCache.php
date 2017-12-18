@@ -54,14 +54,11 @@ class TreeCache
      *
      * @return null|Node[]
      */
-    public function getTree () : ?array
+    public function get () : ?array
     {
-        if (!$this->isDebug && !empty($this->nodes))
-        {
-            return $this->nodes;
-        }
-
-        return null;
+        return !$this->isDebug && !empty($this->nodes)
+            ? $this->nodes
+            : null;
     }
 
 
@@ -71,7 +68,7 @@ class TreeCache
      *
      * @param Node[] $nodes
      */
-    public function setTree (array $nodes)
+    public function set (array $nodes)
     {
         $this->nodes = $nodes;
         $this->cacheItem->set($this->nodes);
@@ -85,6 +82,6 @@ class TreeCache
      */
     public function clear ()
     {
-        $this->setTree([]);
+        $this->set([]);
     }
 }

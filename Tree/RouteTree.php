@@ -75,12 +75,12 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
      */
     private function buildTree ()
     {
-        $tree = $this->cache->getTree();
+        $tree = $this->cache->get();
 
         if (null === $tree)
         {
             $tree = $this->builder->buildTree($this->router->getRouteCollection());
-            $this->cache->setTree($tree);
+            $this->cache->set($tree);
         }
 
         return $this->postProcessing->postProcessTree($tree);
