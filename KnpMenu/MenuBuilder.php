@@ -83,12 +83,9 @@ class MenuBuilder
                 "routeParameters" => $node->getParameters(),
             ]);
 
-            if ($node->isHidden())
-            {
-                $child->setDisplay(false);
-            }
-
+            $child->setDisplay(!$node->isHidden());
             $child->setExtras($node->getExtra());
+
             $this->appendNodes($child, $node->getChildren());
         }
     }
