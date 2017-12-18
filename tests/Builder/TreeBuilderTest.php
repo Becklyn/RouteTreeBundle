@@ -1,12 +1,13 @@
 <?php
 
-namespace Becklyn\RouteTreeBundle\tests\Builder;
+namespace Tests\Becklyn\RouteTreeBundle\Builder;
 
 use Becklyn\RouteTreeBundle\Builder\ParametersGenerator;
 use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
 use Becklyn\RouteTreeBundle\tests\RouteTestTrait;
 use Becklyn\RouteTreeBundle\Tree\Node;
 use Becklyn\RouteTreeBundle\Tree\Processing\PostProcessing\MissingParametersProcessor;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\RouteCollection;
 /**
  *
  */
-class TreeBuilderTest extends \PHPUnit_Framework_TestCase
+class TreeBuilderTest extends TestCase
 {
     use RouteTestTrait;
 
