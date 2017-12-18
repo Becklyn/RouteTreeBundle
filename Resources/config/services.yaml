@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
 
     becklyn.route_tree:
         class: Becklyn\RouteTreeBundle\Tree\RouteTree
