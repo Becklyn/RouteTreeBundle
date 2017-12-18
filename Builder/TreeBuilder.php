@@ -154,11 +154,16 @@ class TreeBuilder
         foreach ($routeCollection as $routeName => $route)
         {
             $routeData = $route->getOption(self::CONFIG_OPTIONS_KEY);
+            // we can silently ignore the null here in the array access, as the item will never exist
             $parentRoute = $routeData[self::CONFIG_PARENT_KEY] ?? null;
 
-            if (null !== $parentRoute && isset($nodes[$routeName], $nodes[$parentRoute]))
+            $node = $nodes[$routeName] ?? null;
+            $parent = $nodes[$parentRoute] ?? null;
+
+            if (null !== $node && null !== $parent)
             {
-                $nodes[$parentRoute]->addChild($nodes[$routeName]);
+                $node->setParent($parent);
+                $parent->addChild($node);
             }
         }
 
