@@ -12,12 +12,6 @@ use Becklyn\RouteTreeBundle\Exception\InvalidNodeDataException;
  */
 class Node
 {
-    /**
-     * @var array
-     */
-    private static $allowedSeparatorValues = ["before", "after", null];
-
-
     //region Fields
     /**
      * @var string
@@ -38,16 +32,7 @@ class Node
      *
      * @var bool
      */
-    private $hidden;
-
-
-    /**
-     * Identifier where to put a separator.
-     * Possible values: "before", "after", null (= no separator)
-     *
-     * @var string|null
-     */
-    private $separator = null;
+    private $hidden = false;
 
 
     /**
@@ -83,15 +68,7 @@ class Node
      *
      * @var string|null
      */
-    private $security;
-
-
-    /**
-     * The route name of the parent route
-     *
-     * @var string|null
-     */
-    private $parentRoute = null;
+    private $security = null;
 
 
     /**
@@ -99,7 +76,7 @@ class Node
      *
      * @var Node|null
      */
-    private $parent;
+    private $parent = null;
 
 
     /**
@@ -123,7 +100,7 @@ class Node
     /**
      * @param string $route
      */
-    public function __construct ($route)
+    public function __construct (string $route)
     {
         $this->route = $route;
     }
@@ -134,7 +111,7 @@ class Node
     /**
      * @return string
      */
-    public function getRoute ()
+    public function getRoute () : string
     {
         return $this->route;
     }
@@ -144,7 +121,7 @@ class Node
     /**
      * @return null|string
      */
-    public function getTitle ()
+    public function getTitle () : ?string
     {
         return $this->title;
     }
@@ -154,11 +131,9 @@ class Node
     /**
      * @param null|string $title
      */
-    public function setTitle ($title)
+    public function setTitle (?string $title)
     {
-        $this->title = null !== $title
-            ? (string) $title
-            : null;
+        $this->title = $title;
     }
 
 
@@ -166,7 +141,7 @@ class Node
     /**
      * @return boolean
      */
-    public function isHidden ()
+    public function isHidden () : bool
     {
         return $this->hidden;
     }
@@ -176,47 +151,16 @@ class Node
     /**
      * @param boolean $hidden
      */
-    public function setHidden ($hidden)
+    public function setHidden (bool $hidden)
     {
-        $this->hidden = (bool) $hidden;
-    }
-
-
-
-    /**
-     * @return null|string
-     */
-    public function getSeparator ()
-    {
-        return $this->separator;
-    }
-
-
-
-    /**
-     * @param null|string $separator
-     *
-     * @throws InvalidNodeDataException
-     */
-    public function setSeparator ($separator)
-    {
-        if (!in_array($separator, self::$allowedSeparatorValues, true))
-        {
-            throw new InvalidNodeDataException(sprintf(
-                "Invalid 'separator' value. Allowed are the values %s, but '%s' was given.",
-                var_export(self::$allowedSeparatorValues, true),
-                $separator
-            ));
-        }
-
-        $this->separator = $separator;
+        $this->hidden = $hidden;
     }
 
 
     /**
      * @return string[]
      */
-    public function getParameters ()
+    public function getParameters () : array
     {
         return $this->parameters;
     }
@@ -239,7 +183,7 @@ class Node
     /**
      * @return null|string
      */
-    public function getSecurity ()
+    public function getSecurity () : ?string
     {
         return $this->security;
     }
@@ -249,11 +193,9 @@ class Node
     /**
      * @param null|string $security
      */
-    public function setSecurity ($security)
+    public function setSecurity (?string $security)
     {
-        $this->security = null !== $security
-            ? (string) $security
-            : null;
+        $this->security = $security;
     }
 
 
@@ -261,7 +203,7 @@ class Node
     /**
      * @return Node|null
      */
-    public function getParent ()
+    public function getParent () : ?Node
     {
         return $this->parent;
     }
@@ -271,7 +213,7 @@ class Node
     /**
      * @param Node|null $parent
      */
-    public function setParent (Node $parent = null)
+    public function setParent (?Node $parent)
     {
         $this->parent = $parent;
     }
@@ -281,7 +223,7 @@ class Node
     /**
      * @return Node[]
      */
-    public function getChildren ()
+    public function getChildren () : array
     {
         return $this->children;
     }
@@ -289,37 +231,9 @@ class Node
 
 
     /**
-     * Returns the parent route
-     *
-     * @return null|string
-     */
-    public function getParentRoute ()
-    {
-        $parent = $this->getParent();
-
-        return null !== $parent
-            ? $parent->getRoute()
-            : $this->parentRoute;
-    }
-
-
-
-    /**
-     * @param null|string $parentRoute
-     */
-    public function setParentRoute ($parentRoute)
-    {
-        $this->parentRoute = null !== $parentRoute
-            ? (string) $parentRoute
-            : null;
-    }
-
-
-
-    /**
      * @return string[]
      */
-    public function getMergedParameters ()
+    public function getMergedParameters () : array
     {
         return $this->mergedParameters;
     }
@@ -329,7 +243,7 @@ class Node
     /**
      * @param string[] $mergedParameters
      */
-    public function setMergedParameters ($mergedParameters)
+    public function setMergedParameters (array $mergedParameters)
     {
         $this->mergedParameters = $mergedParameters;
     }
@@ -354,7 +268,7 @@ class Node
      *
      * @return string
      */
-    public function getDisplayTitle ()
+    public function getDisplayTitle () : string
     {
         return $this->getTitle() ?: $this->getRoute();
     }
@@ -363,16 +277,7 @@ class Node
     /**
      * @return array
      */
-    public function getExtra ($key, $defaultValue = null) : array
-    {
-        return $this->extra[$key] ?? $defaultValue;
-    }
-
-
-    /**
-     * @return array
-     */
-    public function getExtras () : array
+    public function getExtra () : array
     {
         return $this->extra;
     }

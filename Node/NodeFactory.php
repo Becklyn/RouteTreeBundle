@@ -32,9 +32,9 @@ class NodeFactory
             if (isset($routeData["title"]))
             {
                 $node->setTitle($routeData["title"]);
+                $node->setHidden(false);
             }
-
-            if (isset($routeData["hidden"]))
+            else
             {
                 $node->setHidden(true);
             }
@@ -52,11 +52,6 @@ class NodeFactory
             if (isset($routeData["extra"]))
             {
                 $node->setExtra($routeData["extra"]);
-            }
-
-            if (isset($routeData[self::CONFIG_PARENT_KEY]))
-            {
-                $node->setParentRoute($routeData[self::CONFIG_PARENT_KEY]);
             }
 
             // set all required parameters at least as "null"

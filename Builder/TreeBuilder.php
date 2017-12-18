@@ -140,19 +140,21 @@ class TreeBuilder
     /**
      * Links the hierarchy between the nodes
      *
-     * @param Node[] $nodes
+     * @param Route[]|RouteCollection $routeCollection
+     * @param Node[]                  $nodes
      *
      * @return Node[]
      */
-    private function linkNodeHierarchy (array $nodes) : array
+    private function linkNodeHierarchy (iterable $routeCollection, array $nodes) : array
     {
-        foreach ($nodes as $node)
+        foreach ($routeCollection as $routeName => $route)
         {
-            $parentRoute = $node->getParentRoute();
+            $routeData = $route->getOption(NodeFactory::CONFIG_OPTIONS_KEY);
+            $parentRoute = $routeData[NodeFactory::CONFIG_OPTIONS_KEY][NodeFactory::CONFIG_PARENT_KEY];
 
-            if (null !== $parentRoute)
+            if (null !== $parentRoute && isset($nodes[$routeName], $nodes[$parentRoute]))
             {
-                $nodes[$parentRoute]->addChild($node);
+                $nodes[$parentRoute]->addChild($nodes[$routeName]);
             }
         }
 
