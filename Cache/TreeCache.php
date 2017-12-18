@@ -3,6 +3,7 @@
 namespace Becklyn\RouteTreeBundle\Cache;
 
 use Becklyn\RouteTreeBundle\Tree\Node;
+use Psr\Cache\CacheItemPoolInterface;
 
 
 /**
@@ -10,38 +11,52 @@ use Becklyn\RouteTreeBundle\Tree\Node;
  */
 class TreeCache
 {
+    const CACHE_ITEM_KEY = "becklyn:route-tree:cache";
+
     /**
      * @var bool
      */
     private $isDebug;
 
-    /**
-     * @var string
-     */
-    private $filePath;
-
-
 
     /**
-     * @param string $cacheDir
-     * @param bool   $debug
+     * @var CacheItemPoolInterface
      */
-    public function __construct ($cacheDir, $debug)
+    private $cachePool;
+
+
+    /**
+     * @var Node[]
+     */
+    private $nodes;
+
+
+    /**
+     * @param CacheItemPoolInterface $cachePool
+     * @param bool                   $debug
+     */
+    public function __construct (CacheItemPoolInterface $cachePool, bool $debug)
     {
-        $this->filePath = "{$cacheDir}/becklyn/route-tree/tree.cache";
         $this->isDebug = $debug;
+        $this->cachePool = $cachePool;
+        $this->cacheItem = $this->cachePool->getItem(self::CACHE_ITEM_KEY);
+        $this->nodes = $this->cacheItem->isHit()
+            ? $this->cacheItem->get()
+            : [];
     }
 
 
 
     /**
+     * Returns the cached tree
+     *
      * @return null|Node[]
      */
-    public function getTree ()
+    public function getTree () : ?array
     {
-        if (!$this->isDebug && is_file($this->filePath))
+        if (!$this->isDebug && !empty($this->nodes))
         {
-            return unserialize(file_get_contents($this->filePath));
+            return $this->nodes;
         }
 
         return null;
@@ -50,13 +65,15 @@ class TreeCache
 
 
     /**
-     * @param array $nodes
+     * Updates the cached tree
+     *
+     * @param Node[] $nodes
      */
     public function setTree (array $nodes)
     {
-        // checking could be a race condition, so we silently fail if the dir already exists
-        @mkdir(dirname($this->filePath), 0755, true);
-        file_put_contents($this->filePath, serialize($nodes));
+        $this->nodes = $nodes;
+        $this->cacheItem->set($this->nodes);
+        $this->cachePool->save($this->cacheItem);
     }
 
 
@@ -66,9 +83,6 @@ class TreeCache
      */
     public function clear ()
     {
-        if (is_file($this->filePath))
-        {
-            @unlink($this->filePath);
-        }
+        $this->setTree([]);
     }
 }
