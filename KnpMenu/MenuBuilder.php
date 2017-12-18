@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\KnpMenu;
 
+use Becklyn\RouteTreeBundle\Exception\RouteTreeException;
 use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Tree\RouteTree;
 use Knp\Menu\FactoryInterface;
@@ -48,14 +49,22 @@ class MenuBuilder
     public function buildMenu (string $fromRoute) : ItemInterface
     {
         $menuRoot = $this->factory->createItem("root");
-        $rootNode = $this->routeTree->getNode($fromRoute);
 
-        if (null !== $rootNode)
+        try
         {
-            $this->appendNodes($menuRoot, $rootNode->getChildren());
-        }
+            $rootNode = $this->routeTree->getNode($fromRoute);
 
-        return $menuRoot;
+            if (null !== $rootNode)
+            {
+                $this->appendNodes($menuRoot, $rootNode->getChildren());
+            }
+
+            return $menuRoot;
+        }
+        catch (RouteTreeException $e)
+        {
+            return $menuRoot;
+        }
     }
 
 
