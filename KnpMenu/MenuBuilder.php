@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Becklyn\RouteTreeBundle\KnpMenu;
 
 use Becklyn\RouteTreeBundle\Tree\Node;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Becklyn\RouteTreeBundle\Tree\Processing;
 
 use Becklyn\RouteTreeBundle\Tree\Node;

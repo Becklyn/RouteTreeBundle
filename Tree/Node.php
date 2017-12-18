@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Becklyn\RouteTreeBundle\Tree;
 
 use Becklyn\RouteTreeBundle\Exception\InvalidNodeDataException;
