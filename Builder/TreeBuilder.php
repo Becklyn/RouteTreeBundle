@@ -58,7 +58,6 @@ class TreeBuilder
     }
 
 
-
     /**
      * Calculates a list of which routes should be included in the tree
      *
@@ -111,7 +110,6 @@ class TreeBuilder
     }
 
 
-
     /**
      * Generates the nodes for the given routes
      *
@@ -139,7 +137,6 @@ class TreeBuilder
     }
 
 
-
     /**
      * Links the hierarchy between the nodes
      *
@@ -161,7 +158,6 @@ class TreeBuilder
 
         return $nodes;
     }
-
 
 
     /**
