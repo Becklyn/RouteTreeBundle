@@ -7,4 +7,5 @@ namespace Becklyn\RouteTreeBundle\Exception;
 /**
  *
  */
-class InvalidRouteTreeException extends \Exception {}
+class InvalidRouteTreeException extends RouteTreeException
+{}

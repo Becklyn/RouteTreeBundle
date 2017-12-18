@@ -8,4 +8,5 @@ namespace Becklyn\RouteTreeBundle\Exception;
 /**
  *
  */
-class InvalidNodeDataException extends \Exception {}
+class InvalidNodeDataException extends RouteTreeException
+{}
