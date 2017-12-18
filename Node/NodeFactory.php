@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Node;
 
+use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
 use Symfony\Component\Routing\Route;
 
 
 class NodeFactory
 {
-    const CONFIG_OPTIONS_KEY = "tree";
-    const CONFIG_PARENT_KEY = "parent";
 
 
     /**
@@ -23,7 +22,7 @@ class NodeFactory
     public function createNode (string $routeName, Route $route) : Node
     {
         $node = new Node($routeName);
-        $routeData = $route->getOption(self::CONFIG_OPTIONS_KEY);
+        $routeData = $route->getOption(TreeBuilder::CONFIG_OPTIONS_KEY);
 
         // if there is no tree data
         if (is_array($routeData))

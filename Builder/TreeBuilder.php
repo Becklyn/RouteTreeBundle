@@ -16,6 +16,10 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class TreeBuilder
 {
+    const CONFIG_OPTIONS_KEY = "tree";
+    const CONFIG_PARENT_KEY = "parent";
+
+
     /**
      * @var NodeFactory
      */
@@ -77,7 +81,7 @@ class TreeBuilder
 
         foreach ($routeCollection as $routeName => $route)
         {
-            $routeData = $route->getOption(NodeFactory::CONFIG_OPTIONS_KEY);
+            $routeData = $route->getOption(self::CONFIG_OPTIONS_KEY);
 
             // no route data found -> skip
             if (null === $routeData)
@@ -89,7 +93,7 @@ class TreeBuilder
             $routeIndex[$routeName] = true;
 
             // mark parent route as relevant
-            $parentRoute = $routeData[NodeFactory::CONFIG_OPTIONS_KEY] ?? null;
+            $parentRoute = $routeData[self::CONFIG_OPTIONS_KEY] ?? null;
 
             if (null !== $parentRoute)
             {
@@ -149,8 +153,8 @@ class TreeBuilder
     {
         foreach ($routeCollection as $routeName => $route)
         {
-            $routeData = $route->getOption(NodeFactory::CONFIG_OPTIONS_KEY);
-            $parentRoute = $routeData[NodeFactory::CONFIG_OPTIONS_KEY][NodeFactory::CONFIG_PARENT_KEY];
+            $routeData = $route->getOption(self::CONFIG_OPTIONS_KEY);
+            $parentRoute = $routeData[self::CONFIG_OPTIONS_KEY][self::CONFIG_PARENT_KEY];
 
             if (null !== $parentRoute && isset($nodes[$routeName], $nodes[$parentRoute]))
             {
