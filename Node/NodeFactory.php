@@ -38,6 +38,11 @@ class NodeFactory
                 $node->setHidden(true);
             }
 
+            if (isset($routeData["priority"]))
+            {
+                $node->setPriority($routeData["priority"]);
+            }
+
             if (isset($routeData["parameters"]))
             {
                 $node->setParameters($routeData["parameters"]);

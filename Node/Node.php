@@ -235,6 +235,14 @@ class Node
     }
 
 
+    /**
+     * @param Node[] $children
+     */
+    public function setChildren (array $children) : void
+    {
+        $this->children = $children;
+    }
+
 
     /**
      * @return string[]
