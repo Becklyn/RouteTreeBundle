@@ -32,27 +32,32 @@ class MissingParametersProcessorTest extends TestCase
     }
 
 
-    public function testMissingParameter ()
+    public function dataProviderTestParameter ()
     {
-        $processor = $this->buildProcessor([]);
-        $node = new Node("test");
-        $node->setParameters(["shouldBeMissing" => null]);
-        $processor->process($node);
-
-        // sets the default value
-        $this->assertSame(1, $node->getParameters()["shouldBeMissing"]);
+        return [
+            // missing parameters are overriden with default values
+            ["shouldBeMissing", 1],
+            // existing parameter should be taken
+            ["shouldNotBeMissing", "exists"],
+        ];
     }
 
 
-    public function testExistingParameter ()
+    /**
+     * @dataProvider dataProviderTestParameter
+     *
+     * @param string $setParameterName
+     * @param        $expectedValue
+     */
+    public function testParameter (string $setParameterName, $expectedValue)
     {
         $processor = $this->buildProcessor([
             "shouldNotBeMissing" => "exists",
         ]);
         $node = new Node("test");
-        $node->setParameters(["shouldNotBeMissing" => null]);
+        $node->setParameters([$setParameterName => null]);
         $processor->process($node);
 
-        $this->assertSame("exists", $node->getParameters()["shouldNotBeMissing"]);
+        $this->assertSame($expectedValue, $node->getParameters()[$setParameterName]);
     }
 }
