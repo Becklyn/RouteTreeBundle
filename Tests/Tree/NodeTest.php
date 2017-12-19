@@ -40,6 +40,7 @@ class NodeTest extends TestCase
         $this->assertEmpty($parent->getChildren());
 
         $parent->addChild($child);
+        $child->setParent($parent);
 
         $this->assertSame($parent, $child->getParent());
         $this->assertEquals([$child], $parent->getChildren());
