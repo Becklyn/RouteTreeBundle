@@ -55,12 +55,12 @@ class ParametersGenerator
     /**
      * Finds whether the parameter is defined in tree somewhere
      *
-     * @param string     $name
-     * @param Node $node
+     * @param string $name
+     * @param Node   $node
      *
-     * @return null|string
+     * @return mixed
      */
-    private function findParameterInTree ($name, Node $node)
+    private function findParameterInTree (string $name, Node $node)
     {
         $nodeParameters = $node->getMergedParameters();
 
