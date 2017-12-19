@@ -5,6 +5,8 @@ namespace Tests\Becklyn\RouteTreeBundle\Processing\PostProcessing;
 use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\PostProcessing\Processor\MissingParametersProcessor;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 
 /**
@@ -12,23 +14,30 @@ use PHPUnit\Framework\TestCase;
  */
 class MissingParametersProcessorTest extends TestCase
 {
-    /**
-     * @var MissingParametersProcessor
-     */
-    private $missingParametersProcessor;
-
-
-    public function setUp ()
+    private function buildProcessor (array $routeParameters) : MissingParametersProcessor
     {
-        $this->missingParametersProcessor = new MissingParametersProcessor();
+        $requestStack = self::getMockBuilder(RequestStack::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $request = new Request([], [], [
+            "_route_params" => $routeParameters,
+        ]);
+
+        $requestStack
+            ->method("getMasterRequest")
+            ->willReturn($request);
+
+        return new MissingParametersProcessor($requestStack);
     }
 
 
     public function testMissingParameter ()
     {
+        $processor = $this->buildProcessor([]);
         $node = new Node("test");
         $node->setParameters(["shouldBeMissing" => null]);
-        $this->missingParametersProcessor->process([], $node);
+        $processor->process($node);
 
         // sets the default value
         $this->assertSame(1, $node->getParameters()["shouldBeMissing"]);
@@ -37,12 +46,12 @@ class MissingParametersProcessorTest extends TestCase
 
     public function testExistingParameter ()
     {
-        $attributes = [
+        $processor = $this->buildProcessor([
             "shouldNotBeMissing" => "exists",
-        ];
+        ]);
         $node = new Node("test");
         $node->setParameters(["shouldNotBeMissing" => null]);
-        $this->missingParametersProcessor->process($attributes, $node);
+        $processor->process($node);
 
         $this->assertSame("exists", $node->getParameters()["shouldNotBeMissing"]);
     }
