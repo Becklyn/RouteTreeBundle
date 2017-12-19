@@ -149,7 +149,8 @@ class Node
      */
     public function isHidden () : bool
     {
-        return $this->hidden;
+        // the node is automatically hidden if no title is set
+        return $this->hidden || null === $this->title;
     }
 
 
