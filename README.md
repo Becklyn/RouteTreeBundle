@@ -93,6 +93,15 @@ page_listing:
 **If you do not define a value, the parameter is looked up in the request attributes of the current request. If it doesn't find anything there, `1` is used.**
 
 
+### Security
+Every node can have a custom security expression, that is evaluated when printing the tree.
+All nodes where the security expression evaluates to `false` are automatically hidden (including all their child nodes).
+
+If no explicit security expression is given, the builder tries to infer the expression from the linked controller by combining `@IsGranted()`
+and `@Security()` annotations from the action method and the controller class.
+If `@IsGranted()` is used with the `subject` attribute, nothing is infered.
+
+
 ### Extra Parameters
 You can define additional parameters, that can be used in the menu template.
 All path options that are not recognized (see "Path Options") are automatically added as extra parameters.
