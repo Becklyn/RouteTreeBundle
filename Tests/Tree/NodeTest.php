@@ -30,6 +30,31 @@ class NodeTest extends TestCase
     }
 
 
+    public function testAutoHiding ()
+    {
+        $node = new Node("route");
+
+        self::assertTrue($node->isHidden());
+
+        // not hidden anymore as soon as a title is set
+        $node->setTitle("Some title");
+        self::assertFalse($node->isHidden());
+    }
+
+
+    public function testExplicitHiding ()
+    {
+        $node = new Node("route");
+        $node->setHidden(true);
+
+        self::assertTrue($node->isHidden());
+
+        // still hidden
+        $node->setTitle("Some title");
+        self::assertTrue($node->isHidden());
+    }
+
+
 
     public function testChildLinks ()
     {
