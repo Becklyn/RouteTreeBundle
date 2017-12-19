@@ -104,7 +104,7 @@ class TreeBuilder
             $routeIndex[$routeName] = true;
 
             // mark parent route as relevant
-            $parentRoute = $routeData[self::CONFIG_OPTIONS_KEY] ?? null;
+            $parentRoute = $routeData[self::CONFIG_PARENT_KEY] ?? null;
 
             if (null !== $parentRoute)
             {
