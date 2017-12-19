@@ -2,8 +2,6 @@
 
 namespace Tests\Becklyn\RouteTreeBundle\Processing\PostProcessing;
 
-use Becklyn\RouteTreeBundle\Builder\ParametersGenerator;
-use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
 use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\PostProcessing\Processor\TranslationsProcessor;
 use Becklyn\RouteTreeBundle\Tree\RouteTree;
@@ -11,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\MessageSelector;
 use Symfony\Component\Translation\Translator;
-use Tests\Becklyn\RouteTreeBundle\RouteTestTrait;
 
 
 /**
@@ -19,14 +16,6 @@ use Tests\Becklyn\RouteTreeBundle\RouteTestTrait;
  */
 class TranslationsProcessorTest extends TestCase
 {
-    use RouteTestTrait;
-
-    /**
-     * @var TreeBuilder
-     */
-    private $builder;
-
-
     /**
      * @var TranslationsProcessor
      */
@@ -35,9 +24,7 @@ class TranslationsProcessorTest extends TestCase
 
     public function setUp ()
     {
-        $this->builder = new TreeBuilder(new ParametersGenerator());
-
-        $translator = new Translator("de", new MessageSelector());
+        $translator = new Translator("de");
         $translator->addLoader("array", new ArrayLoader());
         $translator->addResource("array", [
             "My title" => "Mein Titel"
@@ -47,24 +34,29 @@ class TranslationsProcessorTest extends TestCase
     }
 
 
-
-    public function testMissingTranslation ()
+    /**
+     * @return array
+     */
+    public function dataProviderTestTranslation ()
     {
-        $node = new Node("route");
-        $node->setTitle("Other title");
-        $this->translationPostProcessing->process($node);
-
-        $this->assertSame("Other title", $node->getTitle());
+        return [
+            // missing translation
+            ["Other title", "Other title"],
+            // existing translation
+            ["My title", "Mein Titel"],
+        ];
     }
 
 
-
-    public function testExistingTranslation ()
+    /**
+     * @dataProvider dataProviderTestTranslation
+     */
+    public function testTranslation (string $title, string $expectedTitle)
     {
         $node = new Node("route");
-        $node->setTitle("My title");
+        $node->setTitle($title);
         $this->translationPostProcessing->process($node);
 
-        $this->assertSame("Mein Titel", $node->getTitle());
+        $this->assertSame($expectedTitle, $node->getTitle());
     }
 }
