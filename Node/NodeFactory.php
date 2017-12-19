@@ -41,50 +41,47 @@ class NodeFactory
         // if there is no tree data
         if (is_array($routeData))
         {
-            // set basic data
-            if (isset($routeData["title"]))
+            foreach ($routeData as $key => $value)
             {
-                $node->setTitle($routeData["title"]);
-                $node->setHidden(false);
-            }
-            else
-            {
-                $node->setHidden(true);
+                switch ($key)
+                {
+                    case "title":
+                        $node->setTitle($value);
+                        break;
+
+                    case "priority":
+                        $node->setPriority($value);
+                        break;
+
+                    case "parameters":
+                        $node->setParameters($value);
+                        break;
+
+                    case "security":
+                        $node->setSecurity($value);
+                        break;
+
+                    // all unknown parameters are automatically extras
+                    default:
+                        $node->setExtra($key, $value);
+                        break;
+                }
             }
 
-            if (isset($routeData["priority"]))
-            {
-                $node->setPriority($routeData["priority"]);
-            }
-
-            if (isset($routeData["parameters"]))
-            {
-                $node->setParameters($routeData["parameters"]);
-            }
-
-            if (isset($routeData["security"]))
-            {
-                // prefer explicitly set security settings
-                $node->setSecurity($routeData["security"]);
-            }
-            else
+            // infer security only if it is not explicitly set on the node
+            if (!isset($routeData["security"]))
             {
                 $this->inferSecurity($node, $route);
             }
-
-            if (isset($routeData["extra"]))
-            {
-                $node->setExtra($routeData["extra"]);
-            }
-
-            // set all required parameters at least as "null"
-            $node->setParameters(
-                array_replace(
-                    array_fill_keys($route->compile()->getVariables(), null),
-                    $node->getParameters()
-                )
-            );
         }
+
+        // set all required parameters at least as "null"
+        $node->setParameters(
+            array_replace(
+                array_fill_keys($route->compile()->getVariables(), null),
+                $node->getParameters()
+            )
+        );
 
         return $node;
     }
