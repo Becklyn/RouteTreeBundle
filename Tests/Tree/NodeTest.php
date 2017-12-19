@@ -30,28 +30,31 @@ class NodeTest extends TestCase
     }
 
 
-    public function testAutoHiding ()
+    public function dataProviderTestAutoHiding ()
     {
-        $node = new Node("route");
-
-        self::assertTrue($node->isHidden());
-
-        // not hidden anymore as soon as a title is set
-        $node->setTitle("Some title");
-        self::assertFalse($node->isHidden());
+        return [
+            // not previously hidden -> not hidden as soon as title is set
+            [false, false],
+            // previously hidden -> still hidden as soon as title is set
+            [true, true],
+        ];
     }
 
 
-    public function testExplicitHiding ()
+    /**
+     * @dataProvider dataProviderTestAutoHiding
+     *
+     * @param bool $previouslyHidden
+     * @param bool $hiddenAfterwards
+     */
+    public function testAutoHiding (bool $previouslyHidden, bool $hiddenAfterwards)
     {
         $node = new Node("route");
-        $node->setHidden(true);
+        $node->setHidden($previouslyHidden);
 
         self::assertTrue($node->isHidden());
-
-        // still hidden
         $node->setTitle("Some title");
-        self::assertTrue($node->isHidden());
+        self::assertSame($hiddenAfterwards, $node->isHidden());
     }
 
 
