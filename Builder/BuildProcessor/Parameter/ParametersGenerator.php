@@ -33,7 +33,7 @@ class ParametersGenerator
      *
      * @param Node $node
      *
-     * @return string[]
+     * @return array
      */
     private function calculateParametersForNode (Node $node)
     {

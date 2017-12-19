@@ -246,7 +246,7 @@ class Node
 
 
     /**
-     * @return string[]
+     * @return array
      */
     public function getMergedParameters () : array
     {
@@ -256,7 +256,7 @@ class Node
 
 
     /**
-     * @param string[] $mergedParameters
+     * @param array $mergedParameters
      */
     public function setMergedParameters (array $mergedParameters) : void
     {
