@@ -106,56 +106,63 @@ class SecurityInferHelper
      */
     private function getSecurityForAction ($class, string $method) : ?string
     {
-        $reflectionMethod = new \ReflectionMethod($class, $method);
-        $reflectionClass = new \ReflectionClass($class);
-
-        /**
-         * @var Security[]  $securityAnnotations
-         */
-        $securityAnnotations = [
-            $this->annotationsReader->getMethodAnnotation($reflectionMethod, Security::class),
-            $this->annotationsReader->getClassAnnotation($reflectionClass, Security::class),
-        ];
-
-        /** @var IsGranted[] $isGrantedAnnotations */
-        $isGrantedAnnotations = [
-            $this->annotationsReader->getMethodAnnotation($reflectionMethod, IsGranted::class),
-            $this->annotationsReader->getClassAnnotation($reflectionClass, IsGranted::class),
-        ];
-
-        $expressions = [];
-
-        // wire @Security() annotations
-        foreach ($securityAnnotations as $securityAnnotation)
+        try
         {
-            if (null !== $securityAnnotation)
-            {
-                $expressions[] = $securityAnnotation->getExpression();
-            }
-        }
+            $reflectionMethod = new \ReflectionMethod($class, $method);
+            $reflectionClass = new \ReflectionClass($class);
 
-        // wire @IsGranted() annotations
-        foreach ($isGrantedAnnotations as $isGrantedAnnotation)
-        {
-            if (null !== $isGrantedAnnotation)
+            /**
+             * @var Security[] $securityAnnotations
+             */
+            $securityAnnotations = [
+                $this->annotationsReader->getMethodAnnotation($reflectionMethod, Security::class),
+                $this->annotationsReader->getClassAnnotation($reflectionClass, Security::class),
+            ];
+
+            /** @var IsGranted[] $isGrantedAnnotations */
+            $isGrantedAnnotations = [
+                $this->annotationsReader->getMethodAnnotation($reflectionMethod, IsGranted::class),
+                $this->annotationsReader->getClassAnnotation($reflectionClass, IsGranted::class),
+            ];
+
+            $expressions = [];
+
+            // wire @Security() annotations
+            foreach ($securityAnnotations as $securityAnnotation)
             {
-                // bail, if a subject is required
-                if (null !== $isGrantedAnnotation->getSubject())
+                if (null !== $securityAnnotation)
                 {
-                    return null;
+                    $expressions[] = $securityAnnotation->getExpression();
                 }
-
-                $expressions[] = "is_granted('{$isGrantedAnnotation->getAttributes()}')";
             }
-        }
 
-        if (empty($expressions))
+            // wire @IsGranted() annotations
+            foreach ($isGrantedAnnotations as $isGrantedAnnotation)
+            {
+                if (null !== $isGrantedAnnotation)
+                {
+                    // bail, if a subject is required
+                    if (null !== $isGrantedAnnotation->getSubject())
+                    {
+                        return null;
+                    }
+
+                    $expressions[] = "is_granted('{$isGrantedAnnotation->getAttributes()}')";
+                }
+            }
+
+            if (empty($expressions))
+            {
+                return null;
+            }
+
+            return count($expressions) === 1
+                ? $expressions[0]
+                : "(" . \implode(") and (", $expressions) . ")";
+        }
+        catch (\ReflectionException $e)
         {
             return null;
         }
-
-        return count($expressions) === 1
-            ? $expressions[0]
-            : "(" . \implode(") and (", $expressions) . ")";
     }
 }
