@@ -31,23 +31,12 @@ class RouteTreeTwigExtension extends AbstractExtension
 
 
     /**
-     * @param string $root
-     *
-     * @return ItemInterface
-     */
-    public function getRouteTreeMenu ($root)
-    {
-        return $this->menuBuilder->buildMenu($root);
-    }
-
-
-    /**
      * {@inheritdoc}
      */
     public function getFunctions ()
     {
         return [
-            new TwigFunction("getRouteTreeMenu", [$this, "getRouteTreeMenu"]),
+            new TwigFunction("route_tree_menu", [$this->menuBuilder, "buildMenu"]),
         ];
     }
 }
