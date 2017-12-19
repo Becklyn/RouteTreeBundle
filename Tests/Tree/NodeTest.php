@@ -44,15 +44,4 @@ class NodeTest extends TestCase
         $this->assertSame($parent, $child->getParent());
         $this->assertEquals([$child], $parent->getChildren());
     }
-
-
-
-    /**
-     * @expectedException \Becklyn\RouteTreeBundle\Exception\InvalidNodeDataException
-     */
-    public function testInvalidSeparator ()
-    {
-        $node = new Node("route");
-        $node->setSeparator("idontexist");
-    }
 }
