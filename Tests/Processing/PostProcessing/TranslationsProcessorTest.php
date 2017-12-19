@@ -57,6 +57,6 @@ class TranslationsProcessorTest extends TestCase
         $node->setTitle($title);
         $this->translationPostProcessing->process($node);
 
-        $this->assertSame($expectedTitle, $node->getTitle());
+        self::assertSame($expectedTitle, $node->getTitle());
     }
 }

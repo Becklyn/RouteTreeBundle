@@ -16,8 +16,8 @@ class NodeTest extends TestCase
         $node = new Node("route");
         $node->setTitle("title");
 
-        $this->assertSame("title", $node->getTitle());
-        $this->assertSame("title", $node->getDisplayTitle());
+        self::assertSame("title", $node->getTitle());
+        self::assertSame("title", $node->getDisplayTitle());
     }
 
 
@@ -25,8 +25,8 @@ class NodeTest extends TestCase
     {
         $node = new Node("route");
 
-        $this->assertNull($node->getTitle());
-        $this->assertSame("route", $node->getDisplayTitle());
+        self::assertNull($node->getTitle());
+        self::assertSame("route", $node->getDisplayTitle());
     }
 
 
@@ -55,19 +55,18 @@ class NodeTest extends TestCase
     }
 
 
-
     public function testChildLinks ()
     {
         $child = new Node("child");
         $parent = new Node("parent");
 
-        $this->assertNull($child->getParent());
-        $this->assertEmpty($parent->getChildren());
+        self::assertNull($child->getParent());
+        self::assertEmpty($parent->getChildren());
 
         $parent->addChild($child);
         $child->setParent($parent);
 
-        $this->assertSame($parent, $child->getParent());
-        $this->assertEquals([$child], $parent->getChildren());
+        self::assertSame($parent, $child->getParent());
+        self::assertEquals([$child], $parent->getChildren());
     }
 }
