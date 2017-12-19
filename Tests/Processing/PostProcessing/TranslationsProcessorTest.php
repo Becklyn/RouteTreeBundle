@@ -7,7 +7,6 @@ use Becklyn\RouteTreeBundle\PostProcessing\Processor\TranslationsProcessor;
 use Becklyn\RouteTreeBundle\Tree\RouteTree;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Loader\ArrayLoader;
-use Symfony\Component\Translation\MessageSelector;
 use Symfony\Component\Translation\Translator;
 
 
