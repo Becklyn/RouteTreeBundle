@@ -16,7 +16,7 @@ class MissingParametersProcessorTest extends TestCase
 {
     private function buildProcessor (array $routeParameters) : MissingParametersProcessor
     {
-        $requestStack = self::getMockBuilder(RequestStack::class)
+        $requestStack = $this->getMockBuilder(RequestStack::class)
             ->disableOriginalConstructor()
             ->getMock();
 
