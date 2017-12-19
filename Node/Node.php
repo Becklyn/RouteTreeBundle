@@ -92,7 +92,7 @@ class Node
      *
      * @var array
      */
-    private $extra = [];
+    private $extras = [];
 
 
     /**
@@ -266,18 +266,19 @@ class Node
     /**
      * @return array
      */
-    public function getExtra () : array
+    public function getExtras () : array
     {
-        return $this->extra;
+        return $this->extras;
     }
 
 
     /**
-     * @param array $extra
+     * @param string $key
+     * @param        $value
      */
-    public function setExtra (array $extra) : void
+    public function setExtra (string $key, $value) : void
     {
-        $this->extra = $extra;
+        $this->extras[$key] = $value;
     }
 
 
