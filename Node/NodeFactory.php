@@ -106,7 +106,6 @@ class NodeFactory
         }
 
         $security = $this->securityInferHelper->inferSecurity($controller);
-        dump($security);
 
         if (null !== $security)
         {
