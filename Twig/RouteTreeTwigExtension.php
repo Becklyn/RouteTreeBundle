@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Becklyn\RouteTreeBundle\Twig;
 
 use Becklyn\RouteTreeBundle\KnpMenu\MenuBuilder;
-use Knp\Menu\ItemInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
