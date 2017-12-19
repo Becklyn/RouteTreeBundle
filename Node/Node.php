@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Node;
 
-use Becklyn\RouteTreeBundle\Exception\InvalidNodeDataException;
-
 
 /**
  * Represents a node in the route tree
