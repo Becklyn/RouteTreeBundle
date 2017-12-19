@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Becklyn\RouteTreeBundle\Cache;
 
 use Becklyn\RouteTreeBundle\Node\Node;
+use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
 
@@ -25,6 +26,12 @@ class TreeCache
      * @var CacheItemPoolInterface
      */
     private $cachePool;
+
+
+    /**
+     * @var CacheItemInterface
+     */
+    private $cacheItem;
 
 
     /**
