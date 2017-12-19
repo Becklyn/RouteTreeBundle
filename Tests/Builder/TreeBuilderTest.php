@@ -2,11 +2,17 @@
 
 namespace Tests\Becklyn\RouteTreeBundle\Builder;
 
-use Becklyn\RouteTreeBundle\Builder\ParametersGenerator;
+use Becklyn\RouteTreeBundle\Builder\BuildProcessor\Parameter\ParametersGenerator;
+use Becklyn\RouteTreeBundle\Builder\BuildProcessor\ParameterProcessor;
+use Becklyn\RouteTreeBundle\Builder\BuildProcessor\PriorityProcessor;
 use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
 use Becklyn\RouteTreeBundle\Node\Node;
+use Becklyn\RouteTreeBundle\Node\NodeFactory;
+use Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper;
 use Becklyn\RouteTreeBundle\PostProcessing\Processor\MissingParametersProcessor;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouteCollection;
 use Tests\Becklyn\RouteTreeBundle\RouteTestTrait;
 
@@ -33,15 +39,36 @@ class TreeBuilderTest extends TestCase
 
     public function setUp ()
     {
-        $this->builder = new TreeBuilder(new ParametersGenerator());
-        $this->missingParametersProcessor = new MissingParametersProcessor();
+        $securityInferHelper = $this->getMockBuilder(SecurityInferHelper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $requestStack = $this->getMockBuilder(RequestStack::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $requestStack
+            ->method("getMasterRequest")
+            ->willReturn(new Request([], [], [
+                "_route_params" => [
+                    "from_attributes" => "yes",
+                ],
+            ]));
+
+        $this->builder = new TreeBuilder(
+            new NodeFactory($securityInferHelper),
+            new PriorityProcessor(),
+            new ParameterProcessor(new ParametersGenerator())
+        );
+
+        $this->missingParametersProcessor = new MissingParametersProcessor($requestStack);
     }
 
 
 
     public function testIgnoreRoute ()
     {
-        $tree = $this->builder->buildTree($routes = [
+        $tree = $this->builder->buildTree([
             "my_route" => $this->generateRoute("/my-route"),
         ]);
 
@@ -70,18 +97,6 @@ class TreeBuilderTest extends TestCase
     {
         $this->builder->buildTree([
             "child" => $this->generateRoute("/child", ["parent" => "parent"]),
-        ]);
-    }
-
-
-
-    /**
-     * @expectedException \Becklyn\RouteTreeBundle\Exception\InvalidNodeDataException
-     */
-    public function testInvalidSeparator ()
-    {
-        $this->builder->buildTree([
-            "child" => $this->generateRoute("/child", ["separator" => "idontexist"]),
         ]);
     }
 
@@ -166,6 +181,7 @@ class TreeBuilderTest extends TestCase
         $this->assertArrayHasKey("child", $tree);
     }
 
+
     public function testPriorityOfRequestAttributesOverInherited ()
     {
         $tree = $this->builder->buildTree([
@@ -184,13 +200,9 @@ class TreeBuilderTest extends TestCase
             ]),
         ]);
 
-        $attributes = [
-            "from_attributes" => "yes",
-        ];
-
         foreach ($tree as $node)
         {
-            $this->missingParametersProcessor->process($attributes, $node);
+            $this->missingParametersProcessor->process($node);
         }
 
         $child = $tree["child"];
