@@ -84,7 +84,11 @@ class MenuBuilder
             ]);
 
             $child->setDisplay(!$node->isHidden());
-            $child->setExtras($node->getExtras());
+            // we need to preserve the original extras
+            $child->setExtras(\array_replace(
+                $node->getExtras(),
+                $child->getExtras()
+            ));
 
             $this->appendNodes($child, $node->getChildren());
         }
