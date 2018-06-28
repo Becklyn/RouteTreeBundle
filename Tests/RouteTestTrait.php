@@ -11,24 +11,19 @@ use Symfony\Component\Routing\Route;
 trait RouteTestTrait
 {
     /**
-     * Generates a route
+     * Creates a route
      *
      * @param string       $path
      * @param array|string $treeData
      *
      * @return Route
      */
-    protected function generateRoute ($path, $treeData = [])
+    protected function createRoute ($path, $treeData = [], array $defaults = [])
     {
         $options = !empty($treeData)
             ? ["tree" => $treeData]
             : [];
 
-        return new Route(
-            $path,
-            [], // $defaults
-            [], // $requirements
-            $options
-        );
+        return new Route($path, $defaults, [], $options);
     }
 }
