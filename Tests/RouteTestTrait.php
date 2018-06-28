@@ -38,7 +38,7 @@ trait RouteTestTrait
     /**
      * Builds a collection and gets its nodes
      *
-     * @param array $routes
+     * @param Route[] $routes
      * @return Node[]
      */
     private function buildAndGetNodes (array $routes) : array
