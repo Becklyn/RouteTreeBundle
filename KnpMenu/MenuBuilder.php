@@ -9,6 +9,7 @@ use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Tree\RouteTree;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 
 /**
@@ -29,13 +30,21 @@ class MenuBuilder
 
 
     /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+
+    /**
      * @param FactoryInterface $factory
      * @param RouteTree        $routeTree
+     * @param RequestStack     $requestStack
      */
-    public function __construct (FactoryInterface $factory, RouteTree $routeTree)
+    public function __construct (FactoryInterface $factory, RouteTree $routeTree, RequestStack $requestStack)
     {
         $this->factory = $factory;
         $this->routeTree = $routeTree;
+        $this->requestStack = $requestStack;
     }
 
 
@@ -43,12 +52,21 @@ class MenuBuilder
      * Builds the menu from a given route
      *
      * @param string $fromRoute
-     *
+     * @param array  $parameters
+     * @param array  $routeParameters
      * @return ItemInterface
      */
-    public function buildMenu (string $fromRoute) : ItemInterface
+    public function buildMenu (string $fromRoute, array $parameters = [], array $routeParameters = []) : ItemInterface
     {
         $menuRoot = $this->factory->createItem("root");
+        $requestParameters = [];
+
+        $request = $this->requestStack->getMasterRequest();
+
+        if (null !== $request)
+        {
+            $requestParameters = $request->attributes->get("_route_params");
+        }
 
         try
         {
@@ -56,7 +74,7 @@ class MenuBuilder
 
             if (null !== $rootNode)
             {
-                $this->appendNodes($menuRoot, $rootNode->getChildren());
+                $this->appendNodes($menuRoot, $rootNode->getChildren(), $requestParameters, $parameters, $routeParameters);
             }
 
             return $menuRoot;
@@ -74,13 +92,13 @@ class MenuBuilder
      * @param ItemInterface $parent
      * @param Node[]        $nodes
      */
-    private function appendNodes (ItemInterface $parent, array $nodes) : void
+    private function appendNodes (ItemInterface $parent, array $nodes, array $requestParameters, array $parameters, array $routeParameters) : void
     {
         foreach ($nodes as $node)
         {
             $child = $parent->addChild($node->getDisplayTitle(), [
                 "route" => $node->getRoute(),
-                "routeParameters" => $node->getParameters(),
+                "routeParameters" => $this->getRouteParameters($node, $requestParameters, $parameters, $routeParameters),
             ]);
 
             $child->setDisplay(!$node->isHidden());
@@ -90,7 +108,56 @@ class MenuBuilder
                 $child->getExtras()
             ));
 
-            $this->appendNodes($child, $node->getChildren());
+            $this->appendNodes($child, $node->getChildren(), $requestParameters, $parameters, $routeParameters);
         }
+    }
+
+
+    /**
+     * Gets the parameters for the route to the given node
+     *
+     * @param Node  $node
+     * @param array $requestParameters
+     * @param array $parameters
+     * @param array $routeParameters
+     * @return array
+     */
+    private function getRouteParameters (Node $node, array $requestParameters, array $parameters, array $routeParameters) : array
+    {
+        $result = [];
+        $nodeParameters = $node->getParameterValues();
+
+        foreach ($node->getRequiredParameters() as $name)
+        {
+            if (isset($routeParameters[$node->getRoute()]) && \array_key_exists($name, $routeParameters[$node->getRoute()]))
+            {
+                // first check if a route-specific parameter is given
+                $value = $routeParameters[$node->getRoute()][$name];
+            }
+            else if (\array_key_exists($name, $parameters))
+            {
+                // then check if a default parameter is given
+                $value = $parameters[$name];
+            }
+            else if (\array_key_exists($name, $requestParameters))
+            {
+                // then check if we can read a parameter from the request
+                $value = $requestParameters[$name];
+            }
+            else if (\array_key_exists($name, $nodeParameters))
+            {
+                // then check if a default parameter was defined
+                $value = $nodeParameters[$name];
+            }
+            else
+            {
+                // fall back to "1" if nothing else is set
+                $value = 1;
+            }
+
+            $result[$name] = $value;
+        }
+
+        return $result;
     }
 }
