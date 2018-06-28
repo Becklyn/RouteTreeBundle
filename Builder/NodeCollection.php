@@ -6,6 +6,7 @@ namespace Becklyn\RouteTreeBundle\Builder;
 use Becklyn\RouteTreeBundle\Builder\BuildProcessor\ParameterProcessor;
 use Becklyn\RouteTreeBundle\Builder\BuildProcessor\PriorityProcessor;
 use Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException;
+use Becklyn\RouteTreeBundle\Exception\RouteTreeException;
 use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Node\NodeFactory;
 use Symfony\Component\Routing\Route;
@@ -155,7 +156,22 @@ class NodeCollection
             return ["parent" => $option];
         }
 
-        return \is_array($option) ? $option : [];
+        // empty value = ignored
+        if (null === $option)
+        {
+            return [];
+        }
+
+        // regular case: config array
+        if (\is_array($option))
+        {
+            return $option;
+        }
+
+        throw new RouteTreeException(sprintf(
+            "The `tree` option should be either null, array or string – %s given.",
+            \gettype($option)
+        ));
     }
     // endregion
 
