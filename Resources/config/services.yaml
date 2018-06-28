@@ -3,61 +3,16 @@ services:
         autowire: true
         autoconfigure: true
 
+    Becklyn\RouteTreeBundle\:
+        resource: '../{Builder,Cache,KnpMenu,Node,PostProcessing,Tree,Twig}/*'
 
-    Becklyn\RouteTreeBundle\Tree\RouteTree: ~
+    Becklyn\RouteTreeBundle\Cache\TreeCache:
+        $debug: '%kernel.debug%'
 
-
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # Builder
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    Becklyn\RouteTreeBundle\Builder\TreeBuilder: ~
-    Becklyn\RouteTreeBundle\Builder\BuildProcessor\ParameterProcessor: ~
-    Becklyn\RouteTreeBundle\Builder\BuildProcessor\Parameter\ParametersGenerator: ~
-    Becklyn\RouteTreeBundle\Builder\BuildProcessor\PriorityProcessor: ~
-
-
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # Post Processing
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    Becklyn\RouteTreeBundle\PostProcessing\PostProcessor: ~
-    Becklyn\RouteTreeBundle\PostProcessing\Processor\MissingParametersProcessor: ~
-
-    Becklyn\RouteTreeBundle\PostProcessing\Processor\SecurityProcessor:
-        arguments:
-            $expressionVoter: '@security.access.expression_voter'
-
-    Becklyn\RouteTreeBundle\PostProcessing\Processor\TranslationsProcessor: ~
-
-
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # Symfony Integration
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    Becklyn\RouteTreeBundle\Routing\RoutingConfigReader: ~
-
-
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # Twig
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    Becklyn\RouteTreeBundle\Twig\RouteTreeTwigExtension: ~
-
-
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # KnpMenu Integration
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    Becklyn\RouteTreeBundle\KnpMenu\MenuBuilder: ~
-
-
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # Node Factory
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    Becklyn\RouteTreeBundle\Node\NodeFactory: ~
     Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper:
         arguments:
             $container: '@service_container'
 
-
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # Cache
-    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    Becklyn\RouteTreeBundle\Cache\TreeCache:
-        $debug: '%kernel.debug%'
+    Becklyn\RouteTreeBundle\PostProcessing\Processor\SecurityProcessor:
+        arguments:
+            $expressionVoter: '@security.access.expression_voter'
