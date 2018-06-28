@@ -3,12 +3,9 @@
 namespace Tests\Becklyn\RouteTreeBundle\Builder;
 
 use Becklyn\RouteTreeBundle\Builder\NodeCollection;
-use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Node\NodeFactory;
 use Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper;
-use Doctrine\Common\Annotations\AnnotationReader;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Tests\Becklyn\RouteTreeBundle\RouteTestTrait;
@@ -34,27 +31,11 @@ class NodeCollectionTest extends TestCase
      */
     protected function setUp ()
     {
-        $annotationReader = $this->getMockBuilder(AnnotationReader::class)
+        $securityInferHelper = $this->getMockBuilder(SecurityInferHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $container = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->nodeFactory = new NodeFactory(new SecurityInferHelper($annotationReader, $container));
-    }
-
-
-    /**
-     * Builds a collection and gets its nodes
-     *
-     * @param array $routes
-     * @return Node[]
-     */
-    private function buildAndGetNodes (array $routes) : array
-    {
-        return (new NodeCollection($this->nodeFactory, $routes))->getNodes();
+        $this->nodeFactory = new NodeFactory($securityInferHelper);
     }
 
 
