@@ -34,21 +34,14 @@ class Node
 
 
     /**
-     * The parameters which were set directly on the node itself.
-     * Array with names as key and parameter values as values
+     * The names of the parameters, that are required (as defined in the route)
      *
-     * $parameters = [
-     *     "name" => "value",
-     * ]
-     *
-     * @var string[]
+     * @var array
      */
-    private $parameters = [];
-
+    private $requiredParameters = [];
 
     /**
-     * The parameters with the inherited parameters.
-     * Array with names as key and parameter values as values
+     * The defined parameter values, found anywhere in the (static) config
      *
      * $parameters = [
      *     "name" => "value",
@@ -56,7 +49,7 @@ class Node
      *
      * @var string[]
      */
-    private $mergedParameters = [];
+    private $parameterValues = [];
 
 
     /**
@@ -100,13 +93,14 @@ class Node
     //endregion
 
 
-
     /**
      * @param string $route
+     * @param array  $requiredParameters
      */
-    public function __construct (string $route)
+    public function __construct (string $route, array $requiredParameters)
     {
         $this->route = $route;
+        $this->requiredParameters = $requiredParameters;
     }
 
 
@@ -159,28 +153,6 @@ class Node
     public function setHidden (bool $hidden) : void
     {
         $this->hidden = $hidden;
-    }
-
-
-    /**
-     * @return string[]
-     */
-    public function getParameters () : array
-    {
-        return $this->parameters;
-    }
-
-
-
-    /**
-     * @param string[] $parameters
-     */
-    public function setParameters (array $parameters) : void
-    {
-        $this->parameters = $parameters;
-
-        // refresh merged parameters
-        $this->setMergedParameters($parameters);
     }
 
 
@@ -246,19 +218,32 @@ class Node
     /**
      * @return array
      */
-    public function getMergedParameters () : array
+    public function getParameterValues () : array
     {
-        return $this->mergedParameters;
+        return $this->parameterValues;
     }
 
 
-
     /**
-     * @param array $mergedParameters
+     * Updates the parameters and takes all parameters, that are in the required parameters
+     *
+     * @param array $parameterValues
      */
-    public function setMergedParameters (array $mergedParameters) : void
+    public function updateParameterValues (array $parameterValues, bool $overwriteExisting = false) : void
     {
-        $this->mergedParameters = $mergedParameters;
+        foreach ($this->requiredParameters as $parameterName)
+        {
+            // there is an existing parameter and we should not overwrite existing ones
+            if (!$overwriteExisting && \array_key_exists($parameterName, $this->parameterValues))
+            {
+                continue;
+            }
+
+            if (\array_key_exists($parameterName, $parameterValues))
+            {
+                $this->parameterValues[$parameterName] = $parameterValues[$parameterName];
+            }
+        }
     }
 
 
