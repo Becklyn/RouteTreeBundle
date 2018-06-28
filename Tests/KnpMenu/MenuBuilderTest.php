@@ -182,6 +182,19 @@ class MenuBuilderTest extends TestCase
                 ["b", ["p" => 4]],
                 "route-bound default parameter for wrong route, so fallback",
             ],
+            [
+                [],
+                ["p" => 2],
+                ["p" => 3],
+                ["p" => 4],
+                [
+                    "b" => [
+                        "p" => null,
+                    ]
+                ],
+                ["b", ["p" => null]],
+                "null is possible as default value",
+            ],
         ];
     }
 
