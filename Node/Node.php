@@ -18,6 +18,14 @@ class Node
 
 
     /**
+     * The names of the parameters, that are required (as defined in the route)
+     *
+     * @var string[]
+     */
+    private $requiredParameters = [];
+
+
+    /**
      * The title to display in the tree
      *
      * @var string|null
@@ -31,14 +39,6 @@ class Node
      * @var bool
      */
     private $hidden = false;
-
-
-    /**
-     * The names of the parameters, that are required (as defined in the route)
-     *
-     * @var array
-     */
-    private $requiredParameters = [];
 
     /**
      * The defined parameter values, found anywhere in the (static) config
@@ -94,8 +94,8 @@ class Node
 
 
     /**
-     * @param string $route
-     * @param array  $requiredParameters
+     * @param string   $route
+     * @param string[] $requiredParameters
      */
     public function __construct (string $route, array $requiredParameters)
     {
@@ -114,6 +114,14 @@ class Node
         return $this->route;
     }
 
+
+    /**
+     * @return string[]
+     */
+    public function getRequiredParameters () : array
+    {
+        return $this->requiredParameters;
+    }
 
 
     /**
