@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Tree;
 
-use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
+use Becklyn\RouteTreeBundle\Builder\NodeCollectionBuilder;
 use Becklyn\RouteTreeBundle\Cache\TreeCache;
 use Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException;
 use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\PostProcessing\PostProcessor;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
-use Symfony\Component\Routing\RouterInterface;
 
 
 /**
@@ -19,18 +18,16 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class RouteTree implements CacheClearerInterface, CacheWarmerInterface
 {
-    const TREE_TRANSLATION_DOMAIN = "route_tree";
-
     /**
      * @var Node[]
      */
-    private $tree = null;
+    private $nodes = [];
 
 
     /**
-     * @var TreeBuilder
+     * @var NodeCollectionBuilder
      */
-    private $builder;
+    private $nodeCollectionBuilder;
 
 
     /**
@@ -46,24 +43,16 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
 
 
     /**
-     * @var RouterInterface
+     *
+     * @param NodeCollectionBuilder $nodeCollectionBuilder
+     * @param TreeCache             $cache
+     * @param PostProcessor         $postProcessing
      */
-    private $router;
-
-
-
-    /**
-     * @param TreeBuilder     $builder
-     * @param TreeCache       $cache
-     * @param PostProcessor   $postProcessing
-     * @param RouterInterface $router
-     */
-    public function __construct (TreeBuilder $builder, TreeCache $cache, PostProcessor $postProcessing, RouterInterface $router)
+    public function __construct (NodeCollectionBuilder $nodeCollectionBuilder, TreeCache $cache, PostProcessor $postProcessing)
     {
-        $this->builder = $builder;
+        $this->nodeCollectionBuilder = $nodeCollectionBuilder;
         $this->cache = $cache;
         $this->postProcessing = $postProcessing;
-        $this->router = $router;
     }
 
 
@@ -71,19 +60,19 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
      * Builds the tree
      *
      * @return Node[]
-     * @throws InvalidRouteTreeException
      */
-    private function buildTree ()
+    private function generateNodes () : array
     {
-        $tree = $this->cache->get();
+        $nodes = $this->cache->get();
 
-        if (null === $tree)
+        if (null === $nodes)
         {
-            $tree = $this->builder->buildTree($this->router->getRouteCollection());
-            $this->cache->set($tree);
+            $nodeCollection = $this->nodeCollectionBuilder->build();
+            $nodes = $nodeCollection->getNodes();
+            $this->cache->set($nodes);
         }
 
-        return $this->postProcessing->postProcessTree($tree);
+        return $this->postProcessing->postProcessTree($nodes);
     }
 
 
@@ -95,16 +84,14 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
      * @return Node|null
      * @throws InvalidRouteTreeException
      */
-    public function getNode ($route)
+    public function getNode (string $route) : ?Node
     {
-        if (null === $this->tree)
+        if (null === $this->nodes)
         {
-            $this->tree = $this->buildTree();
+            $this->nodes = $this->generateNodes();
         }
 
-        return isset($this->tree[$route])
-            ? $this->tree[$route]
-            : null;
+        return $this->nodes[$route] ?? null;
     }
 
 
@@ -112,6 +99,7 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
     //region Cache clearer implementation
     /**
      * @inheritDoc
+     * @internal
      */
     public function clear ($cacheDir)
     {
@@ -124,6 +112,7 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
     //region Cache warmer implementation
     /**
      * @inheritDoc
+     * @internal
      */
     public function isOptional ()
     {
@@ -134,11 +123,12 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
 
     /**
      * @inheritDoc
+     * @internal
      */
     public function warmUp ($cacheDir)
     {
         $this->cache->clear();
-        $this->buildTree();
+        $this->generateNodes();
     }
     //endregion
 }
