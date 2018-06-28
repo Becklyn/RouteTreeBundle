@@ -60,7 +60,7 @@ class TreeBuilderTest extends TestCase
             new RoutingConfigReader(),
             new NodeFactory(new RoutingConfigReader(), $securityInferHelper),
             new PriorityProcessor(),
-            new ParameterProcessor(new ParametersGenerator())
+            new ParameterProcessor()
         );
 
         $this->missingParametersProcessor = new MissingParametersProcessor($requestStack);
@@ -71,7 +71,7 @@ class TreeBuilderTest extends TestCase
     public function testIgnoreRoute ()
     {
         $tree = $this->builder->buildTree([
-            "my_route" => $this->generateRoute("/my-route"),
+            "my_route" => $this->createRoute("/my-route"),
         ]);
 
         $this->assertEmpty($tree);
@@ -82,8 +82,8 @@ class TreeBuilderTest extends TestCase
     public function testIncludeParent ()
     {
         $tree = $this->builder->buildTree([
-            "child" => $this->generateRoute("/child", ["parent" => "parent"]),
-            "parent" => $this->generateRoute("/parent"),
+            "child" => $this->createRoute("/child", ["parent" => "parent"]),
+            "parent" => $this->createRoute("/parent"),
         ]);
 
         $this->assertArrayHasKey("child", $tree);
@@ -97,8 +97,8 @@ class TreeBuilderTest extends TestCase
     public function testStringParent ()
     {
         $tree = $this->builder->buildTree([
-            "child" => $this->generateRoute("/child", "parent"),
-            "parent" => $this->generateRoute("/parent"),
+            "child" => $this->createRoute("/child", "parent"),
+            "parent" => $this->createRoute("/parent"),
         ]);
 
         $this->assertArrayHasKey("child", $tree);
@@ -112,10 +112,10 @@ class TreeBuilderTest extends TestCase
     public function testScalarParent ()
     {
         $tree = $this->builder->buildTree([
-            "child1" => $this->generateRoute("/child1", 1),
-            "child2" => $this->generateRoute("/child2", 1.0),
-            "child3" => $this->generateRoute("/child3", true),
-            "parent" => $this->generateRoute("/parent"),
+            "child1" => $this->createRoute("/child1", 1),
+            "child2" => $this->createRoute("/child2", 1.0),
+            "child3" => $this->createRoute("/child3", true),
+            "parent" => $this->createRoute("/parent"),
         ]);
 
         $this->assertEmpty($tree);
@@ -129,7 +129,7 @@ class TreeBuilderTest extends TestCase
     public function testMissingParent ()
     {
         $this->builder->buildTree([
-            "child" => $this->generateRoute("/child", ["parent" => "parent"]),
+            "child" => $this->createRoute("/child", ["parent" => "parent"]),
         ]);
     }
 
@@ -138,8 +138,8 @@ class TreeBuilderTest extends TestCase
     public function testLinking ()
     {
         $tree = $this->builder->buildTree([
-            "child" => $this->generateRoute("/child", ["parent" => "parent"]),
-            "parent" => $this->generateRoute("/parent"),
+            "child" => $this->createRoute("/child", ["parent" => "parent"]),
+            "parent" => $this->createRoute("/parent"),
         ]);
 
         /** @var Node $child */
@@ -157,11 +157,11 @@ class TreeBuilderTest extends TestCase
     public function assertMissingParameter ()
     {
         $tree = $this->builder->buildTree([
-            "route" => $this->generateRoute("/route/{first}"),
+            "route" => $this->createRoute("/route/{first}"),
         ]);
 
-        $this->assertArrayHasKey("first", $tree["route"]->getParameters());
-        $this->assertNull($tree["route"]->getParameters()["first"]);
+        $this->assertArrayHasKey("first", $tree["route"]->getDefinedParameters());
+        $this->assertNull($tree["route"]->getDefinedParameters()["first"]);
     }
 
 
@@ -169,13 +169,13 @@ class TreeBuilderTest extends TestCase
     public function testDefinedParameter ()
     {
         $tree = $this->builder->buildTree([
-            "route" => $this->generateRoute("/route/{first}", [
+            "route" => $this->createRoute("/route/{first}", [
                 "parameters" => ["first" => "directly-set"],
             ]),
         ]);
 
-        $this->assertArrayHasKey("first", $tree["route"]->getParameters());
-        $this->assertSame("directly-set", $tree["route"]->getParameters()["first"]);
+        $this->assertArrayHasKey("first", $tree["route"]->getDefinedParameters());
+        $this->assertSame("directly-set", $tree["route"]->getDefinedParameters()["first"]);
     }
 
 
@@ -183,17 +183,17 @@ class TreeBuilderTest extends TestCase
     public function testInheritedParameter ()
     {
         $tree = $this->builder->buildTree([
-            "child" => $this->generateRoute("/child/{param}", ["parent" => "parent"]),
-            "parent" => $this->generateRoute("/parent", ["parent" => "grandparent"]),
-            "grandparent" => $this->generateRoute("/grandparent", [
+            "child" => $this->createRoute("/child/{param}", ["parent" => "parent"]),
+            "parent" => $this->createRoute("/parent", ["parent" => "grandparent"]),
+            "grandparent" => $this->createRoute("/grandparent", [
                 "parameters" => ["param" => "inherited"],
             ]),
         ]);
 
         $route = $tree["child"];
 
-        $this->assertArrayHasKey("param", $route->getMergedParameters());
-        $this->assertSame("inherited", $route->getMergedParameters()["param"]);
+        $this->assertArrayHasKey("param", $route->getParameterValues());
+        $this->assertSame("inherited", $route->getParameterValues()["param"]);
     }
 
 
@@ -201,9 +201,9 @@ class TreeBuilderTest extends TestCase
     public function testBuildFromRouteCollection ()
     {
         $routeCollection = new RouteCollection();
-        $routeCollection->add("child", $this->generateRoute("/child/{param}", ["parent" => "parent"]));
-        $routeCollection->add("parent", $this->generateRoute("/parent", ["parent" => "grandparent"]));
-        $routeCollection->add("grandparent", $this->generateRoute("/grandparent", [
+        $routeCollection->add("child", $this->createRoute("/child/{param}", ["parent" => "parent"]));
+        $routeCollection->add("parent", $this->createRoute("/parent", ["parent" => "grandparent"]));
+        $routeCollection->add("grandparent", $this->createRoute("/grandparent", [
             "parameters" => ["param" => "inherited"],
         ]));
 
@@ -218,14 +218,14 @@ class TreeBuilderTest extends TestCase
     public function testPriorityOfRequestAttributesOverInherited ()
     {
         $tree = $this->builder->buildTree([
-            "child" => $this->generateRoute("/child", [
+            "child" => $this->createRoute("/child", [
                 "parent" => "parent",
                 "parameters" => [
                     "from_attributes" => null,
                     "from_parent" => null,
                 ]
             ]),
-            "parent" => $this->generateRoute("/parent", [
+            "parent" => $this->createRoute("/parent", [
                 "parameters" => [
                     "from_attributes" => "no",
                     "from_parent" => "yes",
@@ -241,7 +241,7 @@ class TreeBuilderTest extends TestCase
         $child = $tree["child"];
 
         // the inherited parameter should only be used if there is no parameter in the attributes
-        $this->assertSame("yes", $child->getParameters()["from_attributes"], "from attributes");
-        $this->assertSame("yes", $child->getParameters()["from_parent"], "from parent");
+        $this->assertSame("yes", $child->getDefinedParameters()["from_attributes"], "from attributes");
+        $this->assertSame("yes", $child->getDefinedParameters()["from_parent"], "from parent");
     }
 }
