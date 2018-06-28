@@ -21,7 +21,7 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
     /**
      * @var Node[]
      */
-    private $nodes = [];
+    private $nodes = null;
 
 
     /**
