@@ -52,6 +52,12 @@ class NodeFactory
         {
             foreach ($routeData as $key => $value)
             {
+                // the "parent" field is handled externally
+                if (RoutingConfigReader::CONFIG_PARENT_KEY === $key)
+                {
+                    continue;
+                }
+
                 switch ($key)
                 {
                     case "title":
