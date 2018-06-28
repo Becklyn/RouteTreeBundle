@@ -96,7 +96,7 @@ class MenuBuilder
     {
         foreach ($nodes as $node)
         {
-            $child = $parent->addChild($node->getDisplayTitle(), [
+            $child = $parent->addChild($node->getRoute(), [
                 "route" => $node->getRoute(),
                 "routeParameters" => $this->getRouteParameters($node, $requestParameters, $parameters, $routeParameters),
             ]);
@@ -107,6 +107,7 @@ class MenuBuilder
                 $node->getExtras(),
                 $child->getExtras()
             ));
+            $child->setLabel($node->getDisplayTitle());
 
             $this->appendNodes($child, $node->getChildren(), $requestParameters, $parameters, $routeParameters);
         }
