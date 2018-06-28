@@ -49,7 +49,12 @@ class TreeBuilder
      * @param PriorityProcessor   $priorityProcessor
      * @param ParameterProcessor  $parameterProcessor
      */
-    public function __construct (RoutingConfigReader $routingConfigReader, NodeFactory $nodeFactory, PriorityProcessor $priorityProcessor, ParameterProcessor $parameterProcessor)
+    public function __construct (
+        RoutingConfigReader $routingConfigReader,
+        NodeFactory $nodeFactory,
+        PriorityProcessor $priorityProcessor,
+        ParameterProcessor $parameterProcessor
+    )
     {
         $this->routingConfigReader = $routingConfigReader;
         $this->nodeFactory = $nodeFactory;
@@ -90,6 +95,7 @@ class TreeBuilder
     {
         $routeIndex = [];
 
+        // start by marking all routes as irrelevant
         foreach ($routeCollection as $routeName => $route)
         {
             $routeIndex[$routeName] = false;
