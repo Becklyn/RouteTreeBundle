@@ -24,9 +24,7 @@ services:
 
     Becklyn\RouteTreeBundle\PostProcessing\Processor\SecurityProcessor:
         arguments:
-            $expressionLanguage: '@sensio_framework_extra.security.expression_language'
-            $trustResolver: '@security.authentication.trust_resolver'
-            $roleHierarchy: '@security.role_hierarchy'
+            $expressionVoter: '@security.access.expression_voter'
 
     Becklyn\RouteTreeBundle\PostProcessing\Processor\TranslationsProcessor: ~
 
