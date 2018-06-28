@@ -6,11 +6,18 @@ namespace Becklyn\RouteTreeBundle\Node;
 
 use Becklyn\RouteTreeBundle\Builder\TreeBuilder;
 use Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper;
+use Becklyn\RouteTreeBundle\Routing\RoutingConfigReader;
 use Symfony\Component\Routing\Route;
 
 
 class NodeFactory
 {
+    /**
+     * @var RoutingConfigReader
+     */
+    private $routingConfigReader;
+
+
     /**
      * @var SecurityInferHelper
      */
@@ -18,10 +25,12 @@ class NodeFactory
 
 
     /**
+     * @param RoutingConfigReader $routingConfigReader
      * @param SecurityInferHelper $securityInferHelper
      */
-    public function __construct (SecurityInferHelper $securityInferHelper)
+    public function __construct (RoutingConfigReader $routingConfigReader, SecurityInferHelper $securityInferHelper)
     {
+        $this->routingConfigReader = $routingConfigReader;
         $this->securityInferHelper = $securityInferHelper;
     }
 
@@ -36,7 +45,7 @@ class NodeFactory
     public function createNode (string $routeName, Route $route) : Node
     {
         $node = new Node($routeName);
-        $routeData = $route->getOption(TreeBuilder::CONFIG_OPTIONS_KEY);
+        $routeData = $this->routingConfigReader->getConfig($route);
 
         // if there is no tree data
         if (is_array($routeData))

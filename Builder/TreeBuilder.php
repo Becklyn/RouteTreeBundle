@@ -9,6 +9,7 @@ use Becklyn\RouteTreeBundle\Builder\BuildProcessor\PriorityProcessor;
 use Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException;
 use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Node\NodeFactory;
+use Becklyn\RouteTreeBundle\Routing\RoutingConfigReader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -18,8 +19,10 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class TreeBuilder
 {
-    const CONFIG_OPTIONS_KEY = "tree";
-    const CONFIG_PARENT_KEY = "parent";
+    /**
+     * @var RoutingConfigReader
+     */
+    private $routingConfigReader;
 
 
     /**
@@ -41,12 +44,14 @@ class TreeBuilder
 
 
     /**
-     * @param NodeFactory        $nodeFactory
-     * @param PriorityProcessor  $priorityProcessor
-     * @param ParameterProcessor $parameterProcessor
+     * @param RoutingConfigReader $routingConfigReader
+     * @param NodeFactory         $nodeFactory
+     * @param PriorityProcessor   $priorityProcessor
+     * @param ParameterProcessor  $parameterProcessor
      */
-    public function __construct (NodeFactory $nodeFactory, PriorityProcessor $priorityProcessor, ParameterProcessor $parameterProcessor)
+    public function __construct (RoutingConfigReader $routingConfigReader, NodeFactory $nodeFactory, PriorityProcessor $priorityProcessor, ParameterProcessor $parameterProcessor)
     {
+        $this->routingConfigReader = $routingConfigReader;
         $this->nodeFactory = $nodeFactory;
         $this->priorityProcessor = $priorityProcessor;
         $this->parameterProcessor = $parameterProcessor;
@@ -92,7 +97,7 @@ class TreeBuilder
 
         foreach ($routeCollection as $routeName => $route)
         {
-            $routeData = $route->getOption(self::CONFIG_OPTIONS_KEY);
+            $routeData = $this->routingConfigReader->getConfig($route);
 
             // no route data found -> skip
             if (null === $routeData)
@@ -104,7 +109,7 @@ class TreeBuilder
             $routeIndex[$routeName] = true;
 
             // mark parent route as relevant
-            $parentRoute = $routeData[self::CONFIG_PARENT_KEY] ?? null;
+            $parentRoute = $routeData[RoutingConfigReader::CONFIG_PARENT_KEY] ?? null;
 
             if (null !== $parentRoute)
             {
@@ -164,9 +169,9 @@ class TreeBuilder
     {
         foreach ($routeCollection as $routeName => $route)
         {
-            $routeData = $route->getOption(self::CONFIG_OPTIONS_KEY);
+            $routeData = $this->routingConfigReader->getConfig($route);
             // we can silently ignore the null here in the array access, as the item will never exist
-            $parentRoute = $routeData[self::CONFIG_PARENT_KEY] ?? null;
+            $parentRoute = $routeData[RoutingConfigReader::CONFIG_PARENT_KEY] ?? null;
 
             $node = $nodes[$routeName] ?? null;
             $parent = $nodes[$parentRoute] ?? null;

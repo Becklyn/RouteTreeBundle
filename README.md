@@ -127,6 +127,27 @@ If the page tree is invalid a `InvalidRouteTreeException` is thrown, on the firs
 
 
 
+Short Syntax
+------------
+
+In simple cases, the config can be simplified to:
+
+
+```yaml
+route:   
+    options:
+        tree: "parent"
+        
+# ... means the same as ...
+
+route:   
+    options:
+        tree: 
+            parent: "parent"
+```
+
+
+
 KnpMenuBundle MenuBuilder
 -------------------------
 

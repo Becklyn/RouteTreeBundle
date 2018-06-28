@@ -10,6 +10,7 @@ use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Node\NodeFactory;
 use Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper;
 use Becklyn\RouteTreeBundle\PostProcessing\Processor\MissingParametersProcessor;
+use Becklyn\RouteTreeBundle\Routing\RoutingConfigReader;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -56,7 +57,8 @@ class TreeBuilderTest extends TestCase
             ]));
 
         $this->builder = new TreeBuilder(
-            new NodeFactory($securityInferHelper),
+            new RoutingConfigReader(),
+            new NodeFactory(new RoutingConfigReader(), $securityInferHelper),
             new PriorityProcessor(),
             new ParameterProcessor(new ParametersGenerator())
         );
@@ -86,6 +88,37 @@ class TreeBuilderTest extends TestCase
 
         $this->assertArrayHasKey("child", $tree);
         $this->assertArrayHasKey("parent", $tree);
+    }
+
+
+    /**
+     * Tests that a string config is automatically expanded to just mean "parent"
+     */
+    public function testStringParent ()
+    {
+        $tree = $this->builder->buildTree([
+            "child" => $this->generateRoute("/child", "parent"),
+            "parent" => $this->generateRoute("/parent"),
+        ]);
+
+        $this->assertArrayHasKey("child", $tree);
+        $this->assertArrayHasKey("parent", $tree);
+    }
+
+
+    /**
+     * Tests that a scalar (non-string) parent is ignored
+     */
+    public function testScalarParent ()
+    {
+        $tree = $this->builder->buildTree([
+            "child1" => $this->generateRoute("/child1", 1),
+            "child2" => $this->generateRoute("/child2", 1.0),
+            "child3" => $this->generateRoute("/child3", true),
+            "parent" => $this->generateRoute("/parent"),
+        ]);
+
+        $this->assertEmpty($tree);
     }
 
 

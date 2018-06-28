@@ -13,12 +13,12 @@ trait RouteTestTrait
     /**
      * Generates a route
      *
-     * @param string $path
-     * @param array  $treeData
+     * @param string       $path
+     * @param array|string $treeData
      *
      * @return Route
      */
-    protected function generateRoute ($path, array $treeData = [])
+    protected function generateRoute ($path, $treeData = [])
     {
         $options = !empty($treeData)
             ? ["tree" => $treeData]
