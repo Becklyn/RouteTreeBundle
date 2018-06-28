@@ -3,6 +3,7 @@
 namespace Tests\Becklyn\RouteTreeBundle\Builder;
 
 use Becklyn\RouteTreeBundle\Builder\NodeCollection;
+use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Node\NodeFactory;
 use Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -40,18 +41,27 @@ class NodeCollectionTest extends TestCase
 
 
     /**
+     * Builds a collection and gets its nodes
+     *
+     * @param array $routes
+     * @return Node[]
+     */
+    private function buildAndGetNodes (array $routes) : array
+    {
+        return (new NodeCollection($this->nodeFactory, $routes))->getNodes();
+    }
+
+
+    /**
      * Tests that routes are automatically correctly linked
      */
     public function testLinkParent ()
     {
-        $config = [
+        $nodes = $this->buildAndGetNodes([
             "a" => $this->createRoute("/a"),
             "b" => $this->createRoute("/b", "a"),
             "c" => $this->createRoute("/c"),
-        ];
-
-        $routes = new NodeCollection($this->nodeFactory, $config);
-        $nodes = $routes->getNodes();
+        ]);
 
         self::assertEquals($nodes["a"], $nodes["b"]->getParent());
         self::assertEquals([$nodes["b"]], $nodes["a"]->getChildren());
@@ -63,7 +73,7 @@ class NodeCollectionTest extends TestCase
      */
     public function testInheritedDefaults ()
     {
-        $config = [
+        $nodes = $this->buildAndGetNodes([
             "a" => $this->createRoute("/a", [
                 "parameters" => [
                     "e" => 3,
@@ -78,10 +88,7 @@ class NodeCollectionTest extends TestCase
                 ],
             ]),
             "c" => $this->createRoute("/b/{e}", "b"),
-        ];
-
-        $routes = new NodeCollection($this->nodeFactory, $config);
-        $nodes = $routes->getNodes();
+        ]);
 
         self::assertEquals([], $nodes["a"]->getParameterValues());
         self::assertEquals(["c" => 2], $nodes["b"]->getParameterValues());
