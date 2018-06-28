@@ -7,7 +7,6 @@ namespace Becklyn\RouteTreeBundle\PostProcessing;
 use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\PostProcessing\Processor\MissingParametersProcessor;
 use Becklyn\RouteTreeBundle\PostProcessing\Processor\SecurityProcessor;
-use Becklyn\RouteTreeBundle\PostProcessing\Processor\TranslationsProcessor;
 
 
 /**
@@ -15,12 +14,6 @@ use Becklyn\RouteTreeBundle\PostProcessing\Processor\TranslationsProcessor;
  */
 class PostProcessor
 {
-    /**
-     * @var TranslationsProcessor
-     */
-    private $translationsProcessor;
-
-
     /**
      * @var SecurityProcessor
      */
@@ -34,17 +27,14 @@ class PostProcessor
 
 
     /**
-     * @param TranslationsProcessor      $translationsProcessor
      * @param SecurityProcessor          $securityProcessor
      * @param MissingParametersProcessor $missingParametersProcessor
      */
     public function __construct (
-        TranslationsProcessor $translationsProcessor,
         SecurityProcessor $securityProcessor,
         MissingParametersProcessor $missingParametersProcessor
     )
     {
-        $this->translationsProcessor = $translationsProcessor;
         $this->securityProcessor = $securityProcessor;
         $this->missingParametersProcessor = $missingParametersProcessor;
     }
@@ -61,7 +51,6 @@ class PostProcessor
     {
         foreach ($nodes as $node)
         {
-            $this->translationsProcessor->process($node);
             $this->securityProcessor->process($node);
             $this->missingParametersProcessor->process($node);
         }
