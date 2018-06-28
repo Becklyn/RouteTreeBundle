@@ -54,7 +54,6 @@ class ParameterProcessor
             $parentDefaults,
             $this->configs[$node->getRoute()]["parameters"] ?? []
         );
-        \var_dump($node->getRoute(), $parentDefaults, $defaults);
 
         $node->updateParameterValues($defaults, false);
 
