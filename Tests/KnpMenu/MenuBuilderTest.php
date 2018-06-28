@@ -221,4 +221,22 @@ class MenuBuilderTest extends TestCase
         $b = $menu->getChild("b");
         self::assertSame(\json_encode($expected), $b->getUri(), $comment);
     }
+
+
+    /**
+     * Test building a breadcrumb + correct ordering
+     */
+    public function testBuildBreadcrumb ()
+    {
+        $builder = $this->createMenuBuilder([
+            "d" => $this->createRoute("/d", "c"),
+            "c" => $this->createRoute("/c", "b"),
+            "b" => $this->createRoute("/b", "a"),
+            "a" => $this->createRoute("/a"),
+        ]);
+
+        $breadcrumb = $builder->buildBreadcrumb("d");
+        self::assertSame("root", $breadcrumb->getName());
+        self::assertEquals(["a", "b", "c", "d"], \array_keys($breadcrumb->getChildren()));
+    }
 }

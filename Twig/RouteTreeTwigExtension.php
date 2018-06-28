@@ -35,6 +35,7 @@ class RouteTreeTwigExtension extends AbstractExtension
     public function getFunctions ()
     {
         return [
+            new TwigFunction("route_tree_breadcrumb", [$this->menuBuilder, "buildBreadcrumb"]),
             new TwigFunction("route_tree_menu", [$this->menuBuilder, "buildMenu"]),
         ];
     }

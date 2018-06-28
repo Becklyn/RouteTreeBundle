@@ -96,21 +96,38 @@ class MenuBuilder
     {
         foreach ($nodes as $node)
         {
-            $child = $parent->addChild($node->getRoute(), [
-                "route" => $node->getRoute(),
-                "routeParameters" => $this->getRouteParameters($node, $requestParameters, $parameters, $routeParameters),
-            ]);
-
-            $child->setDisplay(!$node->isHidden());
-            // we need to preserve the original extras
-            $child->setExtras(\array_replace(
-                $node->getExtras(),
-                $child->getExtras()
-            ));
-            $child->setLabel($node->getDisplayTitle());
-
+            $child = $this->addChild($parent, $node, $requestParameters, $parameters, $routeParameters);
             $this->appendNodes($child, $node->getChildren(), $requestParameters, $parameters, $routeParameters);
         }
+    }
+
+
+    /**
+     * Adds a single node as child
+     *
+     * @param ItemInterface $parent
+     * @param Node          $node
+     * @param array         $requestParameters
+     * @param array         $parameters
+     * @param array         $routeParameters
+     * @return ItemInterface
+     */
+    private function addChild (ItemInterface $parent, Node $node, array $requestParameters, array $parameters, array $routeParameters) : ItemInterface
+    {
+        $child = $parent->addChild($node->getRoute(), [
+            "route" => $node->getRoute(),
+            "routeParameters" => $this->getRouteParameters($node, $requestParameters, $parameters, $routeParameters),
+        ]);
+
+        $child->setDisplay(!$node->isHidden());
+        // we need to preserve the original extras
+        $child->setExtras(\array_replace(
+            $node->getExtras(),
+            $child->getExtras()
+        ));
+        $child->setLabel($node->getDisplayTitle());
+
+        return $child;
     }
 
 
@@ -160,5 +177,60 @@ class MenuBuilder
         }
 
         return $result;
+    }
+
+
+    /**
+     * Builds the breadcrumb to the given node.
+     * The breadcrumb is a one-level deep menu with the breadcrumb nodes as entries.
+     * The node itself is the last item in the children list, the top most node is the first one.
+     *
+     * @param string $fromNode
+     * @param array  $parameters
+     * @param array  $routeParameters
+     * @return ItemInterface
+     */
+    public function buildBreadcrumb (string $fromNode, array $parameters = [], array $routeParameters = []) : ItemInterface
+    {
+        $menuRoot = $this->factory->createItem("root");
+        $requestParameters = [];
+
+        $request = $this->requestStack->getMasterRequest();
+
+        if (null !== $request)
+        {
+            $requestParameters = $request->attributes->get("_route_params");
+        }
+
+        $hierarchy = $this->getHierarchyToNode($fromNode);
+        $menuNode = $menuRoot;
+        foreach ($hierarchy as $node)
+        {
+            $this->addChild($menuNode, $node, $requestParameters, $parameters, $routeParameters);
+        }
+
+        return $menuRoot;
+    }
+
+
+    /**
+     * Returns the hierarchy to the given node
+     *
+     * @param string $targetNode
+     * @return Node[]
+     */
+    private function getHierarchyToNode (string $targetNode) : array
+    {
+        $node = $this->routeTree->getNode($targetNode);
+        $hierarchy = [];
+
+        do
+        {
+            $hierarchy[] = $node;
+            $node = $node->getParent();
+        }
+        while ($node !== null);
+
+        return \array_reverse($hierarchy);
     }
 }
