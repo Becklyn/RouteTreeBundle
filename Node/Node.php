@@ -97,7 +97,7 @@ class Node
      * @param string   $route
      * @param string[] $requiredParameters
      */
-    public function __construct (string $route, array $requiredParameters)
+    public function __construct (string $route, array $requiredParameters = [])
     {
         $this->route = $route;
         $this->requiredParameters = $requiredParameters;
