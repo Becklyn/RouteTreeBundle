@@ -12,7 +12,3 @@ services:
     Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper:
         arguments:
             $container: '@service_container'
-
-    Becklyn\RouteTreeBundle\PostProcessing\Processor\SecurityProcessor:
-        arguments:
-            $expressionVoter: '@security.access.expression_voter'
