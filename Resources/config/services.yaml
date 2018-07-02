@@ -13,4 +13,4 @@ services:
         $container: '@service_container'
 
     Becklyn\RouteTreeBundle\PostProcessing\Processor\Security\SecurityChecker:
-        $securityListener: '@sensio_framework_extra.security.listener'
+        $trustResolver: '@security.authentication.trust_resolver'
