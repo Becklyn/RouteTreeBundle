@@ -10,5 +10,7 @@ services:
         $debug: '%kernel.debug%'
 
     Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper:
-        arguments:
-            $container: '@service_container'
+        $container: '@service_container'
+
+    Becklyn\RouteTreeBundle\PostProcessing\Processor\Security\SecurityChecker:
+        $securityListener: '@sensio_framework_extra.security.listener'
