@@ -44,6 +44,12 @@ class SecurityInferHelper
      */
     public function inferSecurity ($controller) : ?string
     {
+        // bail if no sensio framework extra bundle is installed
+        if (!\class_exists(IsGranted::class) || !\class_exists(Security::class))
+        {
+            return null;
+        }
+
         try
         {
             if (\is_array($controller))
