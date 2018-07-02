@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Becklyn\RouteTreeBundle\PostProcessing\Processor;
 
 use Becklyn\RouteTreeBundle\Node\Node;
-use Symfony\Component\ExpressionLanguage\Expression;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authorization\Voter\ExpressionVoter;
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+use Becklyn\RouteTreeBundle\PostProcessing\Processor\Security\SecurityChecker;
 
 
 /**
@@ -17,25 +14,17 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 class SecurityProcessor
 {
     /**
-     * @var TokenStorageInterface
+     * @var SecurityChecker
      */
-    private $tokenStorage;
+    private $securityChecker;
 
 
     /**
-     * @var ExpressionVoter
+     * @param SecurityChecker $securityChecker
      */
-    private $expressionVoter;
-
-
-    /**
-     * @param TokenStorageInterface $tokenStorage
-     * @param ExpressionVoter       $expressionVoter
-     */
-    public function __construct (TokenStorageInterface $tokenStorage, ExpressionVoter $expressionVoter)
+    public function __construct (SecurityChecker $securityChecker)
     {
-        $this->tokenStorage = $tokenStorage;
-        $this->expressionVoter = $expressionVoter;
+        $this->securityChecker = $securityChecker;
     }
 
 
@@ -53,17 +42,7 @@ class SecurityProcessor
             return true;
         }
 
-        $token = $this->tokenStorage->getToken();
-
-        // if the user is not behind a firewall but a security string is set, prevent access
-        if (null === $token)
-        {
-            return false;
-        }
-
-        return VoterInterface::ACCESS_DENIED !== $this->expressionVoter->vote($token, null, [
-            new Expression($node->getSecurity()),
-        ]);
+        return $this->securityChecker->canAccess($node->getSecurity());
     }
 
 
