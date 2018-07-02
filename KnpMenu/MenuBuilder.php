@@ -9,6 +9,7 @@ use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Tree\RouteTree;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 
@@ -36,15 +37,23 @@ class MenuBuilder
 
 
     /**
-     * @param FactoryInterface $factory
-     * @param RouteTree        $routeTree
-     * @param RequestStack     $requestStack
+     * @var null|LoggerInterface
      */
-    public function __construct (FactoryInterface $factory, RouteTree $routeTree, RequestStack $requestStack)
+    private $logger;
+
+
+    /**
+     * @param FactoryInterface     $factory
+     * @param RouteTree            $routeTree
+     * @param RequestStack         $requestStack
+     * @param null|LoggerInterface $logger
+     */
+    public function __construct (FactoryInterface $factory, RouteTree $routeTree, RequestStack $requestStack, ?LoggerInterface $logger = null)
     {
         $this->factory = $factory;
         $this->routeTree = $routeTree;
         $this->requestStack = $requestStack;
+        $this->logger = $logger;
     }
 
 
@@ -81,6 +90,14 @@ class MenuBuilder
         }
         catch (RouteTreeException $e)
         {
+            if (null !== $this->logger)
+            {
+                $this->logger->error("Route tree building failed from route '{from_route}' due to an exception.", [
+                    "from_route" => $fromRoute,
+                    "exception" => $e,
+                ]);
+            }
+
             return $menuRoot;
         }
     }
