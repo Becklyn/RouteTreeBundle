@@ -4,7 +4,7 @@ services:
         autoconfigure: true
 
     Becklyn\RouteTreeBundle\:
-        resource: '../{Builder,Cache,KnpMenu,Node,PostProcessing,Tree,Twig}/*'
+        resource: '../../{Builder,Cache,KnpMenu,Node,PostProcessing,Tree,Twig}/*'
 
     Becklyn\RouteTreeBundle\Cache\TreeCache:
         $debug: '%kernel.debug%'
