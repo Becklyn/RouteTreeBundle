@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Becklyn\RouteTreeBundle\Twig;
 
 use Becklyn\RouteTreeBundle\KnpMenu\MenuBuilder;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
 
 
 /**
  * Defines all twig extensions used in this bundle
  */
-class RouteTreeTwigExtension extends AbstractExtension
+class RouteTreeTwigExtension extends \Twig_Extension
 {
     /**
      * @var MenuBuilder
@@ -35,7 +33,8 @@ class RouteTreeTwigExtension extends AbstractExtension
     public function getFunctions ()
     {
         return [
-            new TwigFunction("route_tree_menu", [$this->menuBuilder, "buildMenu"]),
+            new \Twig_Function("route_tree_breadcrumb", [$this->menuBuilder, "buildBreadcrumb"]),
+            new \Twig_Function("route_tree_menu", [$this->menuBuilder, "buildMenu"]),
         ];
     }
 }
