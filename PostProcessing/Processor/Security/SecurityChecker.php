@@ -105,7 +105,7 @@ class SecurityChecker
      * @param Request $request
      * @return array
      */
-    private function getVariables (Request $request) : array
+    protected function getVariables (Request $request) : array
     {
         $token = $this->tokenStorage->getToken();
 
