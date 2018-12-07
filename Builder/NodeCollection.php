@@ -201,6 +201,7 @@ class NodeCollection
                 $name,
                 $config,
                 $route->compile()->getVariables(),
+                $route->getRequirements(),
                 $route->getDefault("_controller")
             );
         }

@@ -29,13 +29,16 @@ class NodeFactory
     /**
      * Generates a node from the given route
      *
-     * @param string $routeName
-     * @param Route  $route
+     * @param string      $routeName
+     * @param array       $config
+     * @param array       $variables
+     * @param array       $requirements
+     * @param string|null $controller
      * @return Node
      */
-    public function createNode (string $routeName, array $config, array $variables, ?string $controller) : Node
+    public function createNode (string $routeName, array $config, array $variables, array $requirements, ?string $controller) : Node
     {
-        $node = new Node($routeName, $variables);
+        $node = new Node($routeName, $variables, $requirements);
 
         foreach ($config as $key => $value)
         {
