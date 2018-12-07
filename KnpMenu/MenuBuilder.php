@@ -164,22 +164,25 @@ class MenuBuilder
 
         foreach ($node->getRequiredParameters() as $name)
         {
-            if (isset($routeParameters[$node->getRoute()]) && \array_key_exists($name, $routeParameters[$node->getRoute()]))
+            if (isset($routeParameters[$node->getRoute()])
+                && \array_key_exists($name, $routeParameters[$node->getRoute()])
+                && $node->isValidParameterValue($name, $routeParameters[$node->getRoute()][$name])
+            )
             {
                 // first check if a route-specific parameter is given
                 $value = $routeParameters[$node->getRoute()][$name];
             }
-            else if (\array_key_exists($name, $parameters))
+            else if (\array_key_exists($name, $parameters) && $node->isValidParameterValue($name, $parameters[$name]))
             {
                 // then check if a default parameter is given
                 $value = $parameters[$name];
             }
-            else if (\array_key_exists($name, $requestParameters))
+            else if (\array_key_exists($name, $requestParameters) && $node->isValidParameterValue($name, $requestParameters[$name]))
             {
                 // then check if we can read a parameter from the request
                 $value = $requestParameters[$name];
             }
-            else if (\array_key_exists($name, $nodeParameters))
+            else if (\array_key_exists($name, $nodeParameters) && $node->isValidParameterValue($name, $nodeParameters[$name]))
             {
                 // then check if a default parameter was defined
                 $value = $nodeParameters[$name];

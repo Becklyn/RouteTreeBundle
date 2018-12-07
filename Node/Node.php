@@ -53,13 +53,25 @@ class Node
 
 
     /**
+     * The requirements as defined in the route
+     *
+     * $requirements = [
+     *     "parameter" => "\\d*",
+     * ]
+     *
+     * @var string[]
+     */
+    private $requirements;
+
+
+    /**
      * Security restrictions.
      * Supports the same values as the security annotation:
      * @link http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/security.html
      *
      * @var string|null
      */
-    private $security = null;
+    private $security;
 
 
     /**
@@ -67,7 +79,7 @@ class Node
      *
      * @var Node|null
      */
-    private $parent = null;
+    private $parent;
 
 
     /**
@@ -96,11 +108,13 @@ class Node
     /**
      * @param string   $route
      * @param string[] $requiredParameters
+     * @param array    $requirements
      */
-    public function __construct (string $route, array $requiredParameters = [])
+    public function __construct (string $route, array $requiredParameters = [], array $requirements = [])
     {
         $this->route = $route;
         $this->requiredParameters = $requiredParameters;
+        $this->requirements = $requirements;
     }
 
 
@@ -313,5 +327,41 @@ class Node
     public function getDisplayTitle () : string
     {
         return $this->getTitle() ?: $this->getRoute();
+    }
+
+
+    /**
+     * Returns whether the given parameter value is valid for the parameter
+     *
+     * @param string     $name
+     * @param string|int $value
+     * @return bool
+     */
+    public function isValidParameterValue (string $name, $value) : bool
+    {
+        $value = (string) $value;
+        $requirement = $this->requirements[$name] ?? null;
+
+        // if there is no requirement, all values are ok.
+        if (null === $requirement)
+        {
+            return true;
+        }
+
+        // try to match with `~` as separator
+        $matched = @\preg_match("~^{$requirement}$~", $value);
+
+        // a RegExp error occured, try again with another delimiter
+        if (false === $matched)
+        {
+            // try another delimiter
+            $matched = @\preg_match("%^{$requirement}$%", $value);
+        }
+
+        // Here there are several possible return values:
+        //  - 1: one of the two regexes matched -> all is fine (= is valid)
+        //  - 0: at least one compiled but didn't match (= is NOT valid)
+        //  - false: didn't compile (= we can't say for sure, so assume valid and let it maybe fail later)
+        return 0 !== $matched;
     }
 }
