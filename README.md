@@ -148,14 +148,16 @@ route:
 
 
 
-KnpMenuBundle MenuBuilder
--------------------------
+Rendering the Route Tree
+------------------------
 
 There is an automatic menu builder, that you can just use in the templates:
 
 ```twig
-{{- knp_menu_render(route_tree_menu("my_route"), {...}) -}}
+{{- route_tree_render("my_route", {...}) -}}
 ```
+
+The first parameter is the parent node of which the menu should be used. The second (optional) argument are the [KnpMenu render options].
 
 
 Getting The Route Tree
@@ -168,3 +170,6 @@ You can inject the service `Becklyn\RouteTreeBundle\Tree\RouteTree` and use it t
 ```
 
 The return value is a `Becklyn\RouteTreeBundle\Node\Node`.
+
+
+[KnpMenu render options]: https://github.com/KnpLabs/KnpMenu/blob/master/doc/01-Basic-Menus.markdown#other-rendering-options

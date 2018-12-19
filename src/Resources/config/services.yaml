@@ -14,3 +14,10 @@ services:
 
     Becklyn\RouteTreeBundle\PostProcessing\Processor\Security\SecurityChecker:
         $trustResolver: '@security.authentication.trust_resolver'
+
+    Becklyn\RouteTreeBundle\KnpMenu\Renderer\SimpleTwigRenderer:
+        tags:
+            - { name: knp_menu.renderer, alias: route_tree }
+
+    Becklyn\RouteTreeBundle\Twig\RouteTreeTwigExtension:
+        $knpHelper: '@knp_menu.helper'
