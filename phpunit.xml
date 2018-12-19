@@ -13,7 +13,7 @@
 
     <testsuites>
         <testsuite name="BecklynRouteTreeBundle">
-            <directory>Tests</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 

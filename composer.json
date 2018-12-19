@@ -34,7 +34,7 @@
         "psr-4": { "Becklyn\\RouteTreeBundle\\": "src/" }
     },
     "autoload-dev": {
-        "psr-4": { "Tests\\Becklyn\\RouteTreeBundle\\": "Tests/" }
+        "psr-4": { "Tests\\Becklyn\\RouteTreeBundle\\": "tests/" }
     },
     "config": {
         "sort-packages": true
