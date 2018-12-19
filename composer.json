@@ -31,7 +31,7 @@
         "sensio/framework-extra-bundle": "To automatically infer from @Security and @IsGranted annotations."
     },
     "autoload": {
-        "psr-4": { "Becklyn\\RouteTreeBundle\\": "" }
+        "psr-4": { "Becklyn\\RouteTreeBundle\\": "src/" }
     },
     "autoload-dev": {
         "psr-4": { "Tests\\Becklyn\\RouteTreeBundle\\": "Tests/" }
