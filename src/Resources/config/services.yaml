@@ -17,7 +17,8 @@ services:
 
     Becklyn\RouteTreeBundle\KnpMenu\Renderer\SimpleTwigRenderer:
         tags:
-            - { name: knp_menu.renderer, alias: route_tree }
+            -   name: knp_menu.renderer
+                alias: !php/const Becklyn\RouteTreeBundle\KnpMenu\Renderer\SimpleTwigRenderer::ALIAS
 
     Becklyn\RouteTreeBundle\Twig\RouteTreeTwigExtension:
         $knpHelper: '@knp_menu.helper'
