@@ -68,7 +68,8 @@ class SecurityInferHelper
             {
                 if (false === \strpos($controller, ':'))
                 {
-                    if (\method_exists($controller, '__invoke'))
+                    $class = new \ReflectionClass($controller);
+                    if ($class->hasMethod('__invoke'))
                     {
                         return $this->getSecurityForAction($controller, '__invoke');
                     }

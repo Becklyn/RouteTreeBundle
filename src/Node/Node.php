@@ -280,7 +280,7 @@ class Node
 
     /**
      * @param string $key
-     * @param        $value
+     * @param mixed  $value
      */
     public function setExtra (string $key, $value) : void
     {
