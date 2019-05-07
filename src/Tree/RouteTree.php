@@ -12,7 +12,6 @@ use Becklyn\RouteTreeBundle\PostProcessing\PostProcessor;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
-
 /**
  *
  */
@@ -21,7 +20,7 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
     /**
      * @var Node[]
      */
-    private $nodes = null;
+    private $nodes;
 
 
     /**
@@ -43,7 +42,6 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
 
 
     /**
-     *
      * @param NodeCollectionBuilder $nodeCollectionBuilder
      * @param TreeCache             $cache
      * @param PostProcessor         $postProcessing
@@ -57,7 +55,7 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
 
 
     /**
-     * Builds the tree
+     * Builds the tree.
      *
      * @return Node[]
      */
@@ -77,12 +75,13 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
 
 
     /**
-     * Fetches a node from the tree
+     * Fetches a node from the tree.
      *
      * @param string $route
      *
-     * @return Node|null
      * @throws InvalidRouteTreeException
+     *
+     * @return Node|null
      */
     public function getNode (string $route) : ?Node
     {
@@ -99,9 +98,10 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
     //region Cache clearer implementation
     /**
      * @inheritDoc
+     *
      * @internal
      */
-    public function clear ($cacheDir)
+    public function clear ($cacheDir) : void
     {
         $this->cache->clear();
     }
@@ -112,6 +112,7 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
     //region Cache warmer implementation
     /**
      * @inheritDoc
+     *
      * @internal
      */
     public function isOptional ()
@@ -123,9 +124,10 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
 
     /**
      * @inheritDoc
+     *
      * @internal
      */
-    public function warmUp ($cacheDir)
+    public function warmUp ($cacheDir) : void
     {
         $this->cache->clear();
         $this->generateNodes();

@@ -8,7 +8,6 @@ use Becklyn\RouteTreeBundle\Node\Node;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
-
 /**
  *
  */
@@ -57,9 +56,9 @@ class TreeCache
 
 
     /**
-     * Returns the cached tree
+     * Returns the cached tree.
      *
-     * @return null|Node[]
+     * @return Node[]|null
      */
     public function get () : ?array
     {
@@ -71,11 +70,11 @@ class TreeCache
 
 
     /**
-     * Updates the cached tree
+     * Updates the cached tree.
      *
      * @param Node[] $nodes
      */
-    public function set (array $nodes)
+    public function set (array $nodes) : void
     {
         $this->nodes = $nodes;
         $this->cacheItem->set($this->nodes);
@@ -85,9 +84,9 @@ class TreeCache
 
 
     /**
-     * Clears the cache
+     * Clears the cache.
      */
-    public function clear ()
+    public function clear () : void
     {
         $this->set([]);
     }

@@ -7,7 +7,6 @@ namespace Becklyn\RouteTreeBundle\PostProcessing\Processor;
 use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\PostProcessing\Processor\Security\SecurityChecker;
 
-
 /**
  * Handles the security checks in tree nodes.
  */
@@ -48,11 +47,11 @@ class SecurityProcessor
 
 
     /**
-     * Processes the given node
+     * Processes the given node.
      *
      * @param Node $node
      */
-    public function process (Node $node)
+    public function process (Node $node) : void
     {
         if (!$this->isAllowedToAccessNode($node))
         {

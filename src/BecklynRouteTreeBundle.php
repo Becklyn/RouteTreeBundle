@@ -10,7 +10,6 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-
 /**
  *
  */
@@ -21,12 +20,11 @@ class BecklynRouteTreeBundle extends Bundle
      */
     public function getContainerExtension ()
     {
-        return new class() extends Extension
-        {
+        return new class() extends Extension {
             /**
              * @inheritDoc
              */
-            public function load(array $configs, ContainerBuilder $container)
+            public function load(array $configs, ContainerBuilder $container) : void
             {
                 $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
                 $loader->load('services.yaml');

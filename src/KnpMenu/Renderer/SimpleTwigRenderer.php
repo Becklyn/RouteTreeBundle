@@ -8,7 +8,6 @@ use Knp\Menu\Renderer\TwigRenderer;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
-
 class SimpleTwigRenderer extends TwigRenderer
 {
     const ALIAS = "route_tree";

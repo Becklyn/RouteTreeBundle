@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Exception;
 
-
 use Throwable;
-
 
 class RouteTreeException extends \Exception
 {

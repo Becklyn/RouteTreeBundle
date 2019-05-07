@@ -10,9 +10,8 @@ use Knp\Menu\Twig\Helper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-
 /**
- * Defines all twig extensions used in this bundle
+ * Defines all twig extensions used in this bundle.
  */
 class RouteTreeTwigExtension extends AbstractExtension
 {
@@ -42,6 +41,7 @@ class RouteTreeTwigExtension extends AbstractExtension
     /**
      * @param string $fromRoute
      * @param array  $options
+     *
      * @return string
      */
     public function renderRouteTree (string $fromRoute, array $options)

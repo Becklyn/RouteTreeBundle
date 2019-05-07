@@ -5,7 +5,6 @@ namespace Becklyn\RouteTreeBundle\Builder;
 use Becklyn\RouteTreeBundle\Node\NodeFactory;
 use Symfony\Component\Routing\RouterInterface;
 
-
 class NodeCollectionBuilder
 {
     /**
@@ -21,7 +20,6 @@ class NodeCollectionBuilder
 
 
     /**
-     *
      * @param NodeFactory     $nodeFactory
      * @param RouterInterface $router
      */
@@ -33,7 +31,7 @@ class NodeCollectionBuilder
 
 
     /**
-     * Builds a new node collection from the current router's routes
+     * Builds a new node collection from the current router's routes.
      *
      * @return NodeCollection
      */

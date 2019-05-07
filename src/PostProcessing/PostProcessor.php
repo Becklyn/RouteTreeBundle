@@ -7,7 +7,6 @@ namespace Becklyn\RouteTreeBundle\PostProcessing;
 use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\PostProcessing\Processor\SecurityProcessor;
 
-
 /**
  *
  */
@@ -29,7 +28,7 @@ class PostProcessor
 
 
     /**
-     * Post processes the tree
+     * Post processes the tree.
      *
      * @param Node[] $nodes
      *

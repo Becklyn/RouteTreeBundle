@@ -1,15 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Builder\BuildProcessor;
 
-
 use Becklyn\RouteTreeBundle\Node\Node;
-
 
 class PriorityProcessor
 {
     /**
      * @param Node[] $nodes
+     *
      * @return Node[]
      */
     public function sortNodes (array $nodes) : array
@@ -28,7 +27,7 @@ class PriorityProcessor
 
 
     /**
-     * Recursively sort all children
+     * Recursively sort all children.
      *
      * @param Node $node
      */
@@ -36,7 +35,7 @@ class PriorityProcessor
     {
         $children = $node->getChildren();
 
-        usort(
+        \usort(
             $children,
             function (Node $left, Node $right)
             {
