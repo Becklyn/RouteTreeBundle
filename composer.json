@@ -1,13 +1,15 @@
 {
-    "name":         "becklyn/route-tree-bundle",
-    "description":  "This bundle provides a simple implementation of a tree built from routing configuration.",
-    "type":         "symfony-bundle",
-    "homepage":     "https://github.com/Becklyn/BecklynRouteTreeBundle",
-    "license":      "BSD-3-Clause",
-    "authors": [{
-        "name":     "Becklyn Studios",
-        "homepage": "http://becklyn.com/"
-    }],
+    "name": "becklyn/route-tree-bundle",
+    "type": "symfony-bundle",
+    "description": "This bundle provides a simple implementation of a tree built from routing configuration.",
+    "homepage": "https://github.com/Becklyn/BecklynRouteTreeBundle",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Becklyn Studios",
+            "homepage": "http://becklyn.com/"
+        }
+    ],
     "require": {
         "php": "^7.1",
         "knplabs/knp-menu": "^2.3",
@@ -26,16 +28,20 @@
         "twig/twig": "^2.9"
     },
     "suggest": {
-        "twig/twig": "To use the route_tree_menu() twig function.",
-        "sensio/framework-extra-bundle": "To automatically infer from @Security and @IsGranted annotations."
-    },
-    "autoload": {
-        "psr-4": { "Becklyn\\RouteTreeBundle\\": "src/" }
-    },
-    "autoload-dev": {
-        "psr-4": { "Tests\\Becklyn\\RouteTreeBundle\\": "tests/" }
+        "sensio/framework-extra-bundle": "To automatically infer from @Security and @IsGranted annotations.",
+        "twig/twig": "To use the route_tree_menu() twig function."
     },
     "config": {
         "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Becklyn\\RouteTreeBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Becklyn\\RouteTreeBundle\\": "tests/"
+        }
     }
 }
