@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Node;
 
-
 /**
- * Represents a node in the route tree
+ * Represents a node in the route tree.
  */
 class Node
 {
@@ -18,7 +17,7 @@ class Node
 
 
     /**
-     * The names of the parameters, that are required (as defined in the route)
+     * The names of the parameters, that are required (as defined in the route).
      *
      * @var string[]
      */
@@ -26,22 +25,22 @@ class Node
 
 
     /**
-     * The title to display in the tree
+     * The title to display in the tree.
      *
      * @var string|null
      */
-    private $title = null;
+    private $title;
 
 
     /**
-     * Flag, whether the element should be rendered
+     * Flag, whether the element should be rendered.
      *
      * @var bool
      */
     private $hidden = false;
 
     /**
-     * The defined parameter values, found anywhere in the (static) config
+     * The defined parameter values, found anywhere in the (static) config.
      *
      * $parameters = [
      *     "name" => "value",
@@ -53,7 +52,7 @@ class Node
 
 
     /**
-     * The requirements as defined in the route
+     * The requirements as defined in the route.
      *
      * $requirements = [
      *     "parameter" => "\\d*",
@@ -66,8 +65,9 @@ class Node
 
     /**
      * Security restrictions.
-     * Supports the same values as the security annotation:
-     * @link http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/security.html
+     * Supports the same values as the security annotation:.
+     *
+     * @see http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/security.html
      *
      * @var string|null
      */
@@ -75,7 +75,7 @@ class Node
 
 
     /**
-     * The route name of the parent route
+     * The route name of the parent route.
      *
      * @var Node|null
      */
@@ -83,7 +83,7 @@ class Node
 
 
     /**
-     * The child nodes
+     * The child nodes.
      *
      * @var Node[]
      */
@@ -91,7 +91,7 @@ class Node
 
 
     /**
-     * The extra data
+     * The extra data.
      *
      * @var array
      */
@@ -139,7 +139,7 @@ class Node
 
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getTitle () : ?string
     {
@@ -149,7 +149,7 @@ class Node
 
 
     /**
-     * @param null|string $title
+     * @param string|null $title
      */
     public function setTitle (?string $title) : void
     {
@@ -159,7 +159,7 @@ class Node
 
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isHidden () : bool
     {
@@ -170,7 +170,7 @@ class Node
 
 
     /**
-     * @param boolean $hidden
+     * @param bool $hidden
      */
     public function setHidden (bool $hidden) : void
     {
@@ -180,7 +180,7 @@ class Node
 
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getSecurity () : ?string
     {
@@ -190,7 +190,7 @@ class Node
 
 
     /**
-     * @param null|string $security
+     * @param string|null $security
      */
     public function setSecurity (?string $security) : void
     {
@@ -202,7 +202,7 @@ class Node
     /**
      * @return Node|null
      */
-    public function getParent () : ?Node
+    public function getParent () : ?self
     {
         return $this->parent;
     }
@@ -212,7 +212,7 @@ class Node
     /**
      * @param Node|null $parent
      */
-    public function setParent (?Node $parent) : void
+    public function setParent (?self $parent) : void
     {
         $this->parent = $parent;
     }
@@ -247,7 +247,7 @@ class Node
 
 
     /**
-     * Updates the parameters and takes all parameters, that are in the required parameters
+     * Updates the parameters and takes all parameters, that are in the required parameters.
      *
      * @param array $parameterValues
      */
@@ -280,7 +280,7 @@ class Node
 
     /**
      * @param string $key
-     * @param        $value
+     * @param mixed  $value
      */
     public function setExtra (string $key, $value) : void
     {
@@ -308,11 +308,11 @@ class Node
 
 
     /**
-     * Adds a node as child node
+     * Adds a node as child node.
      *
      * @param Node $node
      */
-    public function addChild (Node $node) : void
+    public function addChild (self $node) : void
     {
         $this->children[] = $node;
     }
@@ -320,7 +320,7 @@ class Node
 
 
     /**
-     * Returns the display title
+     * Returns the display title.
      *
      * @return string
      */
@@ -331,10 +331,11 @@ class Node
 
 
     /**
-     * Returns whether the given parameter value is valid for the parameter
+     * Returns whether the given parameter value is valid for the parameter.
      *
      * @param string     $name
      * @param string|int $value
+     *
      * @return bool
      */
     public function isValidParameterValue (string $name, $value) : bool

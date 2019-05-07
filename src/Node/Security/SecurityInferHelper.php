@@ -10,7 +10,6 @@ use Psr\Container\ContainerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-
 class SecurityInferHelper
 {
     /**
@@ -37,10 +36,11 @@ class SecurityInferHelper
 
 
     /**
-     * Infers the security from the given controller
+     * Infers the security from the given controller.
      *
      * @param mixed $controller
-     * @return null|string the security expression for the given controller
+     *
+     * @return string|null the security expression for the given controller
      */
     public function inferSecurity ($controller) : ?string
     {
@@ -56,18 +56,21 @@ class SecurityInferHelper
             {
                 return $this->getSecurityForAction($controller[0], $controller[1]);
             }
-            else if (\is_object($controller))
+
+             if (\is_object($controller))
             {
                 if (\method_exists($controller, '__invoke'))
                 {
                     return $this->getSecurityForAction($controller, "__invoke");
                 }
             }
-            else if (\is_string($controller))
+            elseif (\is_string($controller))
             {
-                if (false === strpos($controller, ':'))
+                if (false === \strpos($controller, ':'))
                 {
-                    if (method_exists($controller, '__invoke'))
+                    $class = new \ReflectionClass($controller);
+
+                    if ($class->hasMethod('__invoke'))
                     {
                         return $this->getSecurityForAction($controller, '__invoke');
                     }
@@ -75,14 +78,15 @@ class SecurityInferHelper
                     return null;
                 }
 
-                if (false !== strpos($controller, '::'))
+                if (false !== \strpos($controller, '::'))
                 {
-                    [$class, $method] = explode('::', $controller, 2);
+                    [$class, $method] = \explode('::', $controller, 2);
                     return $this->getSecurityForAction($class, $method);
                 }
-                else if (false !== strpos($controller, ':'))
+
+                 if (false !== \strpos($controller, ':'))
                 {
-                    [$service, $method] = explode(':', $controller, 2);
+                    [$service, $method] = \explode(':', $controller, 2);
 
                     if ($this->container->has($service))
                     {
@@ -104,11 +108,12 @@ class SecurityInferHelper
 
 
     /**
-     * Returns the security expression for the given action
+     * Returns the security expression for the given action.
      *
      * @param string|object $class
-     * @param string $method
-     * @return null|string
+     * @param string        $method
+     *
+     * @return string|null
      */
     private function getSecurityForAction ($class, string $method) : ?string
     {
@@ -118,7 +123,7 @@ class SecurityInferHelper
             $reflectionClass = new \ReflectionClass($class);
 
             /**
-             * @var Security[] $securityAnnotations
+             * @var Security[]
              */
             $securityAnnotations = [
                 $this->annotationsReader->getMethodAnnotation($reflectionMethod, Security::class),
@@ -162,7 +167,7 @@ class SecurityInferHelper
                 return null;
             }
 
-            return count($expressions) === 1
+            return 1 === \count($expressions)
                 ? $expressions[0]
                 : "(" . \implode(") and (", $expressions) . ")";
         }

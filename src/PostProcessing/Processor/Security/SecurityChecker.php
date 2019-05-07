@@ -10,10 +10,9 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
-
 /**
  * This implementation should be kept in-sync
- * with {@see Sensio\Bundle\FrameworkExtraBundle\EventListener\SecurityListener}
+ * with {@see Sensio\Bundle\FrameworkExtraBundle\EventListener\SecurityListener}.
  */
 class SecurityChecker
 {
@@ -53,7 +52,6 @@ class SecurityChecker
 
 
     /**
-     *
      * @param ExtendedExpressionLanguage           $language
      * @param TokenStorageInterface                $tokenStorage
      * @param RoleHierarchyInterface               $roleHierarchy
@@ -80,9 +78,10 @@ class SecurityChecker
 
 
     /**
-     * Returns whether the current user can access with the given expression
+     * Returns whether the current user can access with the given expression.
      *
      * @param string $expression
+     *
      * @return bool
      */
     public function canAccess (string $expression) : bool
@@ -100,9 +99,10 @@ class SecurityChecker
 
 
     /**
-     * Returns the required variables for the expression language
+     * Returns the required variables for the expression language.
      *
      * @param Request $request
+     *
      * @return array
      */
     private function getVariables (Request $request) : array
@@ -120,7 +120,7 @@ class SecurityChecker
             'object' => $request,
             'subject' => $request,
             'request' => $request,
-            'roles' => array_map(function (Role $role) { return $role->getRole(); }, $roles),
+            'roles' => \array_map(function (Role $role) { return $role->getRole(); }, $roles),
             'trust_resolver' => $this->trustResolver,
             // needed for the is_granted expression function
             'auth_checker' => $this->authChecker,

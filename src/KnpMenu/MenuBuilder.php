@@ -12,7 +12,6 @@ use Knp\Menu\ItemInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-
 /**
  *
  */
@@ -37,7 +36,7 @@ class MenuBuilder
 
 
     /**
-     * @var null|LoggerInterface
+     * @var LoggerInterface|null
      */
     private $logger;
 
@@ -46,7 +45,7 @@ class MenuBuilder
      * @param FactoryInterface     $factory
      * @param RouteTree            $routeTree
      * @param RequestStack         $requestStack
-     * @param null|LoggerInterface $logger
+     * @param LoggerInterface|null $logger
      */
     public function __construct (FactoryInterface $factory, RouteTree $routeTree, RequestStack $requestStack, ?LoggerInterface $logger = null)
     {
@@ -58,11 +57,12 @@ class MenuBuilder
 
 
     /**
-     * Builds the menu from a given route
+     * Builds the menu from a given route.
      *
      * @param string $fromRoute
      * @param array  $parameters
      * @param array  $routeParameters
+     *
      * @return ItemInterface
      */
     public function buildMenu (string $fromRoute, array $parameters = [], array $routeParameters = []) : ItemInterface
@@ -104,7 +104,7 @@ class MenuBuilder
 
 
     /**
-     * Appends the node tree to the given parent
+     * Appends the node tree to the given parent.
      *
      * @param ItemInterface $parent
      * @param Node[]        $nodes
@@ -120,13 +120,14 @@ class MenuBuilder
 
 
     /**
-     * Adds a single node as child
+     * Adds a single node as child.
      *
      * @param ItemInterface $parent
      * @param Node          $node
      * @param array         $requestParameters
      * @param array         $parameters
      * @param array         $routeParameters
+     *
      * @return ItemInterface
      */
     private function addChild (ItemInterface $parent, Node $node, array $requestParameters, array $parameters, array $routeParameters) : ItemInterface
@@ -149,12 +150,13 @@ class MenuBuilder
 
 
     /**
-     * Gets the parameters for the route to the given node
+     * Gets the parameters for the route to the given node.
      *
      * @param Node  $node
      * @param array $requestParameters
      * @param array $parameters
      * @param array $routeParameters
+     *
      * @return array
      */
     private function getRouteParameters (Node $node, array $requestParameters, array $parameters, array $routeParameters) : array
@@ -172,17 +174,17 @@ class MenuBuilder
                 // first check if a route-specific parameter is given
                 $value = $routeParameters[$node->getRoute()][$name];
             }
-            else if (\array_key_exists($name, $parameters) && $node->isValidParameterValue($name, $parameters[$name]))
+            elseif (\array_key_exists($name, $parameters) && $node->isValidParameterValue($name, $parameters[$name]))
             {
                 // then check if a default parameter is given
                 $value = $parameters[$name];
             }
-            else if (\array_key_exists($name, $requestParameters) && $node->isValidParameterValue($name, $requestParameters[$name]))
+            elseif (\array_key_exists($name, $requestParameters) && $node->isValidParameterValue($name, $requestParameters[$name]))
             {
                 // then check if we can read a parameter from the request
                 $value = $requestParameters[$name];
             }
-            else if (\array_key_exists($name, $nodeParameters) && $node->isValidParameterValue($name, $nodeParameters[$name]))
+            elseif (\array_key_exists($name, $nodeParameters) && $node->isValidParameterValue($name, $nodeParameters[$name]))
             {
                 // then check if a default parameter was defined
                 $value = $nodeParameters[$name];
@@ -208,6 +210,7 @@ class MenuBuilder
      * @param string $fromNode
      * @param array  $parameters
      * @param array  $routeParameters
+     *
      * @return ItemInterface
      */
     public function buildBreadcrumb (string $fromNode, array $parameters = [], array $routeParameters = []) : ItemInterface
@@ -224,6 +227,7 @@ class MenuBuilder
 
         $hierarchy = $this->getHierarchyToNode($fromNode);
         $menuNode = $menuRoot;
+
         foreach ($hierarchy as $node)
         {
             $this->addChild($menuNode, $node, $requestParameters, $parameters, $routeParameters);
@@ -234,9 +238,10 @@ class MenuBuilder
 
 
     /**
-     * Returns the hierarchy to the given node
+     * Returns the hierarchy to the given node.
      *
      * @param string $targetNode
+     *
      * @return Node[]
      */
     private function getHierarchyToNode (string $targetNode) : array
@@ -249,7 +254,7 @@ class MenuBuilder
             $hierarchy[] = $node;
             $node = $node->getParent();
         }
-        while ($node !== null);
+        while (null !== $node);
 
         return \array_reverse($hierarchy);
     }

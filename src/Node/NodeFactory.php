@@ -7,7 +7,6 @@ namespace Becklyn\RouteTreeBundle\Node;
 use Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper;
 use Symfony\Component\Routing\Route;
 
-
 class NodeFactory
 {
     /**
@@ -17,7 +16,6 @@ class NodeFactory
 
 
     /**
-     *
      * @param SecurityInferHelper $securityInferHelper
      */
     public function __construct (SecurityInferHelper $securityInferHelper)
@@ -27,13 +25,14 @@ class NodeFactory
 
 
     /**
-     * Generates a node from the given route
+     * Generates a node from the given route.
      *
      * @param string      $routeName
      * @param array       $config
      * @param array       $variables
      * @param array       $requirements
      * @param string|null $controller
+     *
      * @return Node
      */
     public function createNode (string $routeName, array $config, array $variables, array $requirements, ?string $controller) : Node
@@ -78,7 +77,7 @@ class NodeFactory
 
 
     /**
-     * Infers the security from the linked controller
+     * Infers the security from the linked controller.
      *
      * @param Node   $node
      * @param string $controller

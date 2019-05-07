@@ -6,7 +6,6 @@ use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Voter\VoterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-
 /**
  * Simple route voter, that votes only based on the route name.
  */

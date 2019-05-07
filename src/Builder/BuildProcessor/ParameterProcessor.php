@@ -1,12 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Builder\BuildProcessor;
 
 use Becklyn\RouteTreeBundle\Node\Node;
 
-
 /**
- * Processes all nodes, so that they can access the default parameters of their parents
+ * Processes all nodes, so that they can access the default parameters of their parents.
  */
 class ParameterProcessor
 {
@@ -23,7 +22,7 @@ class ParameterProcessor
 
 
     /**
-     * Calculates all parameters
+     * Calculates all parameters.
      *
      * @param Node[] $nodes
      *
@@ -44,11 +43,11 @@ class ParameterProcessor
     }
 
     /**
-     * Automatically sets the parameters for all descendant nodes
+     * Automatically sets the parameters for all descendant nodes.
      *
      * @param Node $node
      */
-    private function generateParametersForNode (Node $node, array $parentDefaults)
+    private function generateParametersForNode (Node $node, array $parentDefaults) : void
     {
         $defaults = \array_replace(
             $parentDefaults,

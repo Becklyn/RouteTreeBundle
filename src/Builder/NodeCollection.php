@@ -2,7 +2,6 @@
 
 namespace Becklyn\RouteTreeBundle\Builder;
 
-
 use Becklyn\RouteTreeBundle\Builder\BuildProcessor\ParameterProcessor;
 use Becklyn\RouteTreeBundle\Builder\BuildProcessor\PriorityProcessor;
 use Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException;
@@ -11,7 +10,6 @@ use Becklyn\RouteTreeBundle\Node\Node;
 use Becklyn\RouteTreeBundle\Node\NodeFactory;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-
 
 class NodeCollection
 {
@@ -22,7 +20,7 @@ class NodeCollection
 
 
     /**
-     * The mapping of route name to the route config
+     * The mapping of route name to the route config.
      *
      * @var array<string,array>
      */
@@ -30,7 +28,7 @@ class NodeCollection
 
 
     /**
-     * Mapping route name node -> parent route name
+     * Mapping route name node -> parent route name.
      *
      * @var array<string,string>
      */
@@ -46,6 +44,7 @@ class NodeCollection
     /**
      * @param NodeFactory             $nodeFactory
      * @param RouteCollection|Route[] $routeCollection
+     *
      * @throws InvalidRouteTreeException
      */
     public function __construct (NodeFactory $nodeFactory, iterable $routeCollection)
@@ -74,7 +73,8 @@ class NodeCollection
     // region Route Index
     /**
      * @param RouteCollection|Route[] $routeCollection
-     * @returns array
+     * @returns() array
+     *
      * @throws InvalidRouteTreeException
      */
     private function buildRouteIndex (iterable $routeCollection) : array
@@ -113,7 +113,7 @@ class NodeCollection
             {
                 if (!isset($routeIndex[$parent]))
                 {
-                    throw new InvalidRouteTreeException(sprintf(
+                    throw new InvalidRouteTreeException(\sprintf(
                         "Route '%s' references a parent '%s', but the parent route could not be found.",
                         $name,
                         $parent
@@ -141,9 +141,10 @@ class NodeCollection
 
 
     /**
-     * Returns the route config for the given node
+     * Returns the route config for the given node.
      *
      * @param Route $route
+     *
      * @return array
      */
     private function getRouteConfig (Route $route) : array
@@ -168,7 +169,7 @@ class NodeCollection
             return $option;
         }
 
-        throw new RouteTreeException(sprintf(
+        throw new RouteTreeException(\sprintf(
             "The `tree` option should be either null, array or string – %s given.",
             \gettype($option)
         ));
@@ -213,10 +214,10 @@ class NodeCollection
 
     // region Hierarchy Linking
     /**
-     * Links the node hierarchy
+     * Links the node hierarchy.
      *
      * @param array<string,string> $mapping
-     * @param Node[] $nodes
+     * @param Node[]               $nodes
      */
     public function linkHierarchy (array $mapping, array $nodes) : void
     {
@@ -233,7 +234,7 @@ class NodeCollection
 
 
     /**
-     * Returns all nodes
+     * Returns all nodes.
      *
      * @return Node[]
      */
