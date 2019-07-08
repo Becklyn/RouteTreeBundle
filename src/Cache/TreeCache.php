@@ -41,11 +41,11 @@ class TreeCache
 
     /**
      * @param CacheItemPoolInterface $cachePool
-     * @param bool                   $debug
+     * @param bool                   $isDebug
      */
-    public function __construct (CacheItemPoolInterface $cachePool, bool $debug)
+    public function __construct (CacheItemPoolInterface $cachePool, bool $isDebug)
     {
-        $this->isDebug = $debug;
+        $this->isDebug = $isDebug;
         $this->cachePool = $cachePool;
         $this->cacheItem = $this->cachePool->getItem(self::CACHE_ITEM_KEY);
         $this->items = $this->cacheItem->isHit()

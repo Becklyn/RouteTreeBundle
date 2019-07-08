@@ -2,13 +2,12 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $isDebug: '%kernel.debug%'
 
     Becklyn\RouteTreeBundle\:
         resource: '../../*'
         exclude: '../../{DependencyInjection,Exception,Resources,BecklynRouteTreeBundle.php}'
-
-    Becklyn\RouteTreeBundle\Cache\TreeCache:
-        $debug: '%kernel.debug%'
 
     Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper:
         $container: '@service_container'
