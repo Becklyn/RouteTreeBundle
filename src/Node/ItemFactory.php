@@ -33,7 +33,7 @@ class ItemFactory
      */
     public function create (string $routeName, array $config, ?string $controller) : MenuItem
     {
-        $item = new MenuItem($routeName, [
+        $item = new MenuItem(null, [
             "key" => $routeName,
             "route" => $routeName,
         ]);
