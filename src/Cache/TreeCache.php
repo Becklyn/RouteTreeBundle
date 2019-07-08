@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Cache;
 
-use Becklyn\RouteTreeBundle\Node\Node;
+use Becklyn\Menu\Item\MenuItem;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
@@ -34,9 +34,9 @@ class TreeCache
 
 
     /**
-     * @var Node[]
+     * @var MenuItem[]
      */
-    private $nodes;
+    private $items;
 
 
     /**
@@ -48,7 +48,7 @@ class TreeCache
         $this->isDebug = $debug;
         $this->cachePool = $cachePool;
         $this->cacheItem = $this->cachePool->getItem(self::CACHE_ITEM_KEY);
-        $this->nodes = $this->cacheItem->isHit()
+        $this->items = $this->cacheItem->isHit()
             ? $this->cacheItem->get()
             : [];
     }
@@ -58,12 +58,12 @@ class TreeCache
     /**
      * Returns the cached tree.
      *
-     * @return Node[]|null
+     * @return MenuItem[]|null
      */
     public function get () : ?array
     {
-        return !$this->isDebug && !empty($this->nodes)
-            ? $this->nodes
+        return !$this->isDebug && !empty($this->items)
+            ? $this->items
             : null;
     }
 
@@ -72,12 +72,12 @@ class TreeCache
     /**
      * Updates the cached tree.
      *
-     * @param Node[] $nodes
+     * @param MenuItem[] $nodes
      */
     public function set (array $nodes) : void
     {
-        $this->nodes = $nodes;
-        $this->cacheItem->set($this->nodes);
+        $this->items = $nodes;
+        $this->cacheItem->set($this->items);
         $this->cachePool->save($this->cacheItem);
     }
 

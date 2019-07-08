@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Twig;
 
-use Becklyn\RouteTreeBundle\KnpMenu\MenuBuilder;
-use Becklyn\RouteTreeBundle\KnpMenu\Renderer\SimpleTwigRenderer;
-use Knp\Menu\Twig\Helper;
+use Becklyn\Menu\Renderer\MenuRenderer;
+use Becklyn\RouteTreeBundle\Menu\MenuBuilder;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -22,19 +21,19 @@ class RouteTreeTwigExtension extends AbstractExtension
 
 
     /**
-     * @var Helper
+     * @var MenuRenderer
      */
-    private $knpHelper;
+    private $menuRenderer;
 
 
     /**
-     * @param MenuBuilder $menuBuilder
-     * @param Helper      $knpHelper
+     * @param MenuBuilder  $menuBuilder
+     * @param MenuRenderer $menuRenderer
      */
-    public function __construct (MenuBuilder $menuBuilder, Helper $knpHelper)
+    public function __construct (MenuBuilder $menuBuilder, MenuRenderer $menuRenderer)
     {
         $this->menuBuilder = $menuBuilder;
-        $this->knpHelper = $knpHelper;
+        $this->menuRenderer = $menuRenderer;
     }
 
 
@@ -46,8 +45,13 @@ class RouteTreeTwigExtension extends AbstractExtension
      */
     public function renderRouteTree (string $fromRoute, array $options)
     {
-        $menu = $this->menuBuilder->buildMenu($fromRoute);
-        return $this->knpHelper->render($menu, $options, SimpleTwigRenderer::ALIAS);
+        $root = $this->menuBuilder->build($fromRoute);
+        $root->addChildListClass("menu-main");
+
+        return $this->menuRenderer->render(
+            $root,
+            $options
+        );
     }
 
 

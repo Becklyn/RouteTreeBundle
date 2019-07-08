@@ -2,21 +2,20 @@
 
 namespace Becklyn\RouteTreeBundle\Builder;
 
+use Becklyn\Menu\Item\MenuItem;
 use Becklyn\RouteTreeBundle\Builder\BuildProcessor\ParameterProcessor;
-use Becklyn\RouteTreeBundle\Builder\BuildProcessor\PriorityProcessor;
 use Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException;
 use Becklyn\RouteTreeBundle\Exception\RouteTreeException;
-use Becklyn\RouteTreeBundle\Node\Node;
-use Becklyn\RouteTreeBundle\Node\NodeFactory;
+use Becklyn\RouteTreeBundle\Node\ItemFactory;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class NodeCollection
+class ItemCollection
 {
     /**
-     * @var NodeFactory
+     * @var ItemFactory
      */
-    private $nodeFactory;
+    private $itemFactory;
 
 
     /**
@@ -36,37 +35,29 @@ class NodeCollection
 
 
     /**
-     * @var array
+     * @var MenuItem[]
      */
-    private $nodes = [];
+    private $items = [];
 
 
     /**
-     * @param NodeFactory             $nodeFactory
+     * @param ItemFactory             $itemFactory
      * @param RouteCollection|Route[] $routeCollection
      *
      * @throws InvalidRouteTreeException
      */
-    public function __construct (NodeFactory $nodeFactory, iterable $routeCollection)
+    public function __construct (ItemFactory $itemFactory, iterable $routeCollection)
     {
-        $this->nodeFactory = $nodeFactory;
+        $this->itemFactory = $itemFactory;
 
         // first: fetch all route config of all relevant routes
         $this->routes = $this->buildRouteIndex($routeCollection);
 
         // second: create all nodes for all relevant routes
-        $this->nodes = $this->buildNodeIndex($routeCollection);
+        $this->items = $this->buildNodeIndex($routeCollection);
 
         // then: link hierarchy
-        $this->linkHierarchy($this->parents, $this->nodes);
-
-        // sort node children recursively
-        $priorityProcessor = new PriorityProcessor();
-        $this->nodes = $priorityProcessor->sortNodes($this->nodes);
-
-        // fetch missing parameters from the hierarchy
-        $parameterProcessor = new ParameterProcessor($this->routes);
-        $this->nodes = $parameterProcessor->calculateAllParameters($this->nodes);
+        $this->linkHierarchy($this->parents, $this->items);
     }
 
 
@@ -180,6 +171,8 @@ class NodeCollection
     // region Node Generation
     /**
      * @param RouteCollection|Route[] $routeCollection
+     *
+     * @return MenuItem[]
      */
     private function buildNodeIndex (iterable $routeCollection) : array
     {
@@ -198,13 +191,7 @@ class NodeCollection
                 $config["parameters"] ?? []
             );
 
-            $index[$name] = $this->nodeFactory->createNode(
-                $name,
-                $config,
-                $route->compile()->getVariables(),
-                $route->getRequirements(),
-                $route->getDefault("_controller")
-            );
+            $index[$name] = $this->itemFactory->create($name, $config, $route->getDefault("_controller"));
         }
 
         return $index;
@@ -214,32 +201,31 @@ class NodeCollection
 
     // region Hierarchy Linking
     /**
-     * Links the node hierarchy.
+     * Links the hierarchy.
      *
      * @param array<string,string> $mapping
-     * @param Node[]               $nodes
+     * @param MenuItem[]           $items
      */
-    public function linkHierarchy (array $mapping, array $nodes) : void
+    public function linkHierarchy (array $mapping, array $items) : void
     {
         foreach ($mapping as $childRoute => $parentRoute)
         {
-            $childNode = $nodes[$childRoute];
-            $parentNode = $nodes[$parentRoute];
+            $child = $items[$childRoute];
+            $parent = $items[$parentRoute];
 
-            $childNode->setParent($parentNode);
-            $parentNode->addChild($childNode);
+            $child->setParent($parent);
         }
     }
     // endregion
 
 
     /**
-     * Returns all nodes.
+     * Returns all menu items.
      *
-     * @return Node[]
+     * @return MenuItem[]
      */
-    public function getNodes () : array
+    public function getItems () : array
     {
-        return $this->nodes;
+        return $this->items;
     }
 }

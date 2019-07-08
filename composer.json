@@ -11,25 +11,23 @@
         }
     ],
     "require": {
-        "php": "^7.1",
-        "knplabs/knp-menu": "^2.3",
-        "knplabs/knp-menu-bundle": "^2.2",
-        "symfony/cache": "^4.2",
-        "symfony/expression-language": "^4.2",
-        "symfony/http-foundation": "^4.2",
-        "symfony/http-kernel": "^4.2",
-        "symfony/routing": "^4.2",
-        "symfony/security-core": "^4.2",
-        "symfony/translation": "^4.2"
+        "php": "^7.2",
+        "becklyn/menu": "dev-implementation as 1.0.0",
+        "symfony/cache": "^4.3",
+        "symfony/expression-language": "^4.3",
+        "symfony/http-foundation": "^4.3",
+        "symfony/http-kernel": "^4.3",
+        "symfony/routing": "^4.3",
+        "symfony/security-core": "^4.3",
+        "symfony/translation": "^4.3",
+        "twig/twig": "^2.11"
     },
     "require-dev": {
-        "becklyn/php-cs": "^1.1",
-        "sensio/framework-extra-bundle": "^5.2",
-        "twig/twig": "^2.9"
+        "becklyn/php-cs": "^1.4",
+        "sensio/framework-extra-bundle": "^5.2"
     },
     "suggest": {
-        "sensio/framework-extra-bundle": "To automatically infer from @Security and @IsGranted annotations.",
-        "twig/twig": "To use the route_tree_menu() twig function."
+        "sensio/framework-extra-bundle": "To automatically infer from @Security and @IsGranted annotations."
     },
     "config": {
         "sort-packages": true
@@ -43,5 +41,8 @@
         "psr-4": {
             "Tests\\Becklyn\\RouteTreeBundle\\": "tests/"
         }
-    }
+    },
+    "repositories": [
+        {"type": "path", "url": "../MenuBundle", "options": {"symlink": true}}
+    ]
 }

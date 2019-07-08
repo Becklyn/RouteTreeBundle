@@ -2,9 +2,9 @@
 
 namespace Tests\Becklyn\RouteTreeBundle;
 
-use Becklyn\RouteTreeBundle\Builder\NodeCollection;
-use Becklyn\RouteTreeBundle\Node\Node;
-use Becklyn\RouteTreeBundle\Node\NodeFactory;
+use Becklyn\Menu\Item\MenuItem;
+use Becklyn\RouteTreeBundle\Builder\ItemCollection;
+use Becklyn\RouteTreeBundle\Node\ItemFactory;
 use Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper;
 use Symfony\Component\Routing\Route;
 
@@ -39,7 +39,7 @@ trait RouteTestTrait
      * Builds a collection and gets its nodes
      *
      * @param Route[] $routes
-     * @return Node[]
+     * @return MenuItem[]
      */
     private function buildAndGetNodes (array $routes) : array
     {
@@ -47,8 +47,8 @@ trait RouteTestTrait
             ->disableOriginalConstructor()
             ->getMock();
 
-        $nodeFactory = new NodeFactory($securityInferHelper);
-        return (new NodeCollection($nodeFactory, $routes))->getNodes();
+        $nodeFactory = new ItemFactory($securityInferHelper);
+        return (new ItemCollection($nodeFactory, $routes))->getItems();
     }
 
 }

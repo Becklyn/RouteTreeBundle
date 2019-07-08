@@ -2,8 +2,8 @@
 
 namespace Tests\Becklyn\RouteTreeBundle\Builder;
 
-use Becklyn\RouteTreeBundle\Builder\NodeCollection;
-use Becklyn\RouteTreeBundle\Node\NodeFactory;
+use Becklyn\RouteTreeBundle\Builder\ItemCollection;
+use Becklyn\RouteTreeBundle\Node\ItemFactory;
 use Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Route;
@@ -21,7 +21,7 @@ class NodeCollectionTest extends TestCase
 
 
     /**
-     * @var NodeFactory
+     * @var ItemFactory
      */
     private $nodeFactory;
 
@@ -35,7 +35,7 @@ class NodeCollectionTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->nodeFactory = new NodeFactory($securityInferHelper);
+        $this->nodeFactory = new ItemFactory($securityInferHelper);
     }
 
 
@@ -170,8 +170,8 @@ class NodeCollectionTest extends TestCase
             "parameters" => ["param" => "inherited"],
         ]));
 
-        $collection = new NodeCollection($this->nodeFactory, $routeCollection);
-        $nodes = $collection->getNodes();
+        $collection = new ItemCollection($this->nodeFactory, $routeCollection);
+        $nodes = $collection->getItems();
 
         $this->assertArrayHasKey("grandparent", $nodes);
         $this->assertArrayHasKey("parent", $nodes);
