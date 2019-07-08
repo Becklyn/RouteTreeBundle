@@ -39,18 +39,9 @@ class MenuBuilder
      */
     public function build (string $fromRoute) : MenuItem
     {
-        $root = new MenuItem();
-
         try
         {
-            $rootNode = $this->routeTree->getByRoute($fromRoute);
-
-            if (null !== $rootNode)
-            {
-                $this->appendNodes($root, $rootNode->getChildren());
-            }
-
-            return $root;
+            return $this->routeTree->getByRoute($fromRoute);
         }
         catch (RouteTreeException $exception)
         {
@@ -59,27 +50,7 @@ class MenuBuilder
                 "exception" => $exception,
             ]);
 
-            return $root;
-        }
-    }
-
-
-    /**
-     * @param MenuItem   $item
-     * @param MenuItem[] $items
-     */
-    private function appendNodes (MenuItem $item, array $items) : void
-    {
-        foreach ($items as $node)
-        {
-            $child = $item->addChild($node->getDisplayTitle(), [
-                "route" => $node->getRoute(),
-                "routeParameters" => [],
-                "visible" => !$node->isHidden(),
-                "extras" => $node->getExtras(),
-            ]);
-
-            $this->appendNodes($child, $node->getChildren());
+            return new MenuItem();
         }
     }
 }
