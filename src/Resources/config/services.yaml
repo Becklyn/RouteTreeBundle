@@ -12,6 +12,3 @@ services:
 
     Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper:
         $container: '@service_container'
-
-    Becklyn\RouteTreeBundle\PostProcessing\Processor\Security\SecurityChecker:
-        $trustResolver: '@security.authentication.trust_resolver'
