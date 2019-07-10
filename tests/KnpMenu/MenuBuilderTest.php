@@ -2,7 +2,7 @@
 
 namespace Becklyn\RouteTreeBundle\Tests\KnpMenu;
 
-use Becklyn\RouteTreeBundle\Builder\NodeCollectionBuilder;
+use Becklyn\RouteTreeBundle\Builder\ItemCollectionBuilder;
 use Becklyn\RouteTreeBundle\Cache\TreeCache;
 use Becklyn\RouteTreeBundle\KnpMenu\MenuBuilder;
 use Becklyn\RouteTreeBundle\PostProcessing\PostProcessor;
@@ -30,7 +30,7 @@ class MenuBuilderTest extends TestCase
      */
     private function createRouteTree (array $routes) : RouteTree
     {
-        $nodeCollectionBuilder = $this->getMockBuilder(NodeCollectionBuilder::class)
+        $nodeCollectionBuilder = $this->getMockBuilder(ItemCollectionBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 

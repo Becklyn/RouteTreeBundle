@@ -2,24 +2,12 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $isDebug: '%kernel.debug%'
 
     Becklyn\RouteTreeBundle\:
         resource: '../../*'
         exclude: '../../{DependencyInjection,Exception,Resources,BecklynRouteTreeBundle.php}'
 
-    Becklyn\RouteTreeBundle\Cache\TreeCache:
-        $debug: '%kernel.debug%'
-
     Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper:
         $container: '@service_container'
-
-    Becklyn\RouteTreeBundle\PostProcessing\Processor\Security\SecurityChecker:
-        $trustResolver: '@security.authentication.trust_resolver'
-
-    Becklyn\RouteTreeBundle\KnpMenu\Renderer\SimpleTwigRenderer:
-        tags:
-            -   name: knp_menu.renderer
-                alias: !php/const Becklyn\RouteTreeBundle\KnpMenu\Renderer\SimpleTwigRenderer::ALIAS
-
-    Becklyn\RouteTreeBundle\Twig\RouteTreeTwigExtension:
-        $knpHelper: '@knp_menu.helper'

@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Becklyn\RouteTreeBundle\Tree;
 
-use Becklyn\RouteTreeBundle\Builder\NodeCollectionBuilder;
+use Becklyn\Menu\Item\MenuItem;
+use Becklyn\RouteTreeBundle\Builder\ItemCollectionBuilder;
 use Becklyn\RouteTreeBundle\Cache\TreeCache;
 use Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException;
-use Becklyn\RouteTreeBundle\Node\Node;
-use Becklyn\RouteTreeBundle\PostProcessing\PostProcessor;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
@@ -18,15 +17,15 @@ use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 class RouteTree implements CacheClearerInterface, CacheWarmerInterface
 {
     /**
-     * @var Node[]
+     * @var MenuItem[]
      */
-    private $nodes;
+    private $items;
 
 
     /**
-     * @var NodeCollectionBuilder
+     * @var ItemCollectionBuilder
      */
-    private $nodeCollectionBuilder;
+    private $collectionBuilder;
 
 
     /**
@@ -36,41 +35,33 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
 
 
     /**
-     * @var PostProcessor
-     */
-    private $postProcessing;
-
-
-    /**
-     * @param NodeCollectionBuilder $nodeCollectionBuilder
+     * @param ItemCollectionBuilder $collectionBuilder
      * @param TreeCache             $cache
-     * @param PostProcessor         $postProcessing
      */
-    public function __construct (NodeCollectionBuilder $nodeCollectionBuilder, TreeCache $cache, PostProcessor $postProcessing)
+    public function __construct (ItemCollectionBuilder $collectionBuilder, TreeCache $cache)
     {
-        $this->nodeCollectionBuilder = $nodeCollectionBuilder;
+        $this->collectionBuilder = $collectionBuilder;
         $this->cache = $cache;
-        $this->postProcessing = $postProcessing;
     }
 
 
     /**
      * Builds the tree.
      *
-     * @return Node[]
+     * @return MenuItem[]
      */
-    private function generateNodes () : array
+    private function generateItems () : array
     {
         $nodes = $this->cache->get();
 
         if (null === $nodes)
         {
-            $nodeCollection = $this->nodeCollectionBuilder->build();
-            $nodes = $nodeCollection->getNodes();
+            $collection = $this->collectionBuilder->build();
+            $nodes = $collection->getItems();
             $this->cache->set($nodes);
         }
 
-        return $this->postProcessing->postProcessTree($nodes);
+        return $nodes;
     }
 
 
@@ -81,16 +72,16 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
      *
      * @throws InvalidRouteTreeException
      *
-     * @return Node|null
+     * @return MenuItem|null
      */
-    public function getNode (string $route) : ?Node
+    public function getByRoute (string $route) : ?MenuItem
     {
-        if (null === $this->nodes)
+        if (null === $this->items)
         {
-            $this->nodes = $this->generateNodes();
+            $this->items = $this->generateItems();
         }
 
-        return $this->nodes[$route] ?? null;
+        return $this->items[$route] ?? null;
     }
 
 
@@ -130,7 +121,7 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
     public function warmUp ($cacheDir) : void
     {
         $this->cache->clear();
-        $this->generateNodes();
+        $this->generateItems();
     }
     //endregion
 }
