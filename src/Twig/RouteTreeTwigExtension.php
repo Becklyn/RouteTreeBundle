@@ -71,13 +71,14 @@ class RouteTreeTwigExtension extends AbstractExtension
     /**
      * Builds and renders a breadcrumb.
      *
-     * @param string $fromRoute         the route to start the rendering from
-     * @param array  $parameters        the global parameters to use when resolving the parameters
-     * @param array  $renderOptions     the options for rendering
-     * @param array  $routeParameters   the route-specific parameters to use when resolving the parameters
+     * @param string $fromRoute       the route to start the rendering from
+     * @param array  $parameters      the global parameters to use when resolving the parameters
+     * @param array  $renderOptions   the options for rendering
+     * @param array  $routeParameters the route-specific parameters to use when resolving the parameters
+     *
+     * @throws \Becklyn\RouteTreeBundle\Exception\InvalidParameterValueException
      *
      * @return string
-     * @throws \Becklyn\RouteTreeBundle\Exception\InvalidParameterValueException
      */
     public function renderBreadcrumb (string $fromRoute, array $renderOptions = [], array $parameters = [], array $routeParameters = []) : string
     {

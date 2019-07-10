@@ -28,7 +28,7 @@ class ParametersMerger
 
 
     /**
-     * Merges the parameters in the sub tree
+     * Merges the parameters in the sub tree.
      *
      * @param MenuItem $item
      * @param array    $parameters
@@ -36,7 +36,7 @@ class ParametersMerger
      *
      * @throws InvalidParameterValueException
      */
-    public function mergeParameters (MenuItem $item, array $parameters, array $routeSpecificParameters = [])
+    public function mergeParameters (MenuItem $item, array $parameters, array $routeSpecificParameters = []) : void
     {
         $request = $this->requestStack->getMasterRequest();
         $requestParameters = null !== $request
@@ -60,7 +60,7 @@ class ParametersMerger
         array $routeSpecificParameters,
         array $parameters,
         array $requestParameters
-    )
+    ) : void
     {
         $target = $item->getTarget();
         $pathVariables = $item->getExtra(self::VARIABLES_EXTRA_KEY, []);
@@ -111,14 +111,15 @@ class ParametersMerger
 
 
     /**
-     * Transforms the value to a route-compatible one
+     * Transforms the value to a route-compatible one.
      *
      * @param string $routeName
      * @param string $parameterName
      * @param mixed  $value
      *
-     * @return mixed
      * @throws InvalidParameterValueException
+     *
+     * @return mixed
      */
     private function transformValue (string $routeName, string $parameterName, $value)
     {

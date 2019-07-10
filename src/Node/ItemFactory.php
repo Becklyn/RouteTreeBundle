@@ -40,7 +40,7 @@ class ItemFactory
             "route" => $routeName,
             "extras" => [
                 ParametersMerger::VARIABLES_EXTRA_KEY => $pathVariables,
-            ]
+            ],
         ]);
 
         foreach ($config as $key => $value)
@@ -55,12 +55,12 @@ class ItemFactory
                     $item->setPriority($value);
                     break;
 
-                case "parameters":
-                    // @todo implement parameter handling
-                    break;
-
                 case "security":
                     $item->setSecurity($value);
+                    break;
+
+                case "sort":
+                    $item->setSort($value);
                     break;
 
                 // all unknown parameters are automatically extras

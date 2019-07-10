@@ -3,7 +3,6 @@
 namespace Becklyn\RouteTreeBundle\Builder;
 
 use Becklyn\Menu\Item\MenuItem;
-use Becklyn\RouteTreeBundle\Builder\BuildProcessor\ParameterProcessor;
 use Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException;
 use Becklyn\RouteTreeBundle\Exception\RouteTreeException;
 use Becklyn\RouteTreeBundle\Node\ItemFactory;

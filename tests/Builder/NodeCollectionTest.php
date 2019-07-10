@@ -56,34 +56,6 @@ class NodeCollectionTest extends TestCase
 
 
     /**
-     * Tests inherited default parameters
-     */
-    public function testInheritedDefaults ()
-    {
-        $nodes = $this->buildAndGetNodes([
-            "a" => $this->createRoute("/a", [
-                "parameters" => [
-                    "e" => 3,
-                    "c" => 2,
-                ],
-            ]),
-            "b" => $this->createRoute("/b/{c}/{d}", [
-                "parent" => "a",
-                "parameters" => [
-                    "test" => 1,
-                    "c" => 2,
-                ],
-            ]),
-            "c" => $this->createRoute("/b/{e}", "b"),
-        ]);
-
-        self::assertEquals([], $nodes["a"]->getParameterValues());
-        self::assertEquals(["c" => 2], $nodes["b"]->getParameterValues());
-        self::assertEquals(["e" => 3], $nodes["c"]->getParameterValues());
-    }
-
-
-    /**
      * Asserts that routes which are not participated with the tree are ignored
      */
     public function testIgnoreRoute ()
@@ -178,36 +150,4 @@ class NodeCollectionTest extends TestCase
         $this->assertArrayHasKey("child", $nodes);
     }
 
-
-    /**
-     * Tests that priority sorting works as expected
-     */
-    public function testPrioritySorting ()
-    {
-        $nodes = $this->buildAndGetNodes([
-            "a" => $this->createRoute("/a"),
-            "b" => $this->createRoute("/b", [
-                "parent" => "a",
-                "priority" => 10,
-            ]),
-            "c" => $this->createRoute("/c", [
-                "parent" => "a",
-                // default is priority 0
-            ]),
-            "d" => $this->createRoute("/d", [
-                "parent" => "a",
-                "priority" => 100,
-            ]),
-            "e" => $this->createRoute("/e", [
-                "parent" => "a",
-                "priority" => -10,
-            ]),
-        ]);
-
-        $children = $nodes["a"]->getChildren();
-        self::assertSame($nodes["d"], $children[0]);
-        self::assertSame($nodes["b"], $children[1]);
-        self::assertSame($nodes["c"], $children[2]);
-        self::assertSame($nodes["e"], $children[3]);
-    }
 }

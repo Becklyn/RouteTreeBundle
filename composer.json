@@ -14,12 +14,9 @@
         "php": "^7.2",
         "becklyn/menu": "dev-implementation as 1.0.0",
         "symfony/cache": "^4.3",
-        "symfony/expression-language": "^4.3",
         "symfony/http-foundation": "^4.3",
         "symfony/http-kernel": "^4.3",
         "symfony/routing": "^4.3",
-        "symfony/security-core": "^4.3",
-        "symfony/translation": "^4.3",
         "twig/twig": "^2.11"
     },
     "require-dev": {
@@ -43,6 +40,12 @@
         }
     },
     "repositories": [
-        {"type": "path", "url": "../MenuBundle", "options": {"symlink": true}}
+        {
+            "type": "path",
+            "url": "../MenuBundle",
+            "options": {
+                "symlink": true
+            }
+        }
     ]
 }
