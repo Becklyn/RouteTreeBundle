@@ -12,7 +12,7 @@
     ],
     "require": {
         "php": "^7.2",
-        "becklyn/menu": "dev-implementation as 1.0.0",
+        "becklyn/menu": "^1.0",
         "symfony/cache": "^4.3",
         "symfony/http-foundation": "^4.3",
         "symfony/http-kernel": "^4.3",
@@ -20,6 +20,7 @@
         "twig/twig": "^2.11"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-master",
         "becklyn/php-cs": "^1.4",
         "sensio/framework-extra-bundle": "^5.2"
     },
@@ -38,14 +39,5 @@
         "psr-4": {
             "Tests\\Becklyn\\RouteTreeBundle\\": "tests/"
         }
-    },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../MenuBundle",
-            "options": {
-                "symlink": true
-            }
-        }
-    ]
+    }
 }
