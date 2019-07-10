@@ -191,7 +191,12 @@ class ItemCollection
                 $config["parameters"] ?? []
             );
 
-            $index[$name] = $this->itemFactory->create($name, $config, $route->getDefault("_controller"));
+            $index[$name] = $this->itemFactory->create(
+                $name,
+                $config,
+                $route->compile()->getPathVariables(),
+                $route->getDefault("_controller")
+            );
         }
 
         return $index;

@@ -6,6 +6,7 @@ namespace Becklyn\RouteTreeBundle\Twig;
 
 use Becklyn\Menu\Renderer\MenuRenderer;
 use Becklyn\RouteTreeBundle\Menu\MenuBuilder;
+use Becklyn\RouteTreeBundle\Parameter\ParametersMerger;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -27,60 +28,76 @@ class RouteTreeTwigExtension extends AbstractExtension
 
 
     /**
-     * @param MenuBuilder  $menuBuilder
-     * @param MenuRenderer $menuRenderer
+     * @var ParametersMerger
      */
-    public function __construct (MenuBuilder $menuBuilder, MenuRenderer $menuRenderer)
+    private $parameterMerger;
+
+
+    /**
+     * @param MenuBuilder      $menuBuilder
+     * @param MenuRenderer     $menuRenderer
+     * @param ParametersMerger $parameterMerger
+     */
+    public function __construct (MenuBuilder $menuBuilder, MenuRenderer $menuRenderer, ParametersMerger $parameterMerger)
     {
         $this->menuBuilder = $menuBuilder;
         $this->menuRenderer = $menuRenderer;
+        $this->parameterMerger = $parameterMerger;
     }
 
 
     /**
+     * Renders the tree.
+     *
      * @param string $fromRoute
-     * @param array  $options
+     * @param array  $renderOptions
      *
      * @return string
      */
-    public function renderTree (string $fromRoute, array $options = [])
+    public function renderTree (string $fromRoute, array $renderOptions = []) : string
     {
         $root = $this->menuBuilder->build($fromRoute);
 
-        if (isset($options["rootClass"]))
+        if (isset($renderOptions["rootClass"]))
         {
-            $root->addChildListClass($options["rootClass"]);
-            unset($options["rootClass"]);
+            $root->addChildListClass($renderOptions["rootClass"]);
+            unset($renderOptions["rootClass"]);
         }
 
-        return $this->menuRenderer->render($root, $options);
+        return $this->menuRenderer->render($root, $renderOptions);
     }
 
 
     /**
-     * @param string $fromRoute
-     * @param array  $options
+     * Builds and renders a breadcrumb.
+     *
+     * @param string $fromRoute         the route to start the rendering from
+     * @param array  $parameters        the global parameters to use when resolving the parameters
+     * @param array  $renderOptions     the options for rendering
+     * @param array  $routeParameters   the route-specific parameters to use when resolving the parameters
      *
      * @return string
+     * @throws \Becklyn\RouteTreeBundle\Exception\InvalidParameterValueException
      */
-    public function renderBreadcrumb (string $fromRoute, array $options = [])
+    public function renderBreadcrumb (string $fromRoute, array $renderOptions = [], array $parameters = [], array $routeParameters = []) : string
     {
         $root = $this->menuBuilder->buildBreadcrumb($fromRoute);
 
-        if (isset($options["rootClass"]))
+        if (isset($renderOptions["rootClass"]))
         {
-            $root->addChildListClass($options["rootClass"]);
-            unset($options["rootClass"]);
+            $root->addChildListClass($renderOptions["rootClass"]);
+            unset($renderOptions["rootClass"]);
         }
 
-        return $this->menuRenderer->render($root, $options);
+        $this->parameterMerger->mergeParameters($root, $parameters, $routeParameters);
+        return $this->menuRenderer->render($root, $renderOptions);
     }
 
 
     /**
      * {@inheritdoc}
      */
-    public function getFunctions ()
+    public function getFunctions () : array
     {
         $safe = ["is_safe" => ["html"]];
 

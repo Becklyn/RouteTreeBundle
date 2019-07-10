@@ -4,6 +4,7 @@ namespace Becklyn\RouteTreeBundle\Node;
 
 use Becklyn\Menu\Item\MenuItem;
 use Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper;
+use Becklyn\RouteTreeBundle\Parameter\ParametersMerger;
 
 class ItemFactory
 {
@@ -27,15 +28,19 @@ class ItemFactory
      *
      * @param string      $routeName
      * @param array       $config
+     * @param array       $pathVariables
      * @param string|null $controller
      *
      * @return MenuItem
      */
-    public function create (string $routeName, array $config, ?string $controller) : MenuItem
+    public function create (string $routeName, array $config, array $pathVariables, ?string $controller) : MenuItem
     {
         $item = new MenuItem(null, [
             "key" => $routeName,
             "route" => $routeName,
+            "extras" => [
+                ParametersMerger::VARIABLES_EXTRA_KEY => $pathVariables,
+            ]
         ]);
 
         foreach ($config as $key => $value)
