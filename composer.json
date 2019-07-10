@@ -20,8 +20,8 @@
         "twig/twig": "^2.11"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-master",
         "becklyn/php-cs": "^1.4",
+        "roave/security-advisories": "dev-master",
         "sensio/framework-extra-bundle": "^5.2"
     },
     "suggest": {
