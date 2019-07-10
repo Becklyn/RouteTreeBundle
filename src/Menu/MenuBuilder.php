@@ -53,4 +53,42 @@ class MenuBuilder
             return new MenuItem();
         }
     }
+
+
+    /**
+     * @param string $fromRoute
+     *
+     * @return MenuItem
+     */
+    public function buildBreadcrumb (string $fromRoute) : MenuItem
+    {
+        try
+        {
+            $root = new MenuItem();
+            $item = $this->routeTree->getByRoute($fromRoute);
+
+            if (null === $item)
+            {
+                return $root;
+            }
+
+            foreach ($item->getHierarchy() as $node)
+            {
+                $inHierarchy = clone $node;
+                $inHierarchy->clearChildren();
+                $root->addChild($inHierarchy);
+            }
+
+            return $root;
+        }
+        catch (RouteTreeException $exception)
+        {
+            $this->logger->error("Route tree building failed from route '{from_route}' due to an exception.", [
+                "from_route" => $fromRoute,
+                "exception" => $exception,
+            ]);
+
+            return new MenuItem();
+        }
+    }
 }

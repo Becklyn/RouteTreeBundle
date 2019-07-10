@@ -43,15 +43,37 @@ class RouteTreeTwigExtension extends AbstractExtension
      *
      * @return string
      */
-    public function renderRouteTree (string $fromRoute, array $options)
+    public function renderTree (string $fromRoute, array $options = [])
     {
         $root = $this->menuBuilder->build($fromRoute);
-        $root->addChildListClass("menu-main");
 
-        return $this->menuRenderer->render(
-            $root,
-            $options
-        );
+        if (isset($options["rootClass"]))
+        {
+            $root->addChildListClass($options["rootClass"]);
+            unset($options["rootClass"]);
+        }
+
+        return $this->menuRenderer->render($root, $options);
+    }
+
+
+    /**
+     * @param string $fromRoute
+     * @param array  $options
+     *
+     * @return string
+     */
+    public function renderBreadcrumb (string $fromRoute, array $options = [])
+    {
+        $root = $this->menuBuilder->buildBreadcrumb($fromRoute);
+
+        if (isset($options["rootClass"]))
+        {
+            $root->addChildListClass($options["rootClass"]);
+            unset($options["rootClass"]);
+        }
+
+        return $this->menuRenderer->render($root, $options);
     }
 
 
@@ -60,10 +82,11 @@ class RouteTreeTwigExtension extends AbstractExtension
      */
     public function getFunctions ()
     {
+        $safe = ["is_safe" => ["html"]];
+
         return [
-            new TwigFunction("route_tree_breadcrumb", [$this->menuBuilder, "buildBreadcrumb"]),
-            new TwigFunction("route_tree_menu", [$this->menuBuilder, "buildMenu"]),
-            new TwigFunction("route_tree_render", [$this, "renderRouteTree"], ["is_safe" => ["html"]]),
+            new TwigFunction("route_tree_breadcrumb", [$this, "renderBreadcrumb"], $safe),
+            new TwigFunction("route_tree_render", [$this, "renderTree"], $safe),
         ];
     }
 }
