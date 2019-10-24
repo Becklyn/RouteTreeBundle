@@ -38,6 +38,7 @@ class ItemFactory
         $item = new MenuItem(null, [
             "key" => $routeName,
             "route" => $routeName,
+            "sort" => true,
             "extras" => [
                 ParametersMerger::VARIABLES_EXTRA_KEY => $pathVariables,
             ],
