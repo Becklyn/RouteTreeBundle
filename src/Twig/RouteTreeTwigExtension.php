@@ -50,10 +50,12 @@ class RouteTreeTwigExtension extends AbstractExtension
     /**
      * Renders the tree.
      *
-     * @param string $fromRoute
-     * @param array  $renderOptions
+     * @param string $fromRoute       the route to start the rendering from
      * @param array  $renderOptions   the options for rendering
+     * @param array  $parameters      the global parameters to use when resolving the parameters
      * @param array  $routeParameters the route-specific parameters to use when resolving the parameters
+     *
+     * @throws InvalidParameterValueException
      *
      * @return string
      */
@@ -76,8 +78,8 @@ class RouteTreeTwigExtension extends AbstractExtension
      * Builds and renders a breadcrumb.
      *
      * @param string $fromRoute       the route to start the rendering from
-     * @param array  $parameters      the global parameters to use when resolving the parameters
      * @param array  $renderOptions   the options for rendering
+     * @param array  $parameters      the global parameters to use when resolving the parameters
      * @param array  $routeParameters the route-specific parameters to use when resolving the parameters
      *
      * @throws InvalidParameterValueException
