@@ -1,3 +1,9 @@
+4.1.0
+=====
+
+*   Removed automatically fetching attributes from the request (less magic is better).
+
+
 4.0.1
 =====
 
