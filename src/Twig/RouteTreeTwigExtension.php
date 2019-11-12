@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Becklyn\RouteTreeBundle\Twig;
 
 use Becklyn\Menu\Renderer\MenuRenderer;
+use Becklyn\RouteTreeBundle\Exception\InvalidParameterValueException;
 use Becklyn\RouteTreeBundle\Menu\MenuBuilder;
 use Becklyn\RouteTreeBundle\Parameter\ParametersMerger;
 use Twig\Extension\AbstractExtension;
@@ -51,10 +52,12 @@ class RouteTreeTwigExtension extends AbstractExtension
      *
      * @param string $fromRoute
      * @param array  $renderOptions
+     * @param array  $renderOptions   the options for rendering
+     * @param array  $routeParameters the route-specific parameters to use when resolving the parameters
      *
      * @return string
      */
-    public function renderTree (string $fromRoute, array $renderOptions = []) : string
+    public function renderTree (string $fromRoute, array $renderOptions = [], array $parameters = [], array $routeParameters = []) : string
     {
         $root = $this->menuBuilder->build($fromRoute);
 
@@ -64,6 +67,7 @@ class RouteTreeTwigExtension extends AbstractExtension
             unset($renderOptions["rootClass"]);
         }
 
+        $this->parameterMerger->mergeParameters($root, $parameters, $routeParameters);
         return $this->menuRenderer->render($root, $renderOptions);
     }
 
@@ -76,7 +80,7 @@ class RouteTreeTwigExtension extends AbstractExtension
      * @param array  $renderOptions   the options for rendering
      * @param array  $routeParameters the route-specific parameters to use when resolving the parameters
      *
-     * @throws \Becklyn\RouteTreeBundle\Exception\InvalidParameterValueException
+     * @throws InvalidParameterValueException
      *
      * @return string
      */

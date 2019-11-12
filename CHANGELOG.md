@@ -2,6 +2,7 @@
 =====
 
 *   Removed automatically fetching attributes from the request (less magic is better).
+*   Add option to set tree parameters when rendering a tree.
 
 
 4.0.1
