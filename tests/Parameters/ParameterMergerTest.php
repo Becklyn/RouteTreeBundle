@@ -32,7 +32,6 @@ class ParameterMergerTest extends TestCase
                 ["abc" => 5], // item
                 [], // route specific
                 [], // defaults
-                [], // request
                 ["abc" => 5], // expected
             ],
             "route specific only" => [
@@ -40,7 +39,6 @@ class ParameterMergerTest extends TestCase
                 [], // item
                 ["example.route" => ["abc" => 5]], // route specific
                 [], // defaults
-                [], // request
                 ["abc" => 5], // expected
             ],
             "defaults only" => [
@@ -48,15 +46,6 @@ class ParameterMergerTest extends TestCase
                 [], // item
                 [], // route specific
                 ["abc" => 5], // defaults
-                [], // request
-                ["abc" => 5], // expected
-            ],
-            "request only" => [
-                ["abc"], // variables
-                [], // item
-                [], // route specific
-                [], // defaults
-                ["abc" => 5], // request
                 ["abc" => 5], // expected
             ],
             "nothing" => [
@@ -64,7 +53,6 @@ class ParameterMergerTest extends TestCase
                 [], // item
                 [], // route specific
                 [], // defaults
-                [], // request
                 ["abc" => null], // expected
             ],
             "item most specific" => [
@@ -72,7 +60,6 @@ class ParameterMergerTest extends TestCase
                 ["abc" => 1], // item
                 ["example.route" => ["abc" => 2]], // route specific
                 ["abc" => 3], // defaults
-                ["abc" => 4], // request
                 ["abc" => 1], // expected
             ],
             "route most specific" => [
@@ -80,7 +67,6 @@ class ParameterMergerTest extends TestCase
                 [], // item
                 ["example.route" => ["abc" => 2]], // route specific
                 ["abc" => 3], // defaults
-                ["abc" => 4], // request
                 ["abc" => 2], // expected
             ],
             "defaults most specific" => [
@@ -88,30 +74,17 @@ class ParameterMergerTest extends TestCase
                 [], // item
                 [], // route specific
                 ["abc" => 3], // defaults
-                ["abc" => 4], // request
                 ["abc" => 3], // expected
-            ],
-            "request most specific" => [
-                ["abc"], // variables
-                [], // item
-                [], // route specific
-                [], // defaults
-                ["abc" => 4], // request
-                ["abc" => 4], // expected
             ],
             "different route" => [
                 ["abc"], // variables
                 [], // item
                 ["other" => ["abc" => 5]], // route specific
                 [], // defaults
-                [], // request
                 ["abc" => null], // expected
             ],
             "object with id route" => [
                 ["abc"], // variables
-                [], // item
-                [], // route specific
-                [], // defaults
                 [
                     "abc" => new class {
                         public function getId()
@@ -119,7 +92,9 @@ class ParameterMergerTest extends TestCase
                             return 123;
                         }
                     },
-                ], // request
+                ], // item
+                [], // route specific
+                [], // defaults
                 ["abc" => 123], // expected
             ],
         ];
@@ -133,7 +108,6 @@ class ParameterMergerTest extends TestCase
      * @param array $itemParameters
      * @param array $routeSpecificParameters
      * @param array $defaultParameters
-     * @param array $requestParameters
      * @param array $expected
      *
      * @throws \Becklyn\RouteTreeBundle\Exception\InvalidParameterValueException
@@ -143,7 +117,6 @@ class ParameterMergerTest extends TestCase
         array $itemParameters,
         array $routeSpecificParameters,
         array $defaultParameters,
-        array $requestParameters,
         array $expected
     ) : void
     {
@@ -155,7 +128,7 @@ class ParameterMergerTest extends TestCase
             ],
         ]);
 
-        $this->createParametersMerger($requestParameters)->mergeParameters($item, $defaultParameters, $routeSpecificParameters);
+        $this->createParametersMerger()->mergeParameters($item, $defaultParameters, $routeSpecificParameters);
         self::assertEquals($expected, $item->getTarget()->getParameters());
     }
 
@@ -198,18 +171,8 @@ class ParameterMergerTest extends TestCase
      *
      * @return ParametersMerger
      */
-    private function createParametersMerger (array $requestAttributes = []) : ParametersMerger
+    private function createParametersMerger () : ParametersMerger
     {
-        $requestStack = $this->getMockBuilder(RequestStack::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $request = new Request([], [], $requestAttributes);
-
-        $requestStack
-            ->method("getMasterRequest")
-            ->willReturn($request);
-
-        return new ParametersMerger($requestStack);
+        return new ParametersMerger();
     }
 }

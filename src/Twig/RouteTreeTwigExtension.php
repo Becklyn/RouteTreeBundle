@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Becklyn\RouteTreeBundle\Twig;
 
 use Becklyn\Menu\Renderer\MenuRenderer;
+use Becklyn\RouteTreeBundle\Exception\InvalidParameterValueException;
 use Becklyn\RouteTreeBundle\Menu\MenuBuilder;
 use Becklyn\RouteTreeBundle\Parameter\ParametersMerger;
 use Twig\Extension\AbstractExtension;
@@ -49,12 +50,16 @@ class RouteTreeTwigExtension extends AbstractExtension
     /**
      * Renders the tree.
      *
-     * @param string $fromRoute
-     * @param array  $renderOptions
+     * @param string $fromRoute       the route to start the rendering from
+     * @param array  $renderOptions   the options for rendering
+     * @param array  $parameters      the global parameters to use when resolving the parameters
+     * @param array  $routeParameters the route-specific parameters to use when resolving the parameters
+     *
+     * @throws InvalidParameterValueException
      *
      * @return string
      */
-    public function renderTree (string $fromRoute, array $renderOptions = []) : string
+    public function renderTree (string $fromRoute, array $renderOptions = [], array $parameters = [], array $routeParameters = []) : string
     {
         $root = $this->menuBuilder->build($fromRoute);
 
@@ -64,6 +69,7 @@ class RouteTreeTwigExtension extends AbstractExtension
             unset($renderOptions["rootClass"]);
         }
 
+        $this->parameterMerger->mergeParameters($root, $parameters, $routeParameters);
         return $this->menuRenderer->render($root, $renderOptions);
     }
 
@@ -72,11 +78,11 @@ class RouteTreeTwigExtension extends AbstractExtension
      * Builds and renders a breadcrumb.
      *
      * @param string $fromRoute       the route to start the rendering from
-     * @param array  $parameters      the global parameters to use when resolving the parameters
      * @param array  $renderOptions   the options for rendering
+     * @param array  $parameters      the global parameters to use when resolving the parameters
      * @param array  $routeParameters the route-specific parameters to use when resolving the parameters
      *
-     * @throws \Becklyn\RouteTreeBundle\Exception\InvalidParameterValueException
+     * @throws InvalidParameterValueException
      *
      * @return string
      */

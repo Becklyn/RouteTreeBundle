@@ -5,26 +5,10 @@ namespace Becklyn\RouteTreeBundle\Parameter;
 use Becklyn\Menu\Item\MenuItem;
 use Becklyn\Menu\Target\LazyRoute;
 use Becklyn\RouteTreeBundle\Exception\InvalidParameterValueException;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class ParametersMerger
 {
     public const VARIABLES_EXTRA_KEY = "_route_tree.path_vars";
-
-
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-
-    /**
-     * @param RequestStack $requestStack
-     */
-    public function __construct (RequestStack $requestStack)
-    {
-        $this->requestStack = $requestStack;
-    }
 
 
     /**
@@ -38,12 +22,7 @@ class ParametersMerger
      */
     public function mergeParameters (MenuItem $item, array $parameters, array $routeSpecificParameters = []) : void
     {
-        $request = $this->requestStack->getMasterRequest();
-        $requestParameters = null !== $request
-            ? $request->attributes->all()
-            : [];
-
-        $this->traverse($item, $routeSpecificParameters, $parameters, $requestParameters);
+        $this->traverse($item, $routeSpecificParameters, $parameters);
     }
 
 
@@ -51,15 +30,13 @@ class ParametersMerger
      * @param MenuItem $item
      * @param array    $routeSpecificParameters
      * @param array    $parameters
-     * @param array    $requestParameters
      *
      * @throws InvalidParameterValueException
      */
     private function traverse (
         MenuItem $item,
         array $routeSpecificParameters,
-        array $parameters,
-        array $requestParameters
+        array $parameters
     ) : void
     {
         $target = $item->getTarget();
@@ -76,7 +53,6 @@ class ParametersMerger
                     $itemParameters,
                     $routeSpecificParameters[$target->getRoute()] ?? [],
                     $parameters,
-                    $requestParameters,
                 ];
 
                 foreach ($sources as $source)
@@ -105,7 +81,7 @@ class ParametersMerger
 
         foreach ($item->getChildren() as $child)
         {
-            $this->traverse($child, $routeSpecificParameters, $parameters, $requestParameters);
+            $this->traverse($child, $routeSpecificParameters, $parameters);
         }
     }
 
