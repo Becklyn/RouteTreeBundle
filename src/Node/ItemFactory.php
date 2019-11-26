@@ -15,7 +15,6 @@ class ItemFactory
 
 
     /**
-     * @param SecurityInferHelper $securityInferHelper
      */
     public function __construct (SecurityInferHelper $securityInferHelper)
     {
@@ -25,13 +24,6 @@ class ItemFactory
 
     /**
      * Generates a node from the given route.
-     *
-     * @param string      $routeName
-     * @param array       $config
-     * @param array       $pathVariables
-     * @param string|null $controller
-     *
-     * @return MenuItem
      */
     public function create (string $routeName, array $config, array $pathVariables, ?string $controller) : MenuItem
     {
@@ -83,9 +75,6 @@ class ItemFactory
 
     /**
      * Infers the security from the linked controller.
-     *
-     * @param MenuItem $item
-     * @param string   $controller
      */
     private function inferSecurity (MenuItem $item, string $controller) : void
     {

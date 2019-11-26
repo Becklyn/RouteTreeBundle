@@ -40,7 +40,6 @@ class ItemCollection
 
 
     /**
-     * @param ItemFactory             $itemFactory
      * @param RouteCollection|Route[] $routeCollection
      *
      * @throws InvalidRouteTreeException
@@ -132,10 +131,6 @@ class ItemCollection
 
     /**
      * Returns the route config for the given node.
-     *
-     * @param Route $route
-     *
-     * @return array
      */
     private function getRouteConfig (Route $route) : array
     {

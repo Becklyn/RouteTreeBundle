@@ -35,8 +35,6 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
 
 
     /**
-     * @param ItemCollectionBuilder $collectionBuilder
-     * @param TreeCache             $cache
      */
     public function __construct (ItemCollectionBuilder $collectionBuilder, TreeCache $cache)
     {
@@ -68,11 +66,7 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
     /**
      * Fetches a node from the tree.
      *
-     * @param string $route
-     *
      * @throws InvalidRouteTreeException
-     *
-     * @return MenuItem|null
      */
     public function getByRoute (string $route) : ?MenuItem
     {

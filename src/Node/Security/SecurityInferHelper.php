@@ -25,8 +25,6 @@ class SecurityInferHelper
 
 
     /**
-     * @param Reader             $annotationsReader
-     * @param ContainerInterface $container
      */
     public function __construct (Reader $annotationsReader, ContainerInterface $container)
     {
@@ -111,9 +109,6 @@ class SecurityInferHelper
      * Returns the security expression for the given action.
      *
      * @param string|object $class
-     * @param string        $method
-     *
-     * @return string|null
      */
     private function getSecurityForAction ($class, string $method) : ?string
     {

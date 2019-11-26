@@ -35,9 +35,6 @@ class RouteTreeTwigExtension extends AbstractExtension
 
 
     /**
-     * @param MenuBuilder      $menuBuilder
-     * @param MenuRenderer     $menuRenderer
-     * @param ParametersMerger $parameterMerger
      */
     public function __construct (MenuBuilder $menuBuilder, MenuRenderer $menuRenderer, ParametersMerger $parameterMerger)
     {
@@ -56,8 +53,6 @@ class RouteTreeTwigExtension extends AbstractExtension
      * @param array  $routeParameters the route-specific parameters to use when resolving the parameters
      *
      * @throws InvalidParameterValueException
-     *
-     * @return string
      */
     public function renderTree (string $fromRoute, array $renderOptions = [], array $parameters = [], array $routeParameters = []) : string
     {
@@ -83,8 +78,6 @@ class RouteTreeTwigExtension extends AbstractExtension
      * @param array  $routeParameters the route-specific parameters to use when resolving the parameters
      *
      * @throws InvalidParameterValueException
-     *
-     * @return string
      */
     public function renderBreadcrumb (string $fromRoute, array $renderOptions = [], array $parameters = [], array $routeParameters = []) : string
     {

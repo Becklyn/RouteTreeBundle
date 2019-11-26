@@ -22,8 +22,6 @@ class MenuBuilder
 
 
     /**
-     * @param RouteTree       $routeTree
-     * @param LoggerInterface $logger
      */
     public function __construct (RouteTree $routeTree, LoggerInterface $logger)
     {
@@ -33,9 +31,7 @@ class MenuBuilder
 
 
     /**
-     * @param string $fromRoute
      *
-     * @return MenuItem
      */
     public function build (string $fromRoute) : MenuItem
     {
@@ -56,9 +52,7 @@ class MenuBuilder
 
 
     /**
-     * @param string $fromRoute
      *
-     * @return MenuItem
      */
     public function buildBreadcrumb (string $fromRoute) : MenuItem
     {
