@@ -7,22 +7,22 @@
     "authors": [
         {
             "name": "Becklyn Studios",
-            "homepage": "http://becklyn.com/"
+            "homepage": "https://becklyn.com/"
         }
     ],
     "require": {
         "php": "^7.2",
-        "becklyn/menu": "^1.1.1",
-        "symfony/cache": "^4.3",
-        "symfony/http-foundation": "^4.3",
-        "symfony/http-kernel": "^4.3",
-        "symfony/routing": "^4.3",
-        "twig/twig": "^2.11"
+        "becklyn/menu": "^1.1.2",
+        "symfony/cache": "^4.3 || ^5.0",
+        "symfony/http-foundation": "^4.3 || ^5.0",
+        "symfony/http-kernel": "^4.3 || ^5.0",
+        "symfony/routing": "^4.3 || ^5.0",
+        "twig/twig": "^2.11 || ^3.0"
     },
     "require-dev": {
-        "becklyn/php-cs": "^1.4",
         "roave/security-advisories": "dev-master",
-        "sensio/framework-extra-bundle": "^5.2"
+        "sensio/framework-extra-bundle": "^5.5",
+        "symfony/phpunit-bridge": "^5.0"
     },
     "suggest": {
         "sensio/framework-extra-bundle": "To automatically infer from @Security and @IsGranted annotations."

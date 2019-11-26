@@ -40,8 +40,6 @@ class TreeCache
 
 
     /**
-     * @param CacheItemPoolInterface $cachePool
-     * @param bool                   $isDebug
      */
     public function __construct (CacheItemPoolInterface $cachePool, bool $isDebug)
     {

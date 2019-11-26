@@ -14,10 +14,6 @@ class ParametersMerger
     /**
      * Merges the parameters in the sub tree.
      *
-     * @param MenuItem $item
-     * @param array    $parameters
-     * @param array    $routeSpecificParameters
-     *
      * @throws InvalidParameterValueException
      */
     public function mergeParameters (MenuItem $item, array $parameters, array $routeSpecificParameters = []) : void
@@ -27,10 +23,6 @@ class ParametersMerger
 
 
     /**
-     * @param MenuItem $item
-     * @param array    $routeSpecificParameters
-     * @param array    $parameters
-     *
      * @throws InvalidParameterValueException
      */
     private function traverse (
@@ -89,9 +81,7 @@ class ParametersMerger
     /**
      * Transforms the value to a route-compatible one.
      *
-     * @param string $routeName
-     * @param string $parameterName
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @throws InvalidParameterValueException
      *

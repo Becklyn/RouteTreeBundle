@@ -20,8 +20,6 @@ class ItemCollectionBuilder
 
 
     /**
-     * @param ItemFactory     $itemFactory
-     * @param RouterInterface $router
      */
     public function __construct (ItemFactory $itemFactory, RouterInterface $router)
     {
@@ -32,8 +30,6 @@ class ItemCollectionBuilder
 
     /**
      * Builds a new node collection from the current router's routes.
-     *
-     * @return ItemCollection
      */
     public function build () : ItemCollection
     {
