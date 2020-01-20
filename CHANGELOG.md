@@ -1,3 +1,9 @@
+4.1.2
+=====
+
+*   (improvement) Allow `becklyn/menu 2.0+`
+
+
 4.1.1
 =====
 
