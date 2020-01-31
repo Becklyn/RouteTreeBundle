@@ -85,8 +85,8 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
 
                     $cache->write(
                         \sprintf(
-                            '<?php return \unserialize(%s);',
-                            var_export(\serialize($items), true)
+                            '<?php return \\unserialize(%s);',
+                            \var_export(\serialize($items), true)
                         ),
                         $routeCollection->getResources()
                     );
