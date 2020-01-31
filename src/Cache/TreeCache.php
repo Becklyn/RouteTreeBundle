@@ -9,7 +9,7 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
 /**
- *
+ * This is a super fast top-level cache with imprecise cache invalidation.
  */
 class TreeCache
 {

@@ -4,6 +4,7 @@ services:
         autoconfigure: true
         bind:
             $isDebug: '%kernel.debug%'
+            $cacheDir: '%kernel.cache_dir%'
 
     Becklyn\RouteTreeBundle\:
         resource: '../../*'
@@ -11,3 +12,9 @@ services:
 
     Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper:
         $container: '@service_container'
+
+    Becklyn\RouteTreeBundle\Tree\RouteTree:
+        calls:
+            -   method: setConfigCacheFactory
+                arguments:
+                    - '@config_cache_factory'
