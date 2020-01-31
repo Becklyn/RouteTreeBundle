@@ -9,7 +9,10 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
 /**
+ * This is a super fast top-level cache with imprecise cache invalidation.
  *
+ * Fun fact: using the pool + item directly are around 10x faster than using the CacheInterface from
+ * symfony/contracts.
  */
 class TreeCache
 {

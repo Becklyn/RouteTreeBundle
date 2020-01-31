@@ -30,6 +30,12 @@
     "config": {
         "sort-packages": true
     },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "4.x-dev",
+            "dev-next": "4.x-dev"
+        }
+    },
     "autoload": {
         "psr-4": {
             "Becklyn\\RouteTreeBundle\\": "src/"

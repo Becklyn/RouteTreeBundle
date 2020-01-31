@@ -1,3 +1,9 @@
+4.1.3
+=====
+
+*   (improvement) Use `ConfigCache` as second level cache.
+
+
 4.1.2
 =====
 
