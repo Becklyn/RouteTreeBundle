@@ -1,3 +1,9 @@
+4.1.4
+=====
+
+*   (bug) Properly pass route default parameters through to the actual parameters merger.
+
+
 4.1.3
 =====
 
