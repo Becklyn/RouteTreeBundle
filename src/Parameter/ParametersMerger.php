@@ -9,6 +9,7 @@ use Becklyn\RouteTreeBundle\Exception\InvalidParameterValueException;
 class ParametersMerger
 {
     public const VARIABLES_EXTRA_KEY = "_route_tree.path_vars";
+    public const VARIABLES_DEFAULT_PARAMETERS = "_route_tree.default_parameters";
 
 
     /**
@@ -39,14 +40,15 @@ class ParametersMerger
             $newParameters = [];
             $itemParameters = $target->getParameters();
 
+            $sources = [
+                $itemParameters,
+                $routeSpecificParameters[$target->getRoute()] ?? [],
+                $parameters,
+                $item->getExtra(self::VARIABLES_DEFAULT_PARAMETERS, []),
+            ];
+
             foreach ($pathVariables as $variable)
             {
-                $sources = [
-                    $itemParameters,
-                    $routeSpecificParameters[$target->getRoute()] ?? [],
-                    $parameters,
-                ];
-
                 foreach ($sources as $source)
                 {
                     if (\array_key_exists($variable, $source))

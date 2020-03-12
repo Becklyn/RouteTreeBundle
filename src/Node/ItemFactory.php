@@ -56,6 +56,10 @@ class ItemFactory
                     $item->setSort($value);
                     break;
 
+                case "parameters":
+                    $item->setExtra(ParametersMerger::VARIABLES_DEFAULT_PARAMETERS, $value);
+                    break;
+
                 // all unknown parameters are automatically extras
                 default:
                     $item->setExtra($key, $value);
