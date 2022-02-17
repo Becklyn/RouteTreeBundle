@@ -138,7 +138,7 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
      *
      * @internal
      */
-    public function isOptional ()
+    public function isOptional () : bool
     {
         return true;
     }
@@ -150,10 +150,12 @@ class RouteTree implements CacheClearerInterface, CacheWarmerInterface
      *
      * @internal
      */
-    public function warmUp ($cacheDir) : void
+    public function warmUp ($cacheDir) : array
     {
         $this->treeCache->clear();
         $this->generateItems();
+
+        return [];
     }
     //endregion
 

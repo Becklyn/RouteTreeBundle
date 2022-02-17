@@ -16,7 +16,7 @@ use Psr\Cache\CacheItemPoolInterface;
  */
 class TreeCache
 {
-    const CACHE_ITEM_KEY = "becklyn.route-tree.cache";
+    public const CACHE_ITEM_KEY = "becklyn.route-tree.cache";
 
     /**
      * @var bool

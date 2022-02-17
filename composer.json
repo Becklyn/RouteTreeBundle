@@ -1,40 +1,31 @@
 {
     "name": "becklyn/route-tree-bundle",
-    "type": "symfony-bundle",
     "description": "This bundle provides a simple implementation of a tree built from routing configuration.",
-    "homepage": "https://github.com/Becklyn/BecklynRouteTreeBundle",
     "license": "BSD-3-Clause",
+    "type": "symfony-bundle",
     "authors": [
         {
             "name": "Becklyn Studios",
             "homepage": "https://becklyn.com/"
         }
     ],
+    "homepage": "https://github.com/Becklyn/BecklynRouteTreeBundle",
     "require": {
-        "php": "^7.2",
-        "becklyn/menu": "^1.1.2 || ^2.0",
-        "symfony/cache": "^4.3 || ^5.0",
-        "symfony/http-foundation": "^4.3 || ^5.0",
-        "symfony/http-kernel": "^4.3 || ^5.0",
-        "symfony/routing": "^4.3 || ^5.0",
-        "twig/twig": "^2.11 || ^3.0"
+        "php": ">=7.4",
+        "becklyn/menu": "^3.1.0",
+        "symfony/cache": "^v5.4.3 || ^v6.0.3",
+        "symfony/http-foundation": "^v5.4.3 || ^v6.0.3",
+        "symfony/http-kernel": "^v5.4.4 || ^v6.0.4",
+        "symfony/routing": "^v5.4.3 || ^v6.0.3",
+        "twig/twig": "^v3.3.8"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
-        "sensio/framework-extra-bundle": "^5.5",
-        "symfony/phpunit-bridge": "^5.0"
+        "sensio/framework-extra-bundle": "^v5.4.3 || ^v6.0.3",
+        "symfony/phpunit-bridge": "^v5.4.3 || ^v6.0.3"
     },
     "suggest": {
         "sensio/framework-extra-bundle": "To automatically infer from @Security and @IsGranted annotations."
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "4.x-dev",
-            "dev-next": "4.x-dev"
-        }
     },
     "autoload": {
         "psr-4": {
@@ -44,6 +35,15 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\Becklyn\\RouteTreeBundle\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "4.x-dev",
+            "dev-next": "4.x-dev"
         }
     }
 }

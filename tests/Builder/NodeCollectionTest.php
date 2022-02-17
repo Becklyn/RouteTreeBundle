@@ -3,6 +3,8 @@
 namespace Tests\Becklyn\RouteTreeBundle\Builder;
 
 use Becklyn\RouteTreeBundle\Builder\ItemCollection;
+use Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException;
+use Becklyn\RouteTreeBundle\Exception\RouteTreeException;
 use Becklyn\RouteTreeBundle\Node\ItemFactory;
 use Becklyn\RouteTreeBundle\Node\Security\SecurityInferHelper;
 use PHPUnit\Framework\TestCase;
@@ -19,17 +21,13 @@ class NodeCollectionTest extends TestCase
 {
     use RouteTestTrait;
 
-
-    /**
-     * @var ItemFactory
-     */
-    private $nodeFactory;
+    private ItemFactory $nodeFactory;
 
 
     /**
      * @inheritdoc
      */
-    protected function setUp ()
+    protected function setUp () : void
     {
         $securityInferHelper = $this->getMockBuilder(SecurityInferHelper::class)
             ->disableOriginalConstructor()
@@ -42,7 +40,7 @@ class NodeCollectionTest extends TestCase
     /**
      * Tests that routes are automatically correctly linked
      */
-    public function testLinkParent ()
+    public function testLinkParent () : void
     {
         $nodes = $this->buildAndGetNodes([
             "a" => $this->createRoute("/a"),
@@ -58,7 +56,7 @@ class NodeCollectionTest extends TestCase
     /**
      * Asserts that routes which are not participated with the tree are ignored
      */
-    public function testIgnoreRoute ()
+    public function testIgnoreRoute () : void
     {
         $nodes = $this->buildAndGetNodes([
             "a" => $this->createRoute("/a"),
@@ -73,7 +71,7 @@ class NodeCollectionTest extends TestCase
     /**
      * Tests the variant syntaxes for defining the parent
      */
-    public function testParentTypes ()
+    public function testParentTypes () : void
     {
         $nodes = $this->buildAndGetNodes([
             "a" => $this->createRoute("/a"),
@@ -89,7 +87,7 @@ class NodeCollectionTest extends TestCase
     }
 
 
-    public function provideInvalidScalarValues ()
+    public function provideInvalidScalarValues () : array
     {
         return [
             [1],
@@ -105,10 +103,11 @@ class NodeCollectionTest extends TestCase
      * @dataProvider provideInvalidScalarValues
      *
      * @param $treeData
-     * @expectedException Becklyn\RouteTreeBundle\Exception\RouteTreeException
      */
-    public function testInvalidScalarValue ($treeData)
+    public function testInvalidScalarValue ($treeData) : void
     {
+        $this->expectException(RouteTreeException::class);
+
         $route = new Route("/route", [], [], [
             "tree" => $treeData,
         ]);
@@ -119,11 +118,11 @@ class NodeCollectionTest extends TestCase
 
     /**
      * Tests that a missing parent correctly throws
-     *
-     * @expectedException \Becklyn\RouteTreeBundle\Exception\InvalidRouteTreeException
      */
-    public function testMissingParent ()
+    public function testMissingParent () : void
     {
+        $this->expectException(InvalidRouteTreeException::class);
+
         $this->buildAndGetNodes([
             "b" => $this->createRoute("/b", "a"),
         ]);
@@ -133,7 +132,7 @@ class NodeCollectionTest extends TestCase
     /**
      * Tests that building from a `RouteCollection` is supported as well
      */
-    public function testBuildFromRouteCollection ()
+    public function testBuildFromRouteCollection () : void
     {
         $routeCollection = new RouteCollection();
         $routeCollection->add("child", $this->createRoute("/child/{param}", ["parent" => "parent"]));
